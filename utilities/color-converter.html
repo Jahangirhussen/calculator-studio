@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Color Converter — Free Online Tool | Calculator Studio</title>
+<meta name="description" content="Convert HEX, RGB and HSL color codes live.">
+<link rel="canonical" href="https://example.com/utilities/color-converter.html">
+<link rel="icon" href="../icons/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="../css/style.css">
+<link rel="stylesheet" href="../css/responsive.css">
+<link rel="stylesheet" href="../css/animations.css">
+</head>
+<body>
+<script>const ROOT="../";</script>
+<div id="site-header"></div>
+<main class="container">
+  <div class="breadcrumb"><a href="../index.html">Home</a> / <a href="index.html">Utilities</a> / Color Converter</div>
+  <h1 class="calc-page-title">Color Converter</h1>
+  <p class="calc-page-desc">Convert between HEX, RGB and HSL color formats live.</p>
+  <div class="calc-layout">
+    <div class="panel">
+      <div class="field">
+        <label>Pick a Color</label>
+        <div style="display:flex;gap:10px;align-items:center">
+          <input type="color" id="picker" value="#D4AF37" style="width:60px;height:44px;padding:2px;border-radius:8px;border:1px solid var(--border);background:var(--bg-alt)">
+          <input type="text" id="hex-input" value="#D4AF37" style="flex:1">
+        </div>
+      </div>
+      <div class="result-box" id="result-box">
+        <div class="label">HEX</div>
+        <div class="value" id="hex-out">#D4AF37</div>
+      </div>
+      <div class="result-box" style="margin-top:10px">
+        <div class="label">RGB</div>
+        <div class="value" id="rgb-out">—</div>
+      </div>
+      <div class="result-box" style="margin-top:10px">
+        <div class="label">HSL</div>
+        <div class="value" id="hsl-out">—</div>
+      </div>
+    </div>
+    <div class="panel"><div class="info-block"><h2>How It Works</h2><p>Pick a color or type a HEX code — RGB and HSL update instantly.</p></div></div>
+  </div>
+  <div class="info-block"><h2>Related Calculators</h2><div class="related-grid" id="related-grid"></div></div>
+</main>
+<div id="site-footer"></div>
+<script src="../js/calc-data.js"></script>
+<script src="../js/main.js"></script>
+<script src="../js/theme.js"></script>
+<script src="../js/utilities.js"></script>
+<script>
+function update(hex){
+  if(!/^#([0-9a-fA-F]{3}|[0-9a-fA-F]{6})$/.test(hex)) return;
+  const {r,g,b} = hexToRgb(hex);
+  const {h,s,l} = rgbToHsl(r,g,b);
+  document.getElementById("hex-out").textContent = hex.toUpperCase();
+  document.getElementById("rgb-out").textContent = `rgb(${r}, ${g}, ${b})`;
+  document.getElementById("hsl-out").textContent = `hsl(${h}, ${s}%, ${l}%)`;
+  document.getElementById("picker").value = rgbToHex(r,g,b);
+  document.getElementById("hex-input").value = hex;
+}
+document.getElementById("picker").addEventListener("input", e=>update(e.target.value));
+document.getElementById("hex-input").addEventListener("input", e=>update(e.target.value));
+update("#D4AF37");
+document.addEventListener("DOMContentLoaded", ()=>{
+  const related = calcsByCategory("utilities").filter(c=>!c.url.includes("color-converter")).slice(0,4);
+  document.getElementById("related-grid").innerHTML = related.map(CalcUI.calcCard).join("");
+});
+</script>
+</body>
+</html>

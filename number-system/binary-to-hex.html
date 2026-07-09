@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Binary to Hexadecimal Converter — Free Online Calculator | Calculator Studio</title>
+<meta name="description" content="Convert binary numbers directly to hexadecimal.">
+<link rel="canonical" href="https://example.com/number-system/binary-to-hex.html">
+<link rel="icon" href="../icons/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="../css/style.css">
+<link rel="stylesheet" href="../css/responsive.css">
+<link rel="stylesheet" href="../css/animations.css">
+</head>
+<body>
+<script>const ROOT="../";</script>
+<div id="site-header"></div>
+<main class="container">
+  <div class="breadcrumb"><a href="../index.html">Home</a> / <a href="index.html">Number System</a> / Binary to Hexadecimal</div>
+  <h1 class="calc-page-title">Binary to Hexadecimal Converter</h1>
+  <p class="calc-page-desc">Convert binary numbers directly to hexadecimal.</p>
+  <div class="calc-layout">
+    <div class="panel">
+      <form id="calc-form">
+        <div class="field"><label>Binary Number</label><input type="text" id="bin" pattern="[01]+" placeholder="e.g. 11111" required></div>
+        <button type="submit" class="btn btn-solid">Convert</button>
+      </form>
+      <div class="result-box hidden" id="result-box">
+        <div class="label">Hexadecimal</div>
+        <div class="value" id="result-value">—</div>
+      </div>
+      <div class="action-row">
+        <button class="btn btn-ghost" onclick="copyResultText('#result-value')">Copy Result</button>
+        <button class="btn btn-ghost" onclick="shareCurrentPage()">Share</button>
+        <button class="btn btn-ghost" type="button" onclick="location.reload()">Reset</button>
+      </div>
+    </div>
+    <div class="panel"><div class="info-block"><h2>Example</h2><p>11111₂ = 1F₁₆</p></div></div>
+  </div>
+  <div class="info-block"><h2>Related Calculators</h2><div class="related-grid" id="related-grid"></div></div>
+</main>
+<div id="site-footer"></div>
+<script src="../js/calc-data.js"></script>
+<script src="../js/main.js"></script>
+<script src="../js/theme.js"></script>
+<script src="../js/calculator.js"></script>
+<script>
+document.getElementById("calc-form").addEventListener("submit", function(e){
+  e.preventDefault();
+  const bin = document.getElementById("bin").value.trim();
+  if(!/^[01]+$/.test(bin)){ showResult("#result-box","Invalid binary number"); return; }
+  showResult("#result-box", parseInt(bin,2).toString(16).toUpperCase());
+});
+document.addEventListener("DOMContentLoaded", ()=>{
+  const related = calcsByCategory("number-system").filter(c=>!c.url.includes("binary-to-hex")).slice(0,4);
+  document.getElementById("related-grid").innerHTML = related.map(CalcUI.calcCard).join("");
+});
+</script>
+</body>
+</html>

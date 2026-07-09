@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Stopwatch — Free Online Calculator | Calculator Studio</title>
+<meta name="description" content="Simple online stopwatch with lap times.">
+<link rel="canonical" href="https://example.com/time-tools/stopwatch.html">
+<link rel="icon" href="../icons/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="../css/style.css">
+<link rel="stylesheet" href="../css/responsive.css">
+<link rel="stylesheet" href="../css/animations.css">
+</head>
+<body>
+<script>const ROOT="../";</script>
+<div id="site-header"></div>
+<main class="container">
+  <div class="breadcrumb"><a href="../index.html">Home</a> / <a href="index.html">Time Tools</a> / Stopwatch</div>
+  <h1 class="calc-page-title">Stopwatch</h1>
+  <p class="calc-page-desc">Start, pause, reset, and record lap times.</p>
+  <div class="panel text-center" style="max-width:500px;margin:0 auto">
+    <div style="font-size:3rem;font-weight:700;color:var(--gold);margin-bottom:20px" id="display">00:00:00.0</div>
+    <div class="action-row" style="justify-content:center">
+      <button class="btn btn-solid" id="start-btn">Start</button>
+      <button class="btn btn-ghost" id="lap-btn">Lap</button>
+      <button class="btn btn-ghost" id="reset-btn">Reset</button>
+    </div>
+    <ul id="laps" style="margin-top:20px;text-align:left"></ul>
+  </div>
+  <div class="info-block"><h2>Related Calculators</h2><div class="related-grid" id="related-grid"></div></div>
+</main>
+<div id="site-footer"></div>
+<script src="../js/calc-data.js"></script>
+<script src="../js/main.js"></script>
+<script src="../js/theme.js"></script>
+<script>
+let running = false, startTime = 0, elapsed = 0, rafId = null, lapCount = 0;
+const display = document.getElementById("display");
+const startBtn = document.getElementById("start-btn");
+function format(ms){
+  const h = String(Math.floor(ms/3600000)).padStart(2,"0");
+  const m = String(Math.floor(ms/60000)%60).padStart(2,"0");
+  const s = String(Math.floor(ms/1000)%60).padStart(2,"0");
+  const t = Math.floor((ms%1000)/100);
+  return `${h}:${m}:${s}.${t}`;
+}
+function loop(){
+  display.textContent = format(elapsed + (Date.now()-startTime));
+  rafId = requestAnimationFrame(loop);
+}
+startBtn.addEventListener("click", ()=>{
+  if(!running){
+    running = true; startTime = Date.now(); startBtn.textContent = "Pause";
+    loop();
+  } else {
+    running = false; elapsed += Date.now()-startTime; startBtn.textContent = "Start";
+    cancelAnimationFrame(rafId);
+  }
+});
+document.getElementById("lap-btn").addEventListener("click", ()=>{
+  const cur = running ? elapsed + (Date.now()-startTime) : elapsed;
+  lapCount++;
+  const li = document.createElement("li");
+  li.style.padding = "6px 0"; li.style.borderBottom = "1px solid var(--border)";
+  li.textContent = `Lap ${lapCount}: ${format(cur)}`;
+  document.getElementById("laps").prepend(li);
+});
+document.getElementById("reset-btn").addEventListener("click", ()=>{
+  running = false; elapsed = 0; lapCount = 0;
+  cancelAnimationFrame(rafId);
+  display.textContent = "00:00:00.0";
+  startBtn.textContent = "Start";
+  document.getElementById("laps").innerHTML = "";
+});
+document.addEventListener("DOMContentLoaded", ()=>{
+  const related = calcsByCategory("time-tools").filter(c=>!c.url.includes("stopwatch")).slice(0,4);
+  document.getElementById("related-grid").innerHTML = related.map(CalcUI.calcCard).join("");
+});
+</script>
+</body>
+</html>

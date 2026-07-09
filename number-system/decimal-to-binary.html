@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Decimal to Binary Converter — Free Online Calculator | Calculator Studio</title>
+<meta name="description" content="Convert decimal numbers to binary instantly.">
+<link rel="canonical" href="https://example.com/number-system/decimal-to-binary.html">
+<link rel="icon" href="../icons/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="../css/style.css">
+<link rel="stylesheet" href="../css/responsive.css">
+<link rel="stylesheet" href="../css/animations.css">
+</head>
+<body>
+<script>const ROOT="../";</script>
+<div id="site-header"></div>
+<main class="container">
+  <div class="breadcrumb"><a href="../index.html">Home</a> / <a href="index.html">Number System</a> / Decimal to Binary</div>
+  <h1 class="calc-page-title">Decimal to Binary Converter</h1>
+  <p class="calc-page-desc">Convert any decimal (base-10) number to binary.</p>
+  <div class="calc-layout">
+    <div class="panel">
+      <form id="calc-form">
+        <div class="field"><label>Decimal Number</label><input type="number" step="any" id="dec" placeholder="e.g. 11.11" required></div>
+        <button type="submit" class="btn btn-solid">Convert</button>
+      </form>
+      <div class="result-box hidden" id="result-box">
+        <div class="label">Binary</div>
+        <div class="value" id="result-value">—</div>
+      </div>
+      <div class="action-row">
+        <button class="btn btn-ghost" onclick="copyResultText('#result-value')">Copy Result</button>
+        <button class="btn btn-ghost" onclick="shareCurrentPage()">Share</button>
+        <button class="btn btn-ghost" type="button" onclick="location.reload()">Reset</button>
+      </div>
+    </div>
+    <div class="panel"><div class="info-block"><h2>Example</h2><p>11 in decimal = 1011 in binary</p></div></div>
+  </div>
+  <div class="info-block"><h2>Related Calculators</h2><div class="related-grid" id="related-grid"></div></div>
+</main>
+<div id="site-footer"></div>
+<script src="../js/calc-data.js"></script>
+<script src="../js/main.js"></script>
+<script src="../js/theme.js"></script>
+<script src="../js/calculator.js"></script>
+<script>
+function decToBaseFraction(num, base, precision){
+  const neg = num < 0; num = Math.abs(num);
+  let intPart = Math.floor(num);
+  let fracPart = num - intPart;
+  let out = intPart.toString(base);
+  if(fracPart > 0){
+    out += ".";
+    for(let i=0; i<precision && fracPart>0; i++){
+      fracPart *= base;
+      const digit = Math.floor(fracPart);
+      out += digit.toString(base);
+      fracPart -= digit;
+    }
+  }
+  return (neg?"-":"") + out.toUpperCase();
+}
+document.getElementById("calc-form").addEventListener("submit", function(e){
+  e.preventDefault();
+  const n = parseFloat(document.getElementById("dec").value);
+  showResult("#result-box", decToBaseFraction(n, 2, 16));
+});
+document.addEventListener("DOMContentLoaded", ()=>{
+  const related = calcsByCategory("number-system").filter(c=>!c.url.includes("decimal-to-binary")).slice(0,4);
+  document.getElementById("related-grid").innerHTML = related.map(CalcUI.calcCard).join("");
+});
+</script>
+</body>
+</html>

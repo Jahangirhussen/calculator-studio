@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ideal Weight Calculator — Free Online Calculator | Calculator Studio</title>
+<meta name="description" content="Estimate your ideal body weight using the Devine formula based on gender and height.">
+<link rel="canonical" href="https://example.com/health/ideal-weight-calculator.html">
+<meta property="og:title" content="Ideal Weight Calculator — Calculator Studio">
+<meta property="og:description" content="Estimate your ideal body weight using the Devine formula based on gender and height.">
+<meta property="og:type" content="website">
+<meta name="twitter:card" content="summary">
+<link rel="icon" href="../icons/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="../css/style.css">
+<link rel="stylesheet" href="../css/responsive.css">
+<link rel="stylesheet" href="../css/animations.css">
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"SoftwareApplication","name":"Ideal Weight Calculator","applicationCategory":"HealthApplication","operatingSystem":"Any"}
+</script>
+</head>
+<body>
+<script>const ROOT="../";</script>
+<div id="site-header"></div>
+<main class="container">
+  <div class="breadcrumb"><a href="../index.html">Home</a> / <a href="index.html">Health</a> / Ideal Weight Calculator</div>
+  <h1 class="calc-page-title">Ideal Weight Calculator</h1>
+  <p class="calc-page-desc">Estimate your ideal body weight using the Devine formula, based on your gender and height.</p>
+  <div class="calc-layout">
+    <div class="panel">
+      <form id="calc-form">
+        <div class="field">
+          <label for="gender">Gender</label>
+          <select id="gender">
+            <option value="male">Male</option>
+            <option value="female">Female</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="height">Height (cm)</label>
+          <input type="number" id="height" step="any" min="0" required>
+        </div>
+        <button type="submit" class="btn btn-solid">Calculate</button>
+      </form>
+      <div class="result-box hidden" id="result-box">
+        <div class="label">Result</div>
+        <div class="value" id="result-value">—</div>
+      </div>
+      <div class="action-row">
+        <button class="btn btn-ghost" onclick="copyResultText('#result-value')">Copy Result</button>
+        <button class="btn btn-ghost" onclick="shareCurrentPage()">Share</button>
+        <button class="btn btn-ghost" onclick="resetForm('#calc-form','#result-box')">Reset</button>
+      </div>
+    </div>
+    <div class="panel">
+      <div class="info-block">
+        <h2>Formula</h2>
+        <div class="formula">Devine Formula (height over 5 ft, per inch):
+Male: Ideal Weight = 50 kg + 2.3 kg × inches over 5 ft
+Female: Ideal Weight = 45.5 kg + 2.3 kg × inches over 5 ft
+
+(For height at or under 5 ft, no addition is applied)</div>
+        <h2>Example</h2>
+        <p>A male 180 cm tall (≈70.9 in, 10.9 in over 5 ft): Ideal Weight = 50 + 2.3×10.9 ≈ 75.1 kg.</p>
+        <h2>How To Use</h2>
+        <p>Select gender, enter height in centimeters, then click Calculate to see your estimated ideal weight.</p>
+      </div>
+    </div>
+  </div>
+  <div class="info-block">
+    <h2>Frequently Asked Questions</h2>
+    <div class="faq-item"><div class="faq-q">Is the Devine formula accurate for everyone? <span class="caret">▾</span></div><div class="faq-a">The Devine formula is a general estimate originally developed for medication dosing and doesn't account for muscle mass, frame size or body composition.</div></div>
+    <div class="faq-item"><div class="faq-q">What if I'm shorter than 5 feet? <span class="caret">▾</span></div><div class="faq-a">For heights at or below 5 feet (152.4 cm), the calculator uses the base weight (50 kg for men, 45.5 kg for women) without any addition.</div></div>
+  </div>
+  <div class="info-block">
+    <h2>Related Calculators</h2>
+    <div class="related-grid" id="related-grid"></div>
+  </div>
+</main>
+<div id="site-footer"></div>
+<script src="../js/calc-data.js"></script>
+<script src="../js/main.js"></script>
+<script src="../js/theme.js"></script>
+<script src="../js/calculator.js"></script>
+<script>
+document.getElementById("calc-form").addEventListener("submit", function(e){
+  e.preventDefault();
+  const gender = document.getElementById("gender").value;
+  const heightCm = parseFloat(document.getElementById("height").value);
+  if(!(heightCm > 0)){
+    showResult("#result-box", "Error: enter a valid height");
+    return;
+  }
+  const totalInches = heightCm / 2.54;
+  const inchesOver5ft = Math.max(0, totalInches - 60);
+  const base = (gender === "male") ? 50 : 45.5;
+  const idealKg = base + 2.3 * inchesOver5ft;
+  const idealLb = idealKg * 2.20462;
+  showResult("#result-box", `${formatNumber(idealKg,1)} kg (${formatNumber(idealLb,1)} lb)`);
+});
+document.addEventListener("DOMContentLoaded", ()=>{
+  const related = calcsByCategory("health").filter(c=>!c.url.includes("ideal-weight-calculator")).slice(0,4);
+  document.getElementById("related-grid").innerHTML = related.map(CalcUI.calcCard).join("");
+});
+</script>
+</body>
+</html>

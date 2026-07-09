@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tax Calculator — Free Online Calculator | Calculator Studio</title>
+<meta name="description" content="Calculate income tax owed and net take-home income based on a flat tax rate.">
+<link rel="canonical" href="https://example.com/finance/tax-calculator.html">
+<meta property="og:title" content="Tax Calculator — Calculator Studio">
+<meta property="og:description" content="Calculate income tax owed and net take-home income based on a flat tax rate.">
+<meta property="og:type" content="website">
+<meta name="twitter:card" content="summary">
+<link rel="icon" href="../icons/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="../css/style.css">
+<link rel="stylesheet" href="../css/responsive.css">
+<link rel="stylesheet" href="../css/animations.css">
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"SoftwareApplication","name":"Tax Calculator","applicationCategory":"FinanceApplication","operatingSystem":"Any"}
+</script>
+</head>
+<body>
+<script>const ROOT="../";</script>
+<div id="site-header"></div>
+<main class="container">
+  <div class="breadcrumb"><a href="../index.html">Home</a> / <a href="index.html">Finance</a> / Tax Calculator</div>
+  <h1 class="calc-page-title">Tax Calculator</h1>
+  <p class="calc-page-desc">Calculate the tax amount owed and your net income after tax based on a flat percentage rate.</p>
+  <div class="calc-layout">
+    <div class="panel">
+      <form id="calc-form">
+        <div class="field-row">
+          <div class="field">
+            <label for="income">Gross Income</label>
+            <input type="number" id="income" step="any" min="0" value="60000" required>
+          </div>
+          <div class="field">
+            <label for="rate">Tax Rate (%)</label>
+            <input type="number" id="rate" step="any" min="0" value="20" required>
+          </div>
+        </div>
+        <button type="submit" class="btn btn-solid">Calculate</button>
+      </form>
+      <div class="result-box hidden" id="result-box">
+        <div class="label">Result</div>
+        <div class="value" id="result-value">—</div>
+      </div>
+      <div class="action-row">
+        <button class="btn btn-ghost" onclick="copyResultText('#result-value')">Copy Result</button>
+        <button class="btn btn-ghost" onclick="shareCurrentPage()">Share</button>
+        <button class="btn btn-ghost" onclick="resetForm('#calc-form','#result-box')">Reset</button>
+      </div>
+    </div>
+    <div class="panel">
+      <div class="info-block">
+        <h2>Formula</h2>
+        <div class="formula">Tax = Income × Rate / 100<br>Net Income = Income − Tax</div>
+        <h2>Example</h2>
+        <p>Gross income $60,000 at 20% tax rate: Tax = 60000 × 20/100 = $12,000. Net income = $48,000.</p>
+        <h2>How To Use</h2>
+        <p>Enter your gross income and applicable flat tax rate percentage, then click Calculate to see the tax owed and your net take-home income.</p>
+      </div>
+    </div>
+  </div>
+  <div class="info-block">
+    <h2>Frequently Asked Questions</h2>
+    <div class="faq-item"><div class="faq-q">Does this account for tax brackets/slabs? <span class="caret">▾</span></div><div class="faq-a">No, this calculator applies a single flat tax rate for simplicity. Actual tax systems often use progressive brackets with different rates for different income ranges.</div></div>
+    <div class="faq-item"><div class="faq-q">Is this calculator suitable for official tax filing? <span class="caret">▾</span></div><div class="faq-a">No, it's meant for quick estimates only. Consult a tax professional or official tax authority calculator for accurate filing figures.</div></div>
+  </div>
+  <div class="info-block">
+    <h2>Related Calculators</h2>
+    <div class="related-grid" id="related-grid"></div>
+  </div>
+</main>
+<div id="site-footer"></div>
+<script src="../js/calc-data.js"></script>
+<script src="../js/main.js"></script>
+<script src="../js/theme.js"></script>
+<script src="../js/calculator.js"></script>
+<script>
+document.getElementById("calc-form").addEventListener("submit", function(e){
+  e.preventDefault();
+  const income = parseFloat(document.getElementById("income").value);
+  const rate = parseFloat(document.getElementById("rate").value);
+  const tax = income * rate / 100;
+  const net = income - tax;
+  const box = document.querySelector("#result-box");
+  box.classList.remove("hidden");
+  box.querySelector(".value").innerHTML =
+    "Tax Owed: " + formatNumber(tax) + "<br>" +
+    "Net Income: " + formatNumber(net);
+  box.classList.add("copied-flash");
+  setTimeout(()=>box.classList.remove("copied-flash"), 600);
+});
+document.addEventListener("DOMContentLoaded", ()=>{
+  const related = calcsByCategory("finance").filter(c=>!c.url.includes("tax-calculator")).slice(0,4);
+  document.getElementById("related-grid").innerHTML = related.map(CalcUI.calcCard).join("");
+});
+</script>
+</body>
+</html>

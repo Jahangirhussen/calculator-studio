@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ROI Calculator — Free Online Calculator | Calculator Studio</title>
+<meta name="description" content="Calculate Return on Investment (ROI) percentage and net gain from investment cost and final value.">
+<link rel="canonical" href="https://example.com/finance/roi-calculator.html">
+<meta property="og:title" content="ROI Calculator — Calculator Studio">
+<meta property="og:description" content="Calculate Return on Investment (ROI) percentage and net gain from investment cost and final value.">
+<meta property="og:type" content="website">
+<meta name="twitter:card" content="summary">
+<link rel="icon" href="../icons/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="../css/style.css">
+<link rel="stylesheet" href="../css/responsive.css">
+<link rel="stylesheet" href="../css/animations.css">
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"SoftwareApplication","name":"ROI Calculator","applicationCategory":"FinanceApplication","operatingSystem":"Any"}
+</script>
+</head>
+<body>
+<script>const ROOT="../";</script>
+<div id="site-header"></div>
+<main class="container">
+  <div class="breadcrumb"><a href="../index.html">Home</a> / <a href="index.html">Finance</a> / ROI Calculator</div>
+  <h1 class="calc-page-title">ROI Calculator</h1>
+  <p class="calc-page-desc">Calculate your Return on Investment (ROI) percentage and net gain.</p>
+  <div class="calc-layout">
+    <div class="panel">
+      <form id="calc-form">
+        <div class="field-row">
+          <div class="field">
+            <label for="cost">Investment Cost</label>
+            <input type="number" id="cost" step="any" min="0" value="1000" required>
+          </div>
+          <div class="field">
+            <label for="gain">Final Value (Gain)</label>
+            <input type="number" id="gain" step="any" min="0" value="1300" required>
+          </div>
+        </div>
+        <button type="submit" class="btn btn-solid">Calculate</button>
+      </form>
+      <div class="result-box hidden" id="result-box">
+        <div class="label">Result</div>
+        <div class="value" id="result-value">—</div>
+      </div>
+      <div class="action-row">
+        <button class="btn btn-ghost" onclick="copyResultText('#result-value')">Copy Result</button>
+        <button class="btn btn-ghost" onclick="shareCurrentPage()">Share</button>
+        <button class="btn btn-ghost" onclick="resetForm('#calc-form','#result-box')">Reset</button>
+      </div>
+    </div>
+    <div class="panel">
+      <div class="info-block">
+        <h2>Formula</h2>
+        <div class="formula">ROI (%) = (Gain − Cost) / Cost × 100<br>Net Profit = Gain − Cost</div>
+        <h2>Example</h2>
+        <p>Investment cost $1,000, final value $1,300: Net profit = $300. ROI = (1300−1000)/1000 × 100 = 30%.</p>
+        <h2>How To Use</h2>
+        <p>Enter your original investment cost and the final value (or total returns), then click Calculate to see your ROI percentage and net profit.</p>
+      </div>
+    </div>
+  </div>
+  <div class="info-block">
+    <h2>Frequently Asked Questions</h2>
+    <div class="faq-item"><div class="faq-q">What is a good ROI? <span class="caret">▾</span></div><div class="faq-a">A "good" ROI depends on the investment type and time period, but a positive ROI above inflation and market averages is generally considered favorable.</div></div>
+    <div class="faq-item"><div class="faq-q">Can ROI be negative? <span class="caret">▾</span></div><div class="faq-a">Yes, if the final value is lower than the investment cost, ROI will be negative, indicating a loss.</div></div>
+  </div>
+  <div class="info-block">
+    <h2>Related Calculators</h2>
+    <div class="related-grid" id="related-grid"></div>
+  </div>
+</main>
+<div id="site-footer"></div>
+<script src="../js/calc-data.js"></script>
+<script src="../js/main.js"></script>
+<script src="../js/theme.js"></script>
+<script src="../js/calculator.js"></script>
+<script>
+document.getElementById("calc-form").addEventListener("submit", function(e){
+  e.preventDefault();
+  const cost = parseFloat(document.getElementById("cost").value);
+  const gain = parseFloat(document.getElementById("gain").value);
+  const profit = gain - cost;
+  const roi = cost !== 0 ? (profit / cost) * 100 : NaN;
+  const box = document.querySelector("#result-box");
+  box.classList.remove("hidden");
+  box.querySelector(".value").innerHTML =
+    "ROI: " + formatNumber(roi) + "%<br>" +
+    "Net Profit: " + formatNumber(profit);
+  box.classList.add("copied-flash");
+  setTimeout(()=>box.classList.remove("copied-flash"), 600);
+});
+document.addEventListener("DOMContentLoaded", ()=>{
+  const related = calcsByCategory("finance").filter(c=>!c.url.includes("roi-calculator")).slice(0,4);
+  document.getElementById("related-grid").innerHTML = related.map(CalcUI.calcCard).join("");
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Calculator Studio — Free All-in-One Online Calculators</title>
+<meta name="description" content="Free online calculators for math, finance, health, converters, education, engineering, programming, time and everyday utilities. Fast, accurate, no ads clutter.">
+<link rel="canonical" href="https://example.com/index.html">
+<meta property="og:title" content="Calculator Studio — Free All-in-One Online Calculators">
+<meta property="og:description" content="150+ free calculators across math, finance, health, converters and more.">
+<meta property="og:type" content="website">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="icons/favicon.svg" type="image/svg+xml">
+<link rel="manifest" href="manifest.json">
+<link rel="stylesheet" href="css/style.css">
+<link rel="stylesheet" href="css/responsive.css">
+<link rel="stylesheet" href="css/animations.css">
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"WebSite","name":"Calculator Studio","url":"https://example.com/"}
+</script>
+</head>
+<body>
+<script>const ROOT="";</script>
+<div id="site-header"></div>
+
+<main>
+  <section class="hero container">
+    <h1>All-in-One <span>Calculator</span><br>100+ Free Online Calculators</h1>
+    <p>Fast. Accurate. Free. Mobile Friendly. Calculators for math, finance, health, conversions, engineering, programming and daily life — all in one place.</p>
+    <div class="search-box">
+      <input type="text" placeholder="Search calculators… e.g. BMI, EMI, Age" data-search="#home-search-results" aria-label="Search calculators">
+      <div class="search-results" id="home-search-results"></div>
+    </div>
+    <div class="popular-searches">
+      <span>Popular:</span>
+      <a href="health/bmi-calculator.html">BMI</a>
+      <a href="health/age-calculator.html">Age</a>
+      <a href="finance/loan-calculator.html">Loan</a>
+      <a href="finance/emi-calculator.html">EMI</a>
+      <a href="math/percentage-calculator.html">Percentage</a>
+      <a href="math/scientific-calculator.html">Scientific</a>
+    </div>
+  </section>
+
+  <section class="container">
+    <div class="section-title"><h2>Quick Calculators</h2></div>
+    <div class="grid grid-4" id="quick-grid"></div>
+  </section>
+
+  <section class="container">
+    <div class="section-title"><h2>Browse by Category</h2></div>
+    <div class="grid grid-4" id="category-grid"></div>
+  </section>
+
+  <section class="container">
+    <div class="section-title"><h2>Popular Calculators</h2></div>
+    <div class="grid grid-4" id="popular-grid"></div>
+  </section>
+
+  <section class="container">
+    <div class="section-title"><h2>Featured Calculators</h2></div>
+    <div class="grid grid-4" id="featured-grid"></div>
+  </section>
+
+  <section class="container">
+    <div class="section-title"><h2>Recently Added</h2></div>
+    <div class="grid grid-4" id="latest-grid"></div>
+  </section>
+
+  <section class="container">
+    <div class="section-title"><h2>Most Used Today</h2></div>
+    <div class="grid grid-4" id="most-used-grid"></div>
+  </section>
+
+  <section class="container">
+    <div class="section-title"><h2>Calculator Collections</h2></div>
+    <div class="grid grid-4">
+      <div class="card category-card"><div class="icon">🎓</div><h3>Student Tools</h3><p>GPA, CGPA, grades &amp; percentage.</p></div>
+      <div class="card category-card"><div class="icon">💼</div><h3>Office Tools</h3><p>Salary, tax, split bill &amp; tips.</p></div>
+      <div class="card category-card"><div class="icon">👨‍💻</div><h3>Developer Tools</h3><p>Hash, UUID, JSON, Base64 &amp; more.</p></div>
+      <div class="card category-card"><div class="icon">📈</div><h3>Financial Tools</h3><p>EMI, loan, interest &amp; ROI.</p></div>
+    </div>
+  </section>
+
+  <section class="container">
+    <div class="section-title"><h2>Why Choose Calculator Studio</h2></div>
+    <div class="grid grid-4">
+      <div class="card category-card"><div class="icon">🧮</div><h3>100+ Calculators</h3></div>
+      <div class="card category-card"><div class="icon">🆓</div><h3>100% Free</h3></div>
+      <div class="card category-card"><div class="icon">🔓</div><h3>No Registration</h3></div>
+      <div class="card category-card"><div class="icon">⚡</div><h3>Instant Results</h3></div>
+      <div class="card category-card"><div class="icon">📱</div><h3>Mobile Friendly</h3></div>
+      <div class="card category-card"><div class="icon">🔍</div><h3>SEO Optimized</h3></div>
+      <div class="card category-card"><div class="icon">🔒</div><h3>Privacy First</h3></div>
+      <div class="card category-card"><div class="icon">🐙</div><h3>GitHub Hosted</h3></div>
+    </div>
+  </section>
+
+  <section class="container">
+    <div class="section-title"><h2>Frequently Asked Questions</h2></div>
+    <div id="faq-list">
+      <div class="faq-item">
+        <div class="faq-q">Are these calculators free to use? <span class="caret">▾</span></div>
+        <div class="faq-a">Yes, every calculator on Calculator Studio is 100% free with no sign-up required.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q">Do I need internet access to use them? <span class="caret">▾</span></div>
+        <div class="faq-a">No. All calculators run entirely in your browser using JavaScript — no server or internet connection needed once the page is loaded.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q">Is my data stored anywhere? <span class="caret">▾</span></div>
+        <div class="faq-a">No data is sent anywhere. All calculations happen locally in your browser.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q">Can I switch between dark and light themes? <span class="caret">▾</span></div>
+        <div class="faq-a">Yes, use the theme toggle button in the header. Your preference is saved automatically.</div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<button id="scroll-top" class="theme-toggle" style="position:fixed;bottom:24px;right:24px;z-index:900;display:none" aria-label="Scroll to top">↑</button>
+
+<div id="site-footer"></div>
+
+<script src="js/calc-data.js"></script>
+<script src="js/main.js"></script>
+<script src="js/theme.js"></script>
+<script src="js/search.js"></script>
+<script src="js/calculator.js"></script>
+<script>
+document.addEventListener("DOMContentLoaded", ()=>{
+  const popular = CALCULATORS.filter(c=>c.popular);
+  document.getElementById("quick-grid").innerHTML = popular.slice(0,8).map(CalcUI.calcCard).join("");
+  document.getElementById("popular-grid").innerHTML = popular.slice(0,8).map(CalcUI.calcCard).join("");
+  document.getElementById("category-grid").innerHTML = CATEGORIES.map(cat=>{
+    const count = calcsByCategory(cat.id).length;
+    return `<a href="${cat.id}/index.html" class="card category-card">
+      <div class="icon">${cat.icon}</div><h3>${cat.label}</h3><p>${count} Calculators</p>
+    </a>`;
+  }).join("");
+  document.getElementById("featured-grid").innerHTML = CALCULATORS.slice(0,8).map(CalcUI.calcCard).join("");
+  document.getElementById("latest-grid").innerHTML = CALCULATORS.slice(-8).map(CalcUI.calcCard).join("");
+
+  // Most Used Today: derived from localStorage click counts, fallback to popular
+  let usage = {};
+  try{ usage = JSON.parse(localStorage.getItem("calcUsage")||"{}"); }catch(e){}
+  const used = Object.keys(usage).length
+    ? CALCULATORS.filter(c=>usage[c.url]).sort((a,b)=>usage[b.url]-usage[a.url]).slice(0,8)
+    : popular.slice(0,5);
+  document.getElementById("most-used-grid").innerHTML = used.map(CalcUI.calcCard).join("");
+
+  document.querySelectorAll("#quick-grid a, #popular-grid a, #featured-grid a, #latest-grid a, #most-used-grid a").forEach(a=>{
+    a.addEventListener("click", ()=>{
+      try{
+        const u = JSON.parse(localStorage.getItem("calcUsage")||"{}");
+        const href = a.getAttribute("href");
+        u[href] = (u[href]||0)+1;
+        localStorage.setItem("calcUsage", JSON.stringify(u));
+      }catch(e){}
+    });
+  });
+
+  const scrollBtn = document.getElementById("scroll-top");
+  window.addEventListener("scroll", ()=>{
+    scrollBtn.style.display = window.scrollY > 500 ? "flex" : "none";
+  });
+  scrollBtn.addEventListener("click", ()=>window.scrollTo({top:0,behavior:"smooth"}));
+});
+</script>
+</body>
+</html>

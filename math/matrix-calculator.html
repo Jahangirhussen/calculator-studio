@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Matrix Calculator — Free Online Calculator | Calculator Studio</title>
+<meta name="description" content="Add, subtract and multiply 2x2 or 3x3 matrices online for free.">
+<link rel="canonical" href="https://example.com/math/matrix-calculator.html">
+<meta property="og:title" content="Matrix Calculator — Calculator Studio">
+<meta property="og:description" content="Add, subtract and multiply matrices online.">
+<meta property="og:type" content="website">
+<meta name="twitter:card" content="summary">
+<link rel="icon" href="../icons/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="../css/style.css">
+<link rel="stylesheet" href="../css/responsive.css">
+<link rel="stylesheet" href="../css/animations.css">
+<style>.mgrid{display:grid;gap:6px;margin-bottom:10px}.mgrid input{width:100%;padding:8px;text-align:center;border-radius:6px;border:1px solid var(--border);background:var(--bg-alt)}</style>
+</head>
+<body>
+<script>const ROOT="../";</script>
+<div id="site-header"></div>
+<main class="container">
+  <div class="breadcrumb"><a href="../index.html">Home</a> / <a href="index.html">Math</a> / Matrix Calculator</div>
+  <h1 class="calc-page-title">Matrix Calculator</h1>
+  <p class="calc-page-desc">Add, subtract or multiply two matrices of the same size (2x2 or 3x3).</p>
+  <div class="calc-layout">
+    <div class="panel">
+      <form id="calc-form">
+        <div class="field"><label>Matrix Size</label>
+          <select id="msize"><option value="2">2 x 2</option><option value="3">3 x 3</option></select>
+        </div>
+        <div class="field-row">
+          <div class="field"><label>Matrix A</label><div class="mgrid" id="matA"></div></div>
+          <div class="field"><label>Matrix B</label><div class="mgrid" id="matB"></div></div>
+        </div>
+        <div class="field"><label>Operation</label>
+          <select id="op"><option value="add">A + B</option><option value="sub">A − B</option><option value="mul">A × B</option></select>
+        </div>
+        <button type="submit" class="btn btn-solid">Calculate</button>
+      </form>
+      <div class="result-box hidden" id="result-box">
+        <div class="label">Result Matrix</div>
+        <div class="value" id="result-value">—</div>
+      </div>
+      <div class="action-row">
+        <button class="btn btn-ghost" onclick="copyResultText('#result-value')">Copy Result</button>
+        <button class="btn btn-ghost" onclick="shareCurrentPage()">Share</button>
+        <button class="btn btn-ghost" type="button" onclick="location.reload()">Reset</button>
+      </div>
+    </div>
+    <div class="panel">
+      <div class="info-block">
+        <h2>Formula</h2>
+        <div class="formula">Addition/Subtraction: element-wise. Multiplication: row × column dot product.</div>
+        <h2>How To Use</h2>
+        <p>Choose matrix size, fill both matrices, select operation, then Calculate.</p>
+      </div>
+    </div>
+  </div>
+  <div class="info-block">
+    <h2>Frequently Asked Questions</h2>
+    <div class="faq-item"><div class="faq-q">Can matrices of different sizes be multiplied? <span class="caret">▾</span></div><div class="faq-a">Only square matrices of equal size are supported here for simplicity.</div></div>
+    <div class="faq-item"><div class="faq-q">Is this free? <span class="caret">▾</span></div><div class="faq-a">Yes, completely free with no sign-up.</div></div>
+  </div>
+  <div class="info-block"><h2>Related Calculators</h2><div class="related-grid" id="related-grid"></div></div>
+</main>
+<div id="site-footer"></div>
+<script src="../js/calc-data.js"></script>
+<script src="../js/main.js"></script>
+<script src="../js/theme.js"></script>
+<script src="../js/calculator.js"></script>
+<script>
+function buildGrid(container, n){
+  container.style.gridTemplateColumns = `repeat(${n},1fr)`;
+  container.innerHTML = "";
+  for(let i=0;i<n*n;i++){
+    const inp = document.createElement("input");
+    inp.type = "number"; inp.value = "0"; inp.step="any";
+    container.appendChild(inp);
+  }
+}
+function readGrid(container, n){
+  const vals = [...container.querySelectorAll("input")].map(i=>parseFloat(i.value)||0);
+  const m = [];
+  for(let r=0;r<n;r++) m.push(vals.slice(r*n,(r+1)*n));
+  return m;
+}
+function renderMatrix(m){
+  return m.map(row=>row.map(v=>Number(v.toFixed(4))).join("\t")).join("\n");
+}
+const msize = document.getElementById("msize");
+const matA = document.getElementById("matA");
+const matB = document.getElementById("matB");
+function rebuild(){ buildGrid(matA, Number(msize.value)); buildGrid(matB, Number(msize.value)); }
+msize.addEventListener("change", rebuild);
+rebuild();
+
+document.getElementById("calc-form").addEventListener("submit", function(e){
+  e.preventDefault();
+  const n = Number(msize.value);
+  const A = readGrid(matA, n), B = readGrid(matB, n);
+  const op = document.getElementById("op").value;
+  let R = [];
+  if(op==="add") R = A.map((row,i)=>row.map((v,j)=>v+B[i][j]));
+  else if(op==="sub") R = A.map((row,i)=>row.map((v,j)=>v-B[i][j]));
+  else {
+    R = Array.from({length:n},()=>Array(n).fill(0));
+    for(let i=0;i<n;i++) for(let j=0;j<n;j++){ let s=0; for(let k=0;k<n;k++) s+=A[i][k]*B[k][j]; R[i][j]=s; }
+  }
+  showResult("#result-box", renderMatrix(R));
+  document.getElementById("result-value").style.whiteSpace = "pre";
+});
+document.addEventListener("DOMContentLoaded", ()=>{
+  const related = calcsByCategory("math").filter(c=>!c.url.includes("matrix-calculator")).slice(0,4);
+  document.getElementById("related-grid").innerHTML = related.map(CalcUI.calcCard).join("");
+});
+</script>
+</body>
+</html>

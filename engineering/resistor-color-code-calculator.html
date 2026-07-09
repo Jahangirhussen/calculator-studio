@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Resistor Color Code Calculator — Free Online Calculator | Calculator Studio</title>
+<meta name="description" content="Decode a 4-band resistor's resistance value from its color code.">
+<link rel="canonical" href="https://example.com/engineering/resistor-color-code-calculator.html">
+<link rel="icon" href="../icons/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="../css/style.css">
+<link rel="stylesheet" href="../css/responsive.css">
+<link rel="stylesheet" href="../css/animations.css">
+</head>
+<body>
+<script>const ROOT="../";</script>
+<div id="site-header"></div>
+<main class="container">
+  <div class="breadcrumb"><a href="../index.html">Home</a> / <a href="index.html">Engineering</a> / Resistor Color Code Calculator</div>
+  <h1 class="calc-page-title">Resistor Color Code Calculator (4-Band)</h1>
+  <p class="calc-page-desc">Decode a 4-band resistor's resistance and tolerance from its color bands.</p>
+  <div class="calc-layout">
+    <div class="panel">
+      <form id="calc-form">
+        <div class="field-row">
+          <div class="field"><label>Band 1 (1st digit)</label><select id="b1"></select></div>
+          <div class="field"><label>Band 2 (2nd digit)</label><select id="b2"></select></div>
+        </div>
+        <div class="field-row">
+          <div class="field"><label>Band 3 (Multiplier)</label><select id="b3"></select></div>
+          <div class="field"><label>Band 4 (Tolerance)</label><select id="b4"></select></div>
+        </div>
+        <button type="submit" class="btn btn-solid">Calculate</button>
+      </form>
+      <div class="result-box hidden" id="result-box">
+        <div class="label">Resistance</div>
+        <div class="value" id="result-value">—</div>
+      </div>
+      <div class="action-row">
+        <button class="btn btn-ghost" onclick="copyResultText('#result-value')">Copy Result</button>
+        <button class="btn btn-ghost" type="button" onclick="location.reload()">Reset</button>
+      </div>
+    </div>
+    <div class="panel"><div class="info-block"><h2>Formula</h2><div class="formula">Resistance = (digit1×10 + digit2) × multiplier</div></div></div>
+  </div>
+  <div class="info-block"><h2>Related Calculators</h2><div class="related-grid" id="related-grid"></div></div>
+</main>
+<div id="site-footer"></div>
+<script src="../js/calc-data.js"></script>
+<script src="../js/main.js"></script>
+<script src="../js/theme.js"></script>
+<script src="../js/calculator.js"></script>
+<script>
+const digitColors = [["Black",0],["Brown",1],["Red",2],["Orange",3],["Yellow",4],["Green",5],["Blue",6],["Violet",7],["Grey",8],["White",9]];
+const multColors = [["Black",1],["Brown",10],["Red",100],["Orange",1000],["Yellow",10000],["Green",100000],["Blue",1000000],["Gold",0.1],["Silver",0.01]];
+const tolColors = [["Brown",1],["Red",2],["Gold",5],["Silver",10]];
+
+function fillSelect(id, arr, labelFn){
+  const el = document.getElementById(id);
+  el.innerHTML = arr.map(([name,val])=>`<option value="${val}">${labelFn(name,val)}</option>`).join("");
+}
+fillSelect("b1", digitColors, (n,v)=>`${n} (${v})`);
+fillSelect("b2", digitColors, (n,v)=>`${n} (${v})`);
+fillSelect("b3", multColors, (n,v)=>`${n} (×${v})`);
+fillSelect("b4", tolColors, (n,v)=>`${n} (±${v}%)`);
+
+document.getElementById("calc-form").addEventListener("submit", function(e){
+  e.preventDefault();
+  const d1 = parseFloat(document.getElementById("b1").value);
+  const d2 = parseFloat(document.getElementById("b2").value);
+  const mult = parseFloat(document.getElementById("b3").value);
+  const tol = parseFloat(document.getElementById("b4").value);
+  let ohms = (d1*10+d2)*mult;
+  let label;
+  if(ohms >= 1e6) label = formatNumber(ohms/1e6) + " MΩ";
+  else if(ohms >= 1e3) label = formatNumber(ohms/1e3) + " kΩ";
+  else label = formatNumber(ohms) + " Ω";
+  showResult("#result-box", `${label} ± ${tol}%`);
+});
+document.addEventListener("DOMContentLoaded", ()=>{
+  const related = calcsByCategory("engineering").filter(c=>!c.url.includes("resistor-color-code-calculator")).slice(0,4);
+  document.getElementById("related-grid").innerHTML = related.map(CalcUI.calcCard).join("");
+});
+</script>
+</body>
+</html>

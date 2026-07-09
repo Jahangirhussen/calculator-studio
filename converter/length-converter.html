@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Length Converter — Free Online Converter | Calculator Studio</title>
+<meta name="description" content="Convert millimeters, centimeters, meters, kilometers, inches, feet, yards and miles instantly.">
+<link rel="canonical" href="https://example.com/converter/length-converter.html">
+<meta property="og:title" content="Length Converter — Calculator Studio">
+<meta property="og:description" content="Convert millimeters, centimeters, meters, kilometers, inches, feet, yards and miles instantly.">
+<meta property="og:type" content="website">
+<meta name="twitter:card" content="summary">
+<link rel="icon" href="../icons/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="../css/style.css">
+<link rel="stylesheet" href="../css/responsive.css">
+<link rel="stylesheet" href="../css/animations.css">
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"SoftwareApplication","name":"Length Converter","applicationCategory":"UtilitiesApplication","operatingSystem":"Any"}
+</script>
+</head>
+<body>
+<script>const ROOT="../";</script>
+<div id="site-header"></div>
+<main class="container">
+  <div class="breadcrumb"><a href="../index.html">Home</a> / <a href="index.html">Converters</a> / Length Converter</div>
+  <h1 class="calc-page-title">Length Converter</h1>
+  <p class="calc-page-desc">Convert between millimeters, centimeters, meters, kilometers, inches, feet, yards and miles.</p>
+  <div class="calc-layout">
+    <div class="panel">
+      <form id="calc-form">
+        <div class="field"><label>Value</label><input type="number" step="any" id="input-value" required></div>
+        <div class="field-row">
+          <div class="field"><label>From</label><select id="from-unit"><!-- options --></select></div>
+          <div class="field"><label>To</label><select id="to-unit"><!-- options --></select></div>
+        </div>
+        <button type="submit" class="btn btn-solid">Convert</button>
+      </form>
+      <div class="result-box hidden" id="result-box">
+        <div class="label">Result</div>
+        <div class="value" id="result-value">—</div>
+      </div>
+      <div class="action-row">
+        <button class="btn btn-ghost" onclick="copyResultText('#result-value')">Copy Result</button>
+        <button class="btn btn-ghost" onclick="shareCurrentPage()">Share</button>
+        <button class="btn btn-ghost" onclick="resetForm('#calc-form','#result-box')">Reset</button>
+      </div>
+    </div>
+    <div class="panel">
+      <div class="info-block">
+        <h2>Formula</h2>
+        <div class="formula">value_in_base = value × factor(unit → meter)<br>result = value_in_base ÷ factor(target → meter)</div>
+        <h2>Example</h2>
+        <p>Convert 5 kilometers to miles: 5 km × 1000 = 5000 m. 5000 m ÷ 1609.344 = 3.106856 miles.</p>
+        <h2>How To Use</h2>
+        <p>Enter a value, choose the unit you're converting from and the unit you want, then click Convert.</p>
+      </div>
+    </div>
+  </div>
+  <div class="info-block">
+    <h2>Frequently Asked Questions</h2>
+    <div class="faq-item"><div class="faq-q">What is the base unit used for length conversion? <span class="caret">▾</span></div><div class="faq-a">This tool converts every unit to meters first, then from meters to your target unit, which keeps the math accurate for any combination.</div></div>
+    <div class="faq-item"><div class="faq-q">How many meters are in a mile? <span class="caret">▾</span></div><div class="faq-a">One mile equals exactly 1609.344 meters.</div></div>
+  </div>
+  <div class="info-block">
+    <h2>Related Calculators</h2>
+    <div class="related-grid" id="related-grid"></div>
+  </div>
+</main>
+<div id="site-footer"></div>
+<script src="../js/calc-data.js"></script>
+<script src="../js/main.js"></script>
+<script src="../js/theme.js"></script>
+<script src="../js/calculator.js"></script>
+<script>
+const UNITS = {
+  millimeter: 0.001,
+  centimeter: 0.01,
+  meter: 1,
+  kilometer: 1000,
+  inch: 0.0254,
+  foot: 0.3048,
+  yard: 0.9144,
+  mile: 1609.344
+};
+document.addEventListener("DOMContentLoaded", ()=>{
+  const opts = Object.keys(UNITS).map(u=>`<option value="${u}">${u}</option>`).join("");
+  document.getElementById("from-unit").innerHTML = opts;
+  document.getElementById("to-unit").innerHTML = opts;
+  document.getElementById("to-unit").value = "mile";
+  const related = calcsByCategory("converter").filter(c=>!c.url.includes("length-converter")).slice(0,4);
+  document.getElementById("related-grid").innerHTML = related.map(CalcUI.calcCard).join("");
+});
+document.getElementById("calc-form").addEventListener("submit", function(e){
+  e.preventDefault();
+  const val = parseFloat(document.getElementById("input-value").value);
+  const from = document.getElementById("from-unit").value;
+  const to = document.getElementById("to-unit").value;
+  const base = val * UNITS[from];
+  const result = base / UNITS[to];
+  showResult("#result-box", formatNumber(result, 6) + " " + to);
+});
+</script>
+</body>
+</html>

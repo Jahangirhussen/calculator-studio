@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pregnancy Due Date Calculator — Free Online Calculator | Calculator Studio</title>
+<meta name="description" content="Estimate your pregnancy due date using Naegele's rule.">
+<link rel="canonical" href="https://example.com/health/pregnancy-due-date-calculator.html">
+<link rel="icon" href="../icons/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="../css/style.css">
+<link rel="stylesheet" href="../css/responsive.css">
+<link rel="stylesheet" href="../css/animations.css">
+</head>
+<body>
+<script>const ROOT="../";</script>
+<div id="site-header"></div>
+<main class="container">
+  <div class="breadcrumb"><a href="../index.html">Home</a> / <a href="index.html">Health</a> / Pregnancy Due Date Calculator</div>
+  <h1 class="calc-page-title">Pregnancy Due Date Calculator</h1>
+  <p class="calc-page-desc">Estimate your due date using Naegele's rule, based on the first day of your last menstrual period (LMP).</p>
+  <div class="calc-layout">
+    <div class="panel">
+      <form id="calc-form">
+        <div class="field"><label>First Day of Last Menstrual Period</label><input type="date" id="lmp" required></div>
+        <button type="submit" class="btn btn-solid">Calculate</button>
+      </form>
+      <div class="result-box hidden" id="result-box">
+        <div class="label">Estimated Due Date</div>
+        <div class="value" id="result-value">—</div>
+      </div>
+      <div class="action-row">
+        <button class="btn btn-ghost" onclick="copyResultText('#result-value')">Copy Result</button>
+        <button class="btn btn-ghost" onclick="shareCurrentPage()">Share</button>
+        <button class="btn btn-ghost" type="button" onclick="location.reload()">Reset</button>
+      </div>
+    </div>
+    <div class="panel"><div class="info-block"><h2>Formula (Naegele's Rule)</h2><div class="formula">Due Date = LMP + 280 days</div><p style="margin-top:10px;color:var(--text-soft);font-size:.8rem">This is an estimate only — consult a doctor for medical advice.</p></div></div>
+  </div>
+  <div class="info-block"><h2>Related Calculators</h2><div class="related-grid" id="related-grid"></div></div>
+</main>
+<div id="site-footer"></div>
+<script src="../js/calc-data.js"></script>
+<script src="../js/main.js"></script>
+<script src="../js/theme.js"></script>
+<script src="../js/calculator.js"></script>
+<script>
+document.getElementById("calc-form").addEventListener("submit", function(e){
+  e.preventDefault();
+  const lmp = new Date(document.getElementById("lmp").value);
+  lmp.setDate(lmp.getDate()+280);
+  showResult("#result-box", lmp.toLocaleDateString(undefined,{year:"numeric",month:"long",day:"numeric"}));
+});
+document.addEventListener("DOMContentLoaded", ()=>{
+  const related = calcsByCategory("health").filter(c=>!c.url.includes("pregnancy-due-date-calculator")).slice(0,4);
+  document.getElementById("related-grid").innerHTML = related.map(CalcUI.calcCard).join("");
+});
+</script>
+</body>
+</html>

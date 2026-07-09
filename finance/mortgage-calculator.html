@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mortgage Calculator — Free Online Calculator | Calculator Studio</title>
+<meta name="description" content="Estimate your monthly mortgage payment, total interest and total cost after down payment.">
+<link rel="canonical" href="https://example.com/finance/mortgage-calculator.html">
+<meta property="og:title" content="Mortgage Calculator — Calculator Studio">
+<meta property="og:description" content="Estimate your monthly mortgage payment, total interest and total cost after down payment.">
+<meta property="og:type" content="website">
+<meta name="twitter:card" content="summary">
+<link rel="icon" href="../icons/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="../css/style.css">
+<link rel="stylesheet" href="../css/responsive.css">
+<link rel="stylesheet" href="../css/animations.css">
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"SoftwareApplication","name":"Mortgage Calculator","applicationCategory":"FinanceApplication","operatingSystem":"Any"}
+</script>
+</head>
+<body>
+<script>const ROOT="../";</script>
+<div id="site-header"></div>
+<main class="container">
+  <div class="breadcrumb"><a href="../index.html">Home</a> / <a href="index.html">Finance</a> / Mortgage Calculator</div>
+  <h1 class="calc-page-title">Mortgage Calculator</h1>
+  <p class="calc-page-desc">Estimate your monthly mortgage payment after accounting for your down payment.</p>
+  <div class="calc-layout">
+    <div class="panel">
+      <form id="calc-form">
+        <div class="field">
+          <label for="price">Home Price</label>
+          <input type="number" id="price" step="any" min="0" value="350000" required>
+        </div>
+        <div class="field">
+          <label for="down">Down Payment</label>
+          <input type="number" id="down" step="any" min="0" value="70000" required>
+        </div>
+        <div class="field-row">
+          <div class="field">
+            <label for="rate">Annual Interest Rate (%)</label>
+            <input type="number" id="rate" step="any" min="0" value="6.5" required>
+          </div>
+          <div class="field">
+            <label for="tenure">Loan Term (Years)</label>
+            <input type="number" id="tenure" step="any" min="0.1" value="30" required>
+          </div>
+        </div>
+        <button type="submit" class="btn btn-solid">Calculate</button>
+      </form>
+      <div class="result-box hidden" id="result-box">
+        <div class="label">Result</div>
+        <div class="value" id="result-value">—</div>
+      </div>
+      <div class="action-row">
+        <button class="btn btn-ghost" onclick="copyResultText('#result-value')">Copy Result</button>
+        <button class="btn btn-ghost" onclick="shareCurrentPage()">Share</button>
+        <button class="btn btn-ghost" onclick="resetForm('#calc-form','#result-box')">Reset</button>
+      </div>
+    </div>
+    <div class="panel">
+      <div class="info-block">
+        <h2>Formula</h2>
+        <div class="formula">Principal = Home Price − Down Payment<br>Payment = P × r × (1+r)<sup>n</sup> / ((1+r)<sup>n</sup> − 1)<br>r = monthly rate = annual rate / 12 / 100, n = months</div>
+        <h2>Example</h2>
+        <p>Home price $350,000 with $70,000 down payment leaves a principal of $280,000. At 6.5% over 30 years, monthly payment ≈ $1,769.61.</p>
+        <h2>How To Use</h2>
+        <p>Enter the home price, down payment, annual interest rate, and loan term, then click Calculate to view your monthly mortgage payment, total interest, and total repayment.</p>
+      </div>
+    </div>
+  </div>
+  <div class="info-block">
+    <h2>Frequently Asked Questions</h2>
+    <div class="faq-item"><div class="faq-q">Does this include taxes and insurance? <span class="caret">▾</span></div><div class="faq-a">No, this calculator estimates principal and interest only. Property tax, insurance, and HOA fees are not included.</div></div>
+    <div class="faq-item"><div class="faq-q">How does a bigger down payment help? <span class="caret">▾</span></div><div class="faq-a">A larger down payment reduces the loan principal, lowering both your monthly payment and total interest paid over the loan term.</div></div>
+  </div>
+  <div class="info-block">
+    <h2>Related Calculators</h2>
+    <div class="related-grid" id="related-grid"></div>
+  </div>
+</main>
+<div id="site-footer"></div>
+<script src="../js/calc-data.js"></script>
+<script src="../js/main.js"></script>
+<script src="../js/theme.js"></script>
+<script src="../js/calculator.js"></script>
+<script>
+document.getElementById("calc-form").addEventListener("submit", function(e){
+  e.preventDefault();
+  const price = parseFloat(document.getElementById("price").value);
+  const down = parseFloat(document.getElementById("down").value);
+  const annualRate = parseFloat(document.getElementById("rate").value);
+  const years = parseFloat(document.getElementById("tenure").value);
+  const P = Math.max(price - down, 0);
+  const n = years * 12;
+  const r = annualRate / 12 / 100;
+  let payment;
+  if(r === 0){
+    payment = P / n;
+  } else {
+    payment = P * r * Math.pow(1+r, n) / (Math.pow(1+r, n) - 1);
+  }
+  const totalPayment = payment * n;
+  const totalInterest = totalPayment - P;
+  const box = document.querySelector("#result-box");
+  box.classList.remove("hidden");
+  box.querySelector(".value").innerHTML =
+    "Loan Principal: " + formatNumber(P) + "<br>" +
+    "Monthly Payment: " + formatNumber(payment) + "<br>" +
+    "Total Interest: " + formatNumber(totalInterest) + "<br>" +
+    "Total Payment: " + formatNumber(totalPayment);
+  box.classList.add("copied-flash");
+  setTimeout(()=>box.classList.remove("copied-flash"), 600);
+});
+document.addEventListener("DOMContentLoaded", ()=>{
+  const related = calcsByCategory("finance").filter(c=>!c.url.includes("mortgage-calculator")).slice(0,4);
+  document.getElementById("related-grid").innerHTML = related.map(CalcUI.calcCard).join("");
+});
+</script>
+</body>
+</html>

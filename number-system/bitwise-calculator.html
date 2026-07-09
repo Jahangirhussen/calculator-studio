@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Bitwise Calculator — Free Online Calculator | Calculator Studio</title>
+<meta name="description" content="Perform AND, OR, XOR, NOT and shift bitwise operations on numbers.">
+<link rel="canonical" href="https://example.com/number-system/bitwise-calculator.html">
+<link rel="icon" href="../icons/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="../css/style.css">
+<link rel="stylesheet" href="../css/responsive.css">
+<link rel="stylesheet" href="../css/animations.css">
+</head>
+<body>
+<script>const ROOT="../";</script>
+<div id="site-header"></div>
+<main class="container">
+  <div class="breadcrumb"><a href="../index.html">Home</a> / <a href="index.html">Number System</a> / Bitwise Calculator</div>
+  <h1 class="calc-page-title">Bitwise Calculator</h1>
+  <p class="calc-page-desc">Compute AND, OR, XOR, NOT, left shift and right shift on integers.</p>
+  <div class="calc-layout">
+    <div class="panel">
+      <form id="calc-form">
+        <div class="field-row">
+          <div class="field"><label>Value A</label><input type="number" id="a" value="0" required></div>
+          <div class="field"><label>Value B (not used for NOT)</label><input type="number" id="b" value="0"></div>
+        </div>
+        <div class="field"><label>Operator</label>
+          <select id="op">
+            <option value="AND">AND (&amp;)</option>
+            <option value="OR">OR (|)</option>
+            <option value="XOR">XOR (^)</option>
+            <option value="NOT">NOT (~A)</option>
+            <option value="LSHIFT">Left Shift (A &lt;&lt; B)</option>
+            <option value="RSHIFT">Right Shift (A &gt;&gt; B)</option>
+          </select>
+        </div>
+        <button type="submit" class="btn btn-solid">Calculate</button>
+      </form>
+      <div class="result-box hidden" id="result-box">
+        <div class="label">Result (decimal / binary)</div>
+        <div class="value" id="result-value">—</div>
+      </div>
+      <div class="action-row">
+        <button class="btn btn-ghost" onclick="copyResultText('#result-value')">Copy Result</button>
+        <button class="btn btn-ghost" type="button" onclick="location.reload()">Reset</button>
+      </div>
+    </div>
+    <div class="panel"><div class="info-block"><h2>Example</h2><p>5 AND 3 = 1 (0101 &amp; 0011 = 0001)</p></div></div>
+  </div>
+  <div class="info-block"><h2>Related Calculators</h2><div class="related-grid" id="related-grid"></div></div>
+</main>
+<div id="site-footer"></div>
+<script src="../js/calc-data.js"></script>
+<script src="../js/main.js"></script>
+<script src="../js/theme.js"></script>
+<script src="../js/calculator.js"></script>
+<script>
+document.getElementById("calc-form").addEventListener("submit", function(e){
+  e.preventDefault();
+  const a = parseInt(document.getElementById("a").value)||0;
+  const b = parseInt(document.getElementById("b").value)||0;
+  const op = document.getElementById("op").value;
+  let r;
+  switch(op){
+    case "AND": r = a & b; break;
+    case "OR": r = a | b; break;
+    case "XOR": r = a ^ b; break;
+    case "NOT": r = ~a; break;
+    case "LSHIFT": r = a << b; break;
+    case "RSHIFT": r = a >> b; break;
+  }
+  showResult("#result-box", `${r} (binary: ${r<0 ? (r>>>0).toString(2) : r.toString(2)})`);
+});
+document.addEventListener("DOMContentLoaded", ()=>{
+  const related = calcsByCategory("number-system").filter(c=>!c.url.includes("bitwise-calculator")).slice(0,4);
+  document.getElementById("related-grid").innerHTML = related.map(CalcUI.calcCard).join("");
+});
+</script>
+</body>
+</html>

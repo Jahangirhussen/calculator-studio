@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Prime Number Calculator — Free Online Calculator | Calculator Studio</title>
+<meta name="description" content="Check whether a number is prime and view its factors.">
+<link rel="canonical" href="https://example.com/math/prime-number-calculator.html">
+<meta property="og:title" content="Prime Number Calculator — Calculator Studio">
+<meta property="og:description" content="Check whether a number is prime and view its factors.">
+<meta property="og:type" content="website">
+<meta name="twitter:card" content="summary">
+<link rel="icon" href="../icons/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="../css/style.css">
+<link rel="stylesheet" href="../css/responsive.css">
+<link rel="stylesheet" href="../css/animations.css">
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"SoftwareApplication","name":"Prime Number Calculator","applicationCategory":"UtilitiesApplication","operatingSystem":"Any"}
+</script>
+</head>
+<body>
+<script>const ROOT="../";</script>
+<div id="site-header"></div>
+<main class="container">
+  <div class="breadcrumb"><a href="../index.html">Home</a> / <a href="index.html">Math</a> / Prime Number Calculator</div>
+  <h1 class="calc-page-title">Prime Number Calculator</h1>
+  <p class="calc-page-desc">Check whether a number is prime, and see its factors.</p>
+  <div class="calc-layout">
+    <div class="panel">
+      <form id="calc-form">
+        <div class="field">
+          <label for="num">Number</label>
+          <input type="number" id="num" step="1" min="0" required>
+        </div>
+        <button type="submit" class="btn btn-solid">Calculate</button>
+      </form>
+      <div class="result-box hidden" id="result-box">
+        <div class="label">Result</div>
+        <div class="value" id="result-value">—</div>
+      </div>
+      <div class="action-row">
+        <button class="btn btn-ghost" onclick="copyResultText('#result-value')">Copy Result</button>
+        <button class="btn btn-ghost" onclick="shareCurrentPage()">Share</button>
+        <button class="btn btn-ghost" onclick="resetForm('#calc-form','#result-box')">Reset</button>
+      </div>
+    </div>
+    <div class="panel">
+      <div class="info-block">
+        <h2>Formula</h2>
+        <div class="formula">A number n > 1 is prime if it has no divisors other than 1 and itself.
+Checked by trial division up to √n.</div>
+        <h2>Example</h2>
+        <p>17 is prime. 18 is not prime (factors: 1, 2, 3, 6, 9, 18).</p>
+        <h2>How To Use</h2>
+        <p>Enter a non-negative integer and click Calculate.</p>
+      </div>
+    </div>
+  </div>
+  <div class="info-block">
+    <h2>Frequently Asked Questions</h2>
+    <div class="faq-item"><div class="faq-q">Is 1 a prime number? <span class="caret">▾</span></div><div class="faq-a">No, 1 is neither prime nor composite by definition.</div></div>
+    <div class="faq-item"><div class="faq-q">Is 2 the only even prime? <span class="caret">▾</span></div><div class="faq-a">Yes, 2 is the only even prime number; all other even numbers are divisible by 2.</div></div>
+  </div>
+  <div class="info-block">
+    <h2>Related Calculators</h2>
+    <div class="related-grid" id="related-grid"></div>
+  </div>
+</main>
+<div id="site-footer"></div>
+<script src="../js/calc-data.js"></script>
+<script src="../js/main.js"></script>
+<script src="../js/theme.js"></script>
+<script src="../js/calculator.js"></script>
+<script>
+function isPrime(n){
+  if(n < 2) return false;
+  if(n % 2 === 0) return n === 2;
+  for(let i=3; i*i<=n; i+=2){ if(n % i === 0) return false; }
+  return true;
+}
+function factorsOf(n){
+  const f = [];
+  for(let i=1;i<=n;i++){ if(n % i === 0) f.push(i); }
+  return f;
+}
+document.getElementById("calc-form").addEventListener("submit", function(e){
+  e.preventDefault();
+  const n = parseInt(document.getElementById("num").value, 10);
+  if(isNaN(n) || n < 0){ showResult("#result-box", "Error: enter a non-negative integer"); return; }
+  const prime = isPrime(n);
+  let msg = `${n} is ${prime ? "a PRIME" : "NOT a prime"} number.`;
+  if(!prime && n <= 100000){
+    const factors = factorsOf(n);
+    msg += ` Factors: ${factors.join(", ")}`;
+  }
+  showResult("#result-box", msg);
+});
+document.addEventListener("DOMContentLoaded", ()=>{
+  const related = calcsByCategory("math").filter(c=>!c.url.includes("prime-number-calculator")).slice(0,4);
+  document.getElementById("related-grid").innerHTML = related.map(CalcUI.calcCard).join("");
+});
+</script>
+</body>
+</html>

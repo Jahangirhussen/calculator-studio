@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Contact — Calculator Studio</title>
+<meta name="description" content="Get in touch with the Calculator Studio team for feedback, suggestions or calculator requests.">
+<link rel="canonical" href="https://example.com/contact.html">
+<link rel="icon" href="icons/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="css/style.css">
+<link rel="stylesheet" href="css/responsive.css">
+<link rel="stylesheet" href="css/animations.css">
+</head>
+<body>
+<script>const ROOT="";</script>
+<div id="site-header"></div>
+<main class="container text-center">
+  <div class="breadcrumb" style="text-align:center"><a href="index.html">Home</a> / Contact</div>
+  <h1 class="calc-page-title">Contact Us</h1>
+  <p class="calc-page-desc" style="margin-left:auto;margin-right:auto">Have feedback, found a bug, or want a new calculator added? Send us a message below, or connect directly.</p>
+
+  <div class="panel" style="max-width:600px;margin:0 auto 30px">
+    <form id="contact-form" onsubmit="event.preventDefault(); document.getElementById('contact-success').classList.remove('hidden'); this.reset();">
+      <div class="field"><label>Name</label><input type="text" required></div>
+      <div class="field"><label>Email</label><input type="email" required></div>
+      <div class="field"><label>Message</label><input type="text" required placeholder="Your message"></div>
+      <button class="btn btn-solid" type="submit">Send Message</button>
+      <p id="contact-success" class="hidden" style="color:var(--gold);margin-top:14px">Thanks! This is a static demo form — no data is sent anywhere.</p>
+    </form>
+  </div>
+
+  <div class="panel" style="max-width:600px;margin:0 auto">
+    <h2 style="margin-bottom:16px">Connect With Me</h2>
+    <div style="display:flex;flex-direction:column;gap:10px;align-items:center">
+      <a href="https://wa.me/8801849620018" class="btn btn-ghost" style="width:100%;max-width:340px">💬 WhatsApp: +880 1849 620018</a>
+      <a href="https://www.kaggle.com/jahangirhussen" class="btn btn-ghost" style="width:100%;max-width:340px" target="_blank" rel="noopener">📊 Kaggle: jahangirhussen</a>
+      <a href="https://www.linkedin.com/in/jahangirhussen/" class="btn btn-ghost" style="width:100%;max-width:340px" target="_blank" rel="noopener">📝 LinkedIn: jahangirhussen</a>
+      <a href="https://codeforces.com/profile/jahangirhussen5011" class="btn btn-ghost" style="width:100%;max-width:340px" target="_blank" rel="noopener">🏆 Codeforces: jahangirhussen5011</a>
+      <a href="https://www.codechef.com/users/jahangirhussen" class="btn btn-ghost" style="width:100%;max-width:340px" target="_blank" rel="noopener">🍳 CodeChef: jahangirhussen</a>
+      <a href="https://leetcode.com/jahangirhussen" class="btn btn-ghost" style="width:100%;max-width:340px" target="_blank" rel="noopener">💻 LeetCode: jahangirhussen</a>
+      <a href="https://orcid.org/0009-0007-1024-6644" class="btn btn-ghost" style="width:100%;max-width:340px" target="_blank" rel="noopener">🆔 ORCID: 0009-0007-1024-6644</a>
+    </div>
+  </div>
+</main>
+<div id="site-footer"></div>
+<script src="js/calc-data.js"></script>
+<script src="js/main.js"></script>
+<script src="js/theme.js"></script>
+</body>
+</html>

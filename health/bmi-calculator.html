@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BMI Calculator — Free Online Calculator | Calculator Studio</title>
+<meta name="description" content="Calculate your Body Mass Index (BMI) using metric or imperial units and see your weight category.">
+<link rel="canonical" href="https://example.com/health/bmi-calculator.html">
+<meta property="og:title" content="BMI Calculator — Calculator Studio">
+<meta property="og:description" content="Calculate your Body Mass Index (BMI) using metric or imperial units and see your weight category.">
+<meta property="og:type" content="website">
+<meta name="twitter:card" content="summary">
+<link rel="icon" href="../icons/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="../css/style.css">
+<link rel="stylesheet" href="../css/responsive.css">
+<link rel="stylesheet" href="../css/animations.css">
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"SoftwareApplication","name":"BMI Calculator","applicationCategory":"HealthApplication","operatingSystem":"Any"}
+</script>
+</head>
+<body>
+<script>const ROOT="../";</script>
+<div id="site-header"></div>
+<main class="container">
+  <div class="breadcrumb"><a href="../index.html">Home</a> / <a href="index.html">Health</a> / BMI Calculator</div>
+  <h1 class="calc-page-title">BMI Calculator</h1>
+  <p class="calc-page-desc">Calculate your Body Mass Index and see your weight category, using metric or imperial units.</p>
+  <div class="calc-layout">
+    <div class="panel">
+      <form id="calc-form">
+        <div class="field">
+          <label for="unit">Units</label>
+          <select id="unit">
+            <option value="metric">Metric (kg / cm)</option>
+            <option value="imperial">Imperial (lb / in)</option>
+          </select>
+        </div>
+        <div class="field-row">
+          <div class="field">
+            <label id="weightLabel" for="weight">Weight (kg)</label>
+            <input type="number" id="weight" step="any" min="0" required>
+          </div>
+          <div class="field">
+            <label id="heightLabel" for="height">Height (cm)</label>
+            <input type="number" id="height" step="any" min="0" required>
+          </div>
+        </div>
+        <button type="submit" class="btn btn-solid">Calculate</button>
+      </form>
+      <div class="result-box hidden" id="result-box">
+        <div class="label">Result</div>
+        <div class="value" id="result-value">—</div>
+      </div>
+      <div class="action-row">
+        <button class="btn btn-ghost" onclick="copyResultText('#result-value')">Copy Result</button>
+        <button class="btn btn-ghost" onclick="shareCurrentPage()">Share</button>
+        <button class="btn btn-ghost" onclick="resetForm('#calc-form','#result-box')">Reset</button>
+      </div>
+    </div>
+    <div class="panel">
+      <div class="info-block">
+        <h2>Formula</h2>
+        <div class="formula">Metric: BMI = kg / (m)²
+Imperial: BMI = 703 × lb / (in)²
+
+Underweight: &lt; 18.5
+Normal: 18.5 – 24.9
+Overweight: 25 – 29.9
+Obese: 30+</div>
+        <h2>Example</h2>
+        <p>A person weighing 70 kg at 175 cm has a BMI of 70 / (1.75)² = 22.9, which is in the Normal range.</p>
+        <h2>How To Use</h2>
+        <p>Choose your unit system, enter weight and height, then click Calculate to see your BMI and category.</p>
+      </div>
+    </div>
+  </div>
+  <div class="info-block">
+    <h2>Frequently Asked Questions</h2>
+    <div class="faq-item"><div class="faq-q">Is BMI accurate for everyone? <span class="caret">▾</span></div><div class="faq-a">BMI is a general screening tool and does not directly measure body fat. It may be less accurate for athletes, the elderly, or pregnant women.</div></div>
+    <div class="faq-item"><div class="faq-q">What is a healthy BMI range? <span class="caret">▾</span></div><div class="faq-a">A BMI between 18.5 and 24.9 is generally considered a healthy weight range for most adults.</div></div>
+  </div>
+  <div class="info-block">
+    <h2>Related Calculators</h2>
+    <div class="related-grid" id="related-grid"></div>
+  </div>
+</main>
+<div id="site-footer"></div>
+<script src="../js/calc-data.js"></script>
+<script src="../js/main.js"></script>
+<script src="../js/theme.js"></script>
+<script src="../js/calculator.js"></script>
+<script>
+const unitSel = document.getElementById("unit");
+const weightLabel = document.getElementById("weightLabel");
+const heightLabel = document.getElementById("heightLabel");
+function updateUnitLabels(){
+  if(unitSel.value === "metric"){
+    weightLabel.textContent = "Weight (kg)";
+    heightLabel.textContent = "Height (cm)";
+  } else {
+    weightLabel.textContent = "Weight (lb)";
+    heightLabel.textContent = "Height (in)";
+  }
+}
+unitSel.addEventListener("change", updateUnitLabels);
+updateUnitLabels();
+
+function bmiCategory(bmi){
+  if(bmi < 18.5) return "Underweight";
+  if(bmi < 25) return "Normal";
+  if(bmi < 30) return "Overweight";
+  return "Obese";
+}
+
+document.getElementById("calc-form").addEventListener("submit", function(e){
+  e.preventDefault();
+  const weight = parseFloat(document.getElementById("weight").value);
+  const height = parseFloat(document.getElementById("height").value);
+  if(!(weight > 0) || !(height > 0)){
+    showResult("#result-box", "Error: enter valid positive numbers");
+    return;
+  }
+  let bmi;
+  if(unitSel.value === "metric"){
+    const m = height / 100;
+    bmi = weight / (m*m);
+  } else {
+    bmi = 703 * weight / (height*height);
+  }
+  showResult("#result-box", `BMI: ${formatNumber(bmi,1)} — ${bmiCategory(bmi)}`);
+});
+document.addEventListener("DOMContentLoaded", ()=>{
+  const related = calcsByCategory("health").filter(c=>!c.url.includes("bmi-calculator")).slice(0,4);
+  document.getElementById("related-grid").innerHTML = related.map(CalcUI.calcCard).join("");
+});
+</script>
+</body>
+</html>

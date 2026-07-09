@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Currency Converter — Free Online Calculator | Calculator Studio</title>
+<meta name="description" content="Convert between currencies using a manually entered exchange rate. No internet or API required.">
+<link rel="canonical" href="https://example.com/finance/currency-converter.html">
+<meta property="og:title" content="Currency Converter — Calculator Studio">
+<meta property="og:description" content="Convert between currencies using a manually entered exchange rate. No internet or API required.">
+<meta property="og:type" content="website">
+<meta name="twitter:card" content="summary">
+<link rel="icon" href="../icons/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="../css/style.css">
+<link rel="stylesheet" href="../css/responsive.css">
+<link rel="stylesheet" href="../css/animations.css">
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"SoftwareApplication","name":"Currency Converter","applicationCategory":"FinanceApplication","operatingSystem":"Any"}
+</script>
+</head>
+<body>
+<script>const ROOT="../";</script>
+<div id="site-header"></div>
+<main class="container">
+  <div class="breadcrumb"><a href="../index.html">Home</a> / <a href="index.html">Finance</a> / Currency Converter</div>
+  <h1 class="calc-page-title">Currency Converter</h1>
+  <p class="calc-page-desc">Convert an amount from one currency to another using an exchange rate you enter manually.</p>
+  <div class="calc-layout">
+    <div class="panel">
+      <form id="calc-form">
+        <div class="field">
+          <label for="amount">Amount</label>
+          <input type="number" id="amount" step="any" min="0" value="100" required>
+        </div>
+        <div class="field-row">
+          <div class="field">
+            <label for="from-code">From Currency (code)</label>
+            <input type="text" id="from-code" value="USD" maxlength="8" required>
+          </div>
+          <div class="field">
+            <label for="to-code">To Currency (code)</label>
+            <input type="text" id="to-code" value="EUR" maxlength="8" required>
+          </div>
+        </div>
+        <div class="field">
+          <label for="rate">Exchange Rate (1 From = ? To)</label>
+          <input type="number" id="rate" step="any" min="0" value="0.92" required>
+        </div>
+        <button type="submit" class="btn btn-solid">Convert</button>
+      </form>
+      <div class="result-box hidden" id="result-box">
+        <div class="label">Result</div>
+        <div class="value" id="result-value">—</div>
+      </div>
+      <div class="action-row">
+        <button class="btn btn-ghost" onclick="copyResultText('#result-value')">Copy Result</button>
+        <button class="btn btn-ghost" onclick="shareCurrentPage()">Share</button>
+        <button class="btn btn-ghost" onclick="resetForm('#calc-form','#result-box')">Reset</button>
+      </div>
+    </div>
+    <div class="panel">
+      <div class="info-block">
+        <h2>Formula</h2>
+        <div class="formula">Converted Amount = Amount × Exchange Rate</div>
+        <h2>Example</h2>
+        <p>Converting 100 USD to EUR at a rate of 0.92: 100 × 0.92 = 92 EUR.</p>
+        <h2>How To Use</h2>
+        <p>Since this calculator works offline without a live API, enter the amount, the currency codes for reference, and the current exchange rate (which you can find from your bank or a currency site), then click Convert.</p>
+      </div>
+    </div>
+  </div>
+  <div class="info-block">
+    <h2>Frequently Asked Questions</h2>
+    <div class="faq-item"><div class="faq-q">Why do I need to enter the exchange rate manually? <span class="caret">▾</span></div><div class="faq-a">This calculator works fully offline without external APIs, so you provide the current exchange rate from your preferred source to get an accurate conversion.</div></div>
+    <div class="faq-item"><div class="faq-q">Where can I find current exchange rates? <span class="caret">▾</span></div><div class="faq-a">Banks, currency exchange services, and financial news sites publish daily exchange rates you can use here.</div></div>
+  </div>
+  <div class="info-block">
+    <h2>Related Calculators</h2>
+    <div class="related-grid" id="related-grid"></div>
+  </div>
+</main>
+<div id="site-footer"></div>
+<script src="../js/calc-data.js"></script>
+<script src="../js/main.js"></script>
+<script src="../js/theme.js"></script>
+<script src="../js/calculator.js"></script>
+<script>
+document.getElementById("calc-form").addEventListener("submit", function(e){
+  e.preventDefault();
+  const amount = parseFloat(document.getElementById("amount").value);
+  const rate = parseFloat(document.getElementById("rate").value);
+  const from = document.getElementById("from-code").value.toUpperCase() || "FROM";
+  const to = document.getElementById("to-code").value.toUpperCase() || "TO";
+  const converted = amount * rate;
+  const box = document.querySelector("#result-box");
+  box.classList.remove("hidden");
+  box.querySelector(".value").innerHTML =
+    formatNumber(amount) + " " + from + " = " + formatNumber(converted) + " " + to;
+  box.classList.add("copied-flash");
+  setTimeout(()=>box.classList.remove("copied-flash"), 600);
+});
+document.addEventListener("DOMContentLoaded", ()=>{
+  const related = calcsByCategory("finance").filter(c=>!c.url.includes("currency-converter")).slice(0,4);
+  document.getElementById("related-grid").innerHTML = related.map(CalcUI.calcCard).join("");
+});
+</script>
+</body>
+</html>

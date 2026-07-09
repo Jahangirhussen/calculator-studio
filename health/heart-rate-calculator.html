@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Heart Rate Calculator — Free Online Calculator | Calculator Studio</title>
+<meta name="description" content="Calculate your maximum heart rate and target training zones.">
+<link rel="canonical" href="https://example.com/health/heart-rate-calculator.html">
+<link rel="icon" href="../icons/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="../css/style.css">
+<link rel="stylesheet" href="../css/responsive.css">
+<link rel="stylesheet" href="../css/animations.css">
+<style>table.zones{width:100%;border-collapse:collapse;margin-top:10px}table.zones td,table.zones th{padding:8px;border-bottom:1px solid var(--border);font-size:.9rem}</style>
+</head>
+<body>
+<script>const ROOT="../";</script>
+<div id="site-header"></div>
+<main class="container">
+  <div class="breadcrumb"><a href="../index.html">Home</a> / <a href="index.html">Health</a> / Heart Rate Calculator</div>
+  <h1 class="calc-page-title">Heart Rate Calculator</h1>
+  <p class="calc-page-desc">Calculate your maximum heart rate and target training zones based on age.</p>
+  <div class="calc-layout">
+    <div class="panel">
+      <form id="calc-form">
+        <div class="field"><label>Age</label><input type="number" id="age" min="1" required></div>
+        <button type="submit" class="btn btn-solid">Calculate</button>
+      </form>
+      <div class="result-box hidden" id="result-box">
+        <div class="label">Maximum Heart Rate</div>
+        <div class="value" id="result-value">—</div>
+      </div>
+      <table class="zones hidden" id="zone-table">
+        <tr><th>Zone</th><th>Range</th><th>BPM</th></tr>
+        <tr><td>Warm Up</td><td>50–60%</td><td id="z1">—</td></tr>
+        <tr><td>Fat Burn</td><td>60–70%</td><td id="z2">—</td></tr>
+        <tr><td>Cardio</td><td>70–80%</td><td id="z3">—</td></tr>
+        <tr><td>Peak</td><td>80–90%</td><td id="z4">—</td></tr>
+      </table>
+    </div>
+    <div class="panel"><div class="info-block"><h2>Formula</h2><div class="formula">Max HR = 220 − age</div></div></div>
+  </div>
+  <div class="info-block"><h2>Related Calculators</h2><div class="related-grid" id="related-grid"></div></div>
+</main>
+<div id="site-footer"></div>
+<script src="../js/calc-data.js"></script>
+<script src="../js/main.js"></script>
+<script src="../js/theme.js"></script>
+<script src="../js/calculator.js"></script>
+<script>
+document.getElementById("calc-form").addEventListener("submit", function(e){
+  e.preventDefault();
+  const age = parseFloat(document.getElementById("age").value);
+  const maxHR = 220-age;
+  showResult("#result-box", Math.round(maxHR) + " bpm");
+  document.getElementById("zone-table").classList.remove("hidden");
+  document.getElementById("z1").textContent = `${Math.round(maxHR*.5)}–${Math.round(maxHR*.6)}`;
+  document.getElementById("z2").textContent = `${Math.round(maxHR*.6)}–${Math.round(maxHR*.7)}`;
+  document.getElementById("z3").textContent = `${Math.round(maxHR*.7)}–${Math.round(maxHR*.8)}`;
+  document.getElementById("z4").textContent = `${Math.round(maxHR*.8)}–${Math.round(maxHR*.9)}`;
+});
+document.addEventListener("DOMContentLoaded", ()=>{
+  const related = calcsByCategory("health").filter(c=>!c.url.includes("heart-rate-calculator")).slice(0,4);
+  document.getElementById("related-grid").innerHTML = related.map(CalcUI.calcCard).join("");
+});
+</script>
+</body>
+</html>

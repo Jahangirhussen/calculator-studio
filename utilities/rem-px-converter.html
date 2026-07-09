@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>REM to PX Converter — Free Online Calculator | Calculator Studio</title>
+<meta name="description" content="Convert CSS REM units to pixels and back.">
+<link rel="canonical" href="https://example.com/utilities/rem-px-converter.html">
+<link rel="icon" href="../icons/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="../css/style.css">
+<link rel="stylesheet" href="../css/responsive.css">
+<link rel="stylesheet" href="../css/animations.css">
+</head>
+<body>
+<script>const ROOT="../";</script>
+<div id="site-header"></div>
+<main class="container">
+  <div class="breadcrumb"><a href="../index.html">Home</a> / <a href="index.html">Utilities</a> / REM to PX Converter</div>
+  <h1 class="calc-page-title">REM ↔ PX Converter</h1>
+  <p class="calc-page-desc">Convert CSS REM units to pixels and pixels to REM, based on a base font size.</p>
+  <div class="calc-layout">
+    <div class="panel">
+      <form id="calc-form">
+        <div class="field"><label>Base Font Size (px)</label><input type="number" id="base" value="16" required></div>
+        <div class="field-row">
+          <div class="field"><label>REM Value</label><input type="number" step="any" id="rem"></div>
+          <div class="field"><label>PX Value</label><input type="number" step="any" id="px"></div>
+        </div>
+        <button type="submit" class="btn btn-solid">Convert</button>
+      </form>
+      <div class="result-box hidden" id="result-box">
+        <div class="label">Result</div>
+        <div class="value" id="result-value">—</div>
+      </div>
+      <div class="action-row">
+        <button class="btn btn-ghost" onclick="copyResultText('#result-value')">Copy Result</button>
+        <button class="btn btn-ghost" type="button" onclick="location.reload()">Reset</button>
+      </div>
+    </div>
+    <div class="panel"><div class="info-block"><h2>Formula</h2><div class="formula">px = rem × base<br>rem = px / base</div><p style="margin-top:8px;color:var(--text-soft);font-size:.8rem">Fill either REM or PX — leave the other blank.</p></div></div>
+  </div>
+  <div class="info-block"><h2>Related Calculators</h2><div class="related-grid" id="related-grid"></div></div>
+</main>
+<div id="site-footer"></div>
+<script src="../js/calc-data.js"></script>
+<script src="../js/main.js"></script>
+<script src="../js/theme.js"></script>
+<script src="../js/calculator.js"></script>
+<script>
+document.getElementById("calc-form").addEventListener("submit", function(e){
+  e.preventDefault();
+  const base = parseFloat(document.getElementById("base").value)||16;
+  const remVal = document.getElementById("rem").value;
+  const pxVal = document.getElementById("px").value;
+  if(remVal !== ""){
+    showResult("#result-box", `${formatNumber(parseFloat(remVal)*base)} px`);
+  } else if(pxVal !== ""){
+    showResult("#result-box", `${formatNumber(parseFloat(pxVal)/base,4)} rem`);
+  }
+});
+document.addEventListener("DOMContentLoaded", ()=>{
+  const related = calcsByCategory("utilities").filter(c=>!c.url.includes("rem-px-converter")).slice(0,4);
+  document.getElementById("related-grid").innerHTML = related.map(CalcUI.calcCard).join("");
+});
+</script>
+</body>
+</html>

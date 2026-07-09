@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>12-Hour to 24-Hour Converter — Free Online Calculator | Calculator Studio</title>
+<meta name="description" content="Convert time between 12-hour AM/PM format and 24-hour format.">
+<link rel="canonical" href="https://example.com/time-tools/12-24-hour-converter.html">
+<link rel="icon" href="../icons/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="../css/style.css">
+<link rel="stylesheet" href="../css/responsive.css">
+<link rel="stylesheet" href="../css/animations.css">
+</head>
+<body>
+<script>const ROOT="../";</script>
+<div id="site-header"></div>
+<main class="container">
+  <div class="breadcrumb"><a href="../index.html">Home</a> / <a href="index.html">Time Tools</a> / 12-Hour to 24-Hour Converter</div>
+  <h1 class="calc-page-title">12-Hour ↔ 24-Hour Converter</h1>
+  <p class="calc-page-desc">Convert between 12-hour AM/PM time and 24-hour time, in either direction.</p>
+  <div class="calc-layout">
+    <div class="panel">
+      <div class="field"><label>Direction</label>
+        <select id="direction">
+          <option value="to24">12-Hour → 24-Hour</option>
+          <option value="to12">24-Hour → 12-Hour</option>
+        </select>
+      </div>
+      <form id="calc-form">
+        <div id="input-12" class="field-row">
+          <div class="field"><label>Hour (1-12)</label><input type="number" id="h12" min="1" max="12" value="12"></div>
+          <div class="field"><label>Minute</label><input type="number" id="m12" min="0" max="59" value="0"></div>
+          <div class="field"><label>AM/PM</label><select id="ampm"><option>AM</option><option>PM</option></select></div>
+        </div>
+        <div id="input-24" class="field hidden"><label>24-Hour Time</label><input type="time" id="t24"></div>
+        <button type="submit" class="btn btn-solid">Convert</button>
+      </form>
+      <div class="result-box hidden" id="result-box">
+        <div class="label">Converted Time</div>
+        <div class="value" id="result-value">—</div>
+      </div>
+    </div>
+    <div class="panel"><div class="info-block"><h2>Note</h2><p>12 AM = 00:00, 12 PM = 12:00, standard convention used.</p></div></div>
+  </div>
+  <div class="info-block"><h2>Related Calculators</h2><div class="related-grid" id="related-grid"></div></div>
+</main>
+<div id="site-footer"></div>
+<script src="../js/calc-data.js"></script>
+<script src="../js/main.js"></script>
+<script src="../js/theme.js"></script>
+<script src="../js/calculator.js"></script>
+<script>
+const direction = document.getElementById("direction");
+direction.addEventListener("change", ()=>{
+  document.getElementById("input-12").classList.toggle("hidden", direction.value!=="to24");
+  document.getElementById("input-24").classList.toggle("hidden", direction.value!=="to12");
+});
+document.getElementById("calc-form").addEventListener("submit", function(e){
+  e.preventDefault();
+  if(direction.value === "to24"){
+    let h = parseInt(document.getElementById("h12").value);
+    const m = parseInt(document.getElementById("m12").value);
+    const ap = document.getElementById("ampm").value;
+    if(ap==="AM"){ if(h===12) h=0; } else { if(h!==12) h+=12; }
+    showResult("#result-box", `${String(h).padStart(2,"0")}:${String(m).padStart(2,"0")}`);
+  } else {
+    const [h,m] = document.getElementById("t24").value.split(":").map(Number);
+    let ap = h>=12 ? "PM" : "AM";
+    let h12 = h%12; if(h12===0) h12=12;
+    showResult("#result-box", `${h12}:${String(m).padStart(2,"0")} ${ap}`);
+  }
+});
+document.addEventListener("DOMContentLoaded", ()=>{
+  const related = calcsByCategory("time-tools").filter(c=>!c.url.includes("12-24-hour-converter")).slice(0,4);
+  document.getElementById("related-grid").innerHTML = related.map(CalcUI.calcCard).join("");
+});
+</script>
+</body>
+</html>

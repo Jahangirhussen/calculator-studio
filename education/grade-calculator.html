@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Grade Calculator — Free Online Calculator | Calculator Studio</title>
+<meta name="description" content="Calculate your letter grade from marks obtained and total marks.">
+<link rel="canonical" href="https://example.com/education/grade-calculator.html">
+<meta property="og:title" content="Grade Calculator — Calculator Studio">
+<meta property="og:description" content="Calculate your letter grade from marks obtained and total marks.">
+<meta property="og:type" content="website">
+<meta name="twitter:card" content="summary">
+<link rel="icon" href="../icons/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="../css/style.css">
+<link rel="stylesheet" href="../css/responsive.css">
+<link rel="stylesheet" href="../css/animations.css">
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"SoftwareApplication","name":"Grade Calculator","applicationCategory":"EducationalApplication","operatingSystem":"Any"}
+</script>
+</head>
+<body>
+<script>const ROOT="../";</script>
+<div id="site-header"></div>
+<main class="container">
+  <div class="breadcrumb"><a href="../index.html">Home</a> / <a href="index.html">Education</a> / Grade Calculator</div>
+  <h1 class="calc-page-title">Grade Calculator</h1>
+  <p class="calc-page-desc">Calculate your letter grade from marks obtained and total marks.</p>
+  <div class="calc-layout">
+    <div class="panel">
+      <form id="calc-form">
+        <div class="field-row">
+          <div class="field">
+            <label for="obtained">Marks Obtained</label>
+            <input type="number" id="obtained" step="any" min="0" required>
+          </div>
+          <div class="field">
+            <label for="total">Total Marks</label>
+            <input type="number" id="total" step="any" min="0" required>
+          </div>
+        </div>
+        <button type="submit" class="btn btn-solid">Calculate</button>
+      </form>
+      <div class="result-box hidden" id="result-box">
+        <div class="label">Result</div>
+        <div class="value" id="result-value">—</div>
+      </div>
+      <div class="action-row">
+        <button class="btn btn-ghost" onclick="copyResultText('#result-value')">Copy Result</button>
+        <button class="btn btn-ghost" onclick="shareCurrentPage()">Share</button>
+        <button class="btn btn-ghost" onclick="resetForm('#calc-form','#result-box')">Reset</button>
+      </div>
+    </div>
+    <div class="panel">
+      <div class="info-block">
+        <h2>Formula</h2>
+        <div class="formula">Percentage = (Marks Obtained / Total Marks) × 100
+
+A+ : 90 - 100
+A  : 80 - 89
+B  : 70 - 79
+C  : 60 - 69
+D  : 50 - 59
+F  : below 50</div>
+        <h2>Example</h2>
+        <p>If you scored 82 out of 100, your percentage is 82% which falls in the A grade range.</p>
+        <h2>How To Use</h2>
+        <p>Enter the marks obtained and the total marks, then click Calculate to see your percentage and letter grade.</p>
+      </div>
+    </div>
+  </div>
+  <div class="info-block">
+    <h2>Frequently Asked Questions</h2>
+    <div class="faq-item"><div class="faq-q">What percentage is required to pass? <span class="caret">▾</span></div><div class="faq-a">This calculator uses 50% as the passing threshold (grade D). Below 50% is an F.</div></div>
+    <div class="faq-item"><div class="faq-q">Can I use a different grading scale? <span class="caret">▾</span></div><div class="faq-a">This calculator uses a standard A+ to F scale. Your institution may use a different scale.</div></div>
+  </div>
+  <div class="info-block">
+    <h2>Related Calculators</h2>
+    <div class="related-grid" id="related-grid"></div>
+  </div>
+</main>
+<div id="site-footer"></div>
+<script src="../js/calc-data.js"></script>
+<script src="../js/main.js"></script>
+<script src="../js/theme.js"></script>
+<script src="../js/calculator.js"></script>
+<script>
+function gradeFromPercent(p){
+  if(p >= 90) return "A+";
+  if(p >= 80) return "A";
+  if(p >= 70) return "B";
+  if(p >= 60) return "C";
+  if(p >= 50) return "D";
+  return "F";
+}
+document.getElementById("calc-form").addEventListener("submit", function(e){
+  e.preventDefault();
+  const obtained = parseFloat(document.getElementById("obtained").value);
+  const total = parseFloat(document.getElementById("total").value);
+  if(!(total > 0) || obtained < 0){
+    showResult("#result-box", "Error: enter valid marks (total must be greater than 0)");
+    return;
+  }
+  const pct = (obtained/total)*100;
+  showResult("#result-box", `${formatNumber(pct,2)}% — Grade ${gradeFromPercent(pct)}`);
+});
+document.addEventListener("DOMContentLoaded", ()=>{
+  const related = calcsByCategory("education").filter(c=>!c.url.includes("grade-calculator")).slice(0,4);
+  document.getElementById("related-grid").innerHTML = related.map(CalcUI.calcCard).join("");
+});
+</script>
+</body>
+</html>

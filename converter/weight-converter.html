@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Weight Converter — Free Online Converter | Calculator Studio</title>
+<meta name="description" content="Convert milligrams, grams, kilograms, tonnes, ounces and pounds instantly.">
+<link rel="canonical" href="https://example.com/converter/weight-converter.html">
+<meta property="og:title" content="Weight Converter — Calculator Studio">
+<meta property="og:description" content="Convert milligrams, grams, kilograms, tonnes, ounces and pounds instantly.">
+<meta property="og:type" content="website">
+<meta name="twitter:card" content="summary">
+<link rel="icon" href="../icons/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="../css/style.css">
+<link rel="stylesheet" href="../css/responsive.css">
+<link rel="stylesheet" href="../css/animations.css">
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"SoftwareApplication","name":"Weight Converter","applicationCategory":"UtilitiesApplication","operatingSystem":"Any"}
+</script>
+</head>
+<body>
+<script>const ROOT="../";</script>
+<div id="site-header"></div>
+<main class="container">
+  <div class="breadcrumb"><a href="../index.html">Home</a> / <a href="index.html">Converters</a> / Weight Converter</div>
+  <h1 class="calc-page-title">Weight Converter</h1>
+  <p class="calc-page-desc">Convert between milligrams, grams, kilograms, tonnes, ounces and pounds.</p>
+  <div class="calc-layout">
+    <div class="panel">
+      <form id="calc-form">
+        <div class="field"><label>Value</label><input type="number" step="any" id="input-value" required></div>
+        <div class="field-row">
+          <div class="field"><label>From</label><select id="from-unit"><!-- options --></select></div>
+          <div class="field"><label>To</label><select id="to-unit"><!-- options --></select></div>
+        </div>
+        <button type="submit" class="btn btn-solid">Convert</button>
+      </form>
+      <div class="result-box hidden" id="result-box">
+        <div class="label">Result</div>
+        <div class="value" id="result-value">—</div>
+      </div>
+      <div class="action-row">
+        <button class="btn btn-ghost" onclick="copyResultText('#result-value')">Copy Result</button>
+        <button class="btn btn-ghost" onclick="shareCurrentPage()">Share</button>
+        <button class="btn btn-ghost" onclick="resetForm('#calc-form','#result-box')">Reset</button>
+      </div>
+    </div>
+    <div class="panel">
+      <div class="info-block">
+        <h2>Formula</h2>
+        <div class="formula">value_in_base = value × factor(unit → gram)<br>result = value_in_base ÷ factor(target → gram)</div>
+        <h2>Example</h2>
+        <p>Convert 2 kilograms to pounds: 2 kg × 1000 = 2000 g. 2000 g ÷ 453.59237 = 4.409245 lb.</p>
+        <h2>How To Use</h2>
+        <p>Enter a value, choose the unit you're converting from and the unit you want, then click Convert.</p>
+      </div>
+    </div>
+  </div>
+  <div class="info-block">
+    <h2>Frequently Asked Questions</h2>
+    <div class="faq-item"><div class="faq-q">What is the base unit used for weight conversion? <span class="caret">▾</span></div><div class="faq-a">This tool converts every unit to grams first, then from grams to your target unit.</div></div>
+    <div class="faq-item"><div class="faq-q">How many grams are in a pound? <span class="caret">▾</span></div><div class="faq-a">One pound equals exactly 453.59237 grams.</div></div>
+  </div>
+  <div class="info-block">
+    <h2>Related Calculators</h2>
+    <div class="related-grid" id="related-grid"></div>
+  </div>
+</main>
+<div id="site-footer"></div>
+<script src="../js/calc-data.js"></script>
+<script src="../js/main.js"></script>
+<script src="../js/theme.js"></script>
+<script src="../js/calculator.js"></script>
+<script>
+const UNITS = {
+  milligram: 0.001,
+  gram: 1,
+  kilogram: 1000,
+  tonne: 1000000,
+  ounce: 28.349523125,
+  pound: 453.59237
+};
+document.addEventListener("DOMContentLoaded", ()=>{
+  const opts = Object.keys(UNITS).map(u=>`<option value="${u}">${u}</option>`).join("");
+  document.getElementById("from-unit").innerHTML = opts;
+  document.getElementById("to-unit").innerHTML = opts;
+  document.getElementById("to-unit").value = "pound";
+  const related = calcsByCategory("converter").filter(c=>!c.url.includes("weight-converter")).slice(0,4);
+  document.getElementById("related-grid").innerHTML = related.map(CalcUI.calcCard).join("");
+});
+document.getElementById("calc-form").addEventListener("submit", function(e){
+  e.preventDefault();
+  const val = parseFloat(document.getElementById("input-value").value);
+  const from = document.getElementById("from-unit").value;
+  const to = document.getElementById("to-unit").value;
+  const base = val * UNITS[from];
+  const result = base / UNITS[to];
+  showResult("#result-box", formatNumber(result, 6) + " " + to);
+});
+</script>
+</body>
+</html>

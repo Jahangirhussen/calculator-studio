@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>UUID Generator — Free Online Tool | Calculator Studio</title>
+<meta name="description" content="Generate RFC 4122 version 4 UUIDs (universally unique identifiers) instantly using your browser's cryptographic random number generator.">
+<link rel="canonical" href="https://example.com/programming/uuid-generator.html">
+<meta property="og:title" content="UUID Generator — Calculator Studio">
+<meta property="og:description" content="Generate RFC 4122 version 4 UUIDs instantly using your browser's cryptographic random number generator.">
+<meta property="og:type" content="website">
+<meta name="twitter:card" content="summary">
+<link rel="icon" href="../icons/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="../css/style.css">
+<link rel="stylesheet" href="../css/responsive.css">
+<link rel="stylesheet" href="../css/animations.css">
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"SoftwareApplication","name":"UUID Generator","applicationCategory":"DeveloperApplication","operatingSystem":"Any"}
+</script>
+</head>
+<body>
+<script>const ROOT="../";</script>
+<div id="site-header"></div>
+<main class="container">
+  <div class="breadcrumb"><a href="../index.html">Home</a> / <a href="index.html">Programming</a> / UUID Generator</div>
+  <h1 class="calc-page-title">UUID Generator</h1>
+  <p class="calc-page-desc">Generate random RFC 4122 version 4 UUIDs (universally unique identifiers) using a cryptographically secure random source. Generate one or many at once.</p>
+  <div class="calc-layout">
+    <div class="panel">
+      <form id="calc-form">
+        <div class="field">
+          <label for="uuid-qty">Quantity</label>
+          <input type="number" id="uuid-qty" class="field" min="1" max="100" value="1" style="width:100%;padding:10px;border:1px solid var(--border);background:var(--bg-alt);border-radius:8px;color:inherit">
+        </div>
+        <button type="submit" class="btn btn-solid">Generate</button>
+      </form>
+      <div class="result-box hidden" id="result-box">
+        <div class="label">Result</div>
+        <div class="value" id="result-value" style="word-break:break-all;font-size:1.1rem;white-space:pre-line">—</div>
+      </div>
+      <div class="action-row">
+        <button class="btn btn-ghost" onclick="copyResultText('#result-value')">Copy Result</button>
+        <button class="btn btn-ghost" onclick="shareCurrentPage()">Share</button>
+        <button class="btn btn-ghost" onclick="resetForm('#calc-form','#result-box')">Reset</button>
+      </div>
+    </div>
+    <div class="panel">
+      <div class="info-block">
+        <h2>How It Works</h2>
+        <p>A UUID (Universally Unique Identifier) version 4 is a 128-bit value that is almost certainly unique across space and time. It is generated using random bits, with a few fixed bits marking the version (4) and variant. This tool uses <code>crypto.getRandomValues()</code> for the random bits.</p>
+        <h2>Example</h2>
+        <p>A typical v4 UUID looks like <code>3f2504e0-4f89-41d3-9a0c-0305e82c3301</code> — 32 hex digits arranged in the pattern <code>8-4-4-4-12</code>, where the first digit of the third group is always <code>4</code> and the first digit of the fourth group is <code>8</code>, <code>9</code>, <code>a</code>, or <code>b</code>.</p>
+        <h2>How To Use</h2>
+        <p>Enter how many UUIDs you'd like to generate (1-100), then click Generate. Each one will appear on its own line in the result box, ready to copy.</p>
+      </div>
+    </div>
+  </div>
+  <div class="info-block">
+    <h2>Frequently Asked Questions</h2>
+    <div class="faq-item"><div class="faq-q">What is a UUID used for? <span class="caret">▾</span></div><div class="faq-a">UUIDs are commonly used as unique identifiers for database records, session tokens, distributed system keys, and more, since they can be generated independently without a central authority while remaining virtually collision-free.</div></div>
+    <div class="faq-item"><div class="faq-q">Can two generated UUIDs collide? <span class="caret">▾</span></div><div class="faq-a">Theoretically yes, but the probability is astronomically small — with 122 random bits, you would need to generate billions of UUIDs per second for centuries before a collision became likely.</div></div>
+    <div class="faq-item"><div class="faq-q">Is this a real RFC 4122 v4 UUID? <span class="caret">▾</span></div><div class="faq-a">Yes. The generator sets the version nibble to 4 and the variant bits per the RFC 4122 specification, using cryptographically secure randomness for all other bits.</div></div>
+  </div>
+  <div class="info-block">
+    <h2>Related Calculators</h2>
+    <div class="related-grid" id="related-grid"></div>
+  </div>
+</main>
+<div id="site-footer"></div>
+<script src="../js/calc-data.js"></script>
+<script src="../js/main.js"></script>
+<script src="../js/theme.js"></script>
+<script src="../js/calculator.js"></script>
+<script>
+function generateUUIDv4(){
+  const bytes = new Uint8Array(16);
+  crypto.getRandomValues(bytes);
+  bytes[6] = (bytes[6] & 0x0f) | 0x40;
+  bytes[8] = (bytes[8] & 0x3f) | 0x80;
+  const hex = Array.from(bytes, b => b.toString(16).padStart(2, "0"));
+  return `${hex.slice(0,4).join("")}-${hex.slice(4,6).join("")}-${hex.slice(6,8).join("")}-${hex.slice(8,10).join("")}-${hex.slice(10,16).join("")}`;
+}
+document.getElementById("calc-form").addEventListener("submit", function(e){
+  e.preventDefault();
+  let qty = parseInt(document.getElementById("uuid-qty").value, 10);
+  if(isNaN(qty) || qty < 1) qty = 1;
+  if(qty > 100) qty = 100;
+  const list = [];
+  for(let i=0;i<qty;i++) list.push(generateUUIDv4());
+  showResult("#result-box", list.join("\n"));
+});
+document.addEventListener("DOMContentLoaded", ()=>{
+  const related = calcsByCategory("programming").filter(c=>!c.url.includes("uuid-generator")).slice(0,4);
+  document.getElementById("related-grid").innerHTML = related.map(CalcUI.calcCard).join("");
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Voltage Divider Calculator — Free Online Calculator | Calculator Studio</title>
+<meta name="description" content="Calculate output voltage of a resistor voltage divider circuit.">
+<link rel="canonical" href="https://example.com/engineering/voltage-calculator.html">
+<link rel="icon" href="../icons/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="../css/style.css">
+<link rel="stylesheet" href="../css/responsive.css">
+<link rel="stylesheet" href="../css/animations.css">
+</head>
+<body>
+<script>const ROOT="../";</script>
+<div id="site-header"></div>
+<main class="container">
+  <div class="breadcrumb"><a href="../index.html">Home</a> / <a href="index.html">Engineering</a> / Voltage Divider Calculator</div>
+  <h1 class="calc-page-title">Voltage Divider Calculator</h1>
+  <p class="calc-page-desc">Calculate the output voltage (Vout) of a two-resistor voltage divider circuit.</p>
+  <div class="calc-layout">
+    <div class="panel">
+      <form id="calc-form">
+        <div class="field"><label>Input Voltage (Vin)</label><input type="number" step="any" id="vin" required></div>
+        <div class="field-row">
+          <div class="field"><label>R1 (Ω)</label><input type="number" step="any" id="r1" required></div>
+          <div class="field"><label>R2 (Ω)</label><input type="number" step="any" id="r2" required></div>
+        </div>
+        <button type="submit" class="btn btn-solid">Calculate</button>
+      </form>
+      <div class="result-box hidden" id="result-box">
+        <div class="label">Output Voltage (Vout)</div>
+        <div class="value" id="result-value">—</div>
+      </div>
+      <div class="action-row">
+        <button class="btn btn-ghost" onclick="copyResultText('#result-value')">Copy Result</button>
+        <button class="btn btn-ghost" type="button" onclick="location.reload()">Reset</button>
+      </div>
+    </div>
+    <div class="panel"><div class="info-block"><h2>Formula</h2><div class="formula">Vout = Vin × R2 / (R1 + R2)</div></div></div>
+  </div>
+  <div class="info-block"><h2>Related Calculators</h2><div class="related-grid" id="related-grid"></div></div>
+</main>
+<div id="site-footer"></div>
+<script src="../js/calc-data.js"></script>
+<script src="../js/main.js"></script>
+<script src="../js/theme.js"></script>
+<script src="../js/calculator.js"></script>
+<script>
+document.getElementById("calc-form").addEventListener("submit", function(e){
+  e.preventDefault();
+  const vin = parseFloat(document.getElementById("vin").value);
+  const r1 = parseFloat(document.getElementById("r1").value);
+  const r2 = parseFloat(document.getElementById("r2").value);
+  const vout = vin*r2/(r1+r2);
+  showResult("#result-box", formatNumber(vout) + " V");
+});
+document.addEventListener("DOMContentLoaded", ()=>{
+  const related = calcsByCategory("engineering").filter(c=>!c.url.includes("voltage-calculator")).slice(0,4);
+  document.getElementById("related-grid").innerHTML = related.map(CalcUI.calcCard).join("");
+});
+</script>
+</body>
+</html>

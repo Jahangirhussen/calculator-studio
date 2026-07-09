@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>EMI Calculator — Free Online Calculator | Calculator Studio</title>
+<meta name="description" content="Calculate your monthly loan EMI (Equated Monthly Installment) instantly with total interest and total payment breakdown.">
+<link rel="canonical" href="https://example.com/finance/emi-calculator.html">
+<meta property="og:title" content="EMI Calculator — Calculator Studio">
+<meta property="og:description" content="Calculate your monthly loan EMI instantly with total interest and total payment breakdown.">
+<meta property="og:type" content="website">
+<meta name="twitter:card" content="summary">
+<link rel="icon" href="../icons/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="../css/style.css">
+<link rel="stylesheet" href="../css/responsive.css">
+<link rel="stylesheet" href="../css/animations.css">
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"SoftwareApplication","name":"EMI Calculator","applicationCategory":"FinanceApplication","operatingSystem":"Any"}
+</script>
+</head>
+<body>
+<script>const ROOT="../";</script>
+<div id="site-header"></div>
+<main class="container">
+  <div class="breadcrumb"><a href="../index.html">Home</a> / <a href="index.html">Finance</a> / EMI Calculator</div>
+  <h1 class="calc-page-title">EMI Calculator</h1>
+  <p class="calc-page-desc">Calculate your monthly loan EMI (Equated Monthly Installment) along with total interest and total payment.</p>
+  <div class="calc-layout">
+    <div class="panel">
+      <form id="calc-form">
+        <div class="field">
+          <label for="principal">Loan Amount (Principal)</label>
+          <input type="number" id="principal" step="any" min="0" value="500000" required>
+        </div>
+        <div class="field-row">
+          <div class="field">
+            <label for="rate">Annual Interest Rate (%)</label>
+            <input type="number" id="rate" step="any" min="0" value="9" required>
+          </div>
+          <div class="field">
+            <label for="tenure">Loan Tenure</label>
+            <input type="number" id="tenure" step="any" min="1" value="5" required>
+          </div>
+        </div>
+        <div class="field">
+          <label for="tenure-unit">Tenure Unit</label>
+          <select id="tenure-unit">
+            <option value="years">Years</option>
+            <option value="months">Months</option>
+          </select>
+        </div>
+        <button type="submit" class="btn btn-solid">Calculate</button>
+      </form>
+      <div class="result-box hidden" id="result-box">
+        <div class="label">Result</div>
+        <div class="value" id="result-value">—</div>
+      </div>
+      <div class="action-row">
+        <button class="btn btn-ghost" onclick="copyResultText('#result-value')">Copy Result</button>
+        <button class="btn btn-ghost" onclick="shareCurrentPage()">Share</button>
+        <button class="btn btn-ghost" onclick="resetForm('#calc-form','#result-box')">Reset</button>
+      </div>
+    </div>
+    <div class="panel">
+      <div class="info-block">
+        <h2>Formula</h2>
+        <div class="formula">EMI = P × r × (1+r)<sup>n</sup> / ((1+r)<sup>n</sup> − 1)<br>r = monthly rate = annual rate / 12 / 100, n = number of months</div>
+        <h2>Example</h2>
+        <p>For a loan of ₹500,000 at 9% annual interest for 5 years (60 months): r = 0.0075, n = 60. EMI ≈ ₹10,378.85, total payment ≈ ₹622,731, total interest ≈ ₹122,731.</p>
+        <h2>How To Use</h2>
+        <p>Enter the loan amount, annual interest rate, and tenure (in years or months), then click Calculate to see your monthly EMI, total interest paid, and total payment over the loan term.</p>
+      </div>
+    </div>
+  </div>
+  <div class="info-block">
+    <h2>Frequently Asked Questions</h2>
+    <div class="faq-item"><div class="faq-q">What is EMI? <span class="caret">▾</span></div><div class="faq-a">EMI (Equated Monthly Installment) is the fixed amount a borrower pays every month to repay a loan, covering both principal and interest.</div></div>
+    <div class="faq-item"><div class="faq-q">Does a longer tenure reduce EMI? <span class="caret">▾</span></div><div class="faq-a">Yes, a longer tenure lowers the monthly EMI but increases the total interest paid over the life of the loan.</div></div>
+  </div>
+  <div class="info-block">
+    <h2>Related Calculators</h2>
+    <div class="related-grid" id="related-grid"></div>
+  </div>
+</main>
+<div id="site-footer"></div>
+<script src="../js/calc-data.js"></script>
+<script src="../js/main.js"></script>
+<script src="../js/theme.js"></script>
+<script src="../js/calculator.js"></script>
+<script>
+document.getElementById("calc-form").addEventListener("submit", function(e){
+  e.preventDefault();
+  const P = parseFloat(document.getElementById("principal").value);
+  const annualRate = parseFloat(document.getElementById("rate").value);
+  let tenure = parseFloat(document.getElementById("tenure").value);
+  const unit = document.getElementById("tenure-unit").value;
+  const n = unit === "years" ? tenure * 12 : tenure;
+  const r = annualRate / 12 / 100;
+  let emi;
+  if(r === 0){
+    emi = P / n;
+  } else {
+    emi = P * r * Math.pow(1+r, n) / (Math.pow(1+r, n) - 1);
+  }
+  const totalPayment = emi * n;
+  const totalInterest = totalPayment - P;
+  const box = document.querySelector("#result-box");
+  box.classList.remove("hidden");
+  box.querySelector(".value").innerHTML =
+    "Monthly EMI: " + formatNumber(emi) + "<br>" +
+    "Total Interest: " + formatNumber(totalInterest) + "<br>" +
+    "Total Payment: " + formatNumber(totalPayment);
+  box.classList.add("copied-flash");
+  setTimeout(()=>box.classList.remove("copied-flash"), 600);
+});
+document.addEventListener("DOMContentLoaded", ()=>{
+  const related = calcsByCategory("finance").filter(c=>!c.url.includes("emi-calculator")).slice(0,4);
+  document.getElementById("related-grid").innerHTML = related.map(CalcUI.calcCard).join("");
+});
+</script>
+</body>
+</html>

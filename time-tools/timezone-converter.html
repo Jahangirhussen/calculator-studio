@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Timezone Converter — Free Online Calculator | Calculator Studio</title>
+<meta name="description" content="Convert a time from one UTC offset timezone to another.">
+<link rel="canonical" href="https://example.com/time-tools/timezone-converter.html">
+<link rel="icon" href="../icons/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="../css/style.css">
+<link rel="stylesheet" href="../css/responsive.css">
+<link rel="stylesheet" href="../css/animations.css">
+</head>
+<body>
+<script>const ROOT="../";</script>
+<div id="site-header"></div>
+<main class="container">
+  <div class="breadcrumb"><a href="../index.html">Home</a> / <a href="index.html">Time Tools</a> / Timezone Converter</div>
+  <h1 class="calc-page-title">Timezone Converter</h1>
+  <p class="calc-page-desc">Convert a time from one UTC offset to another.</p>
+  <div class="calc-layout">
+    <div class="panel">
+      <form id="calc-form">
+        <div class="field"><label>Time</label><input type="time" id="time-in" required></div>
+        <div class="field-row">
+          <div class="field"><label>From Timezone (UTC offset)</label><select id="from-tz"></select></div>
+          <div class="field"><label>To Timezone (UTC offset)</label><select id="to-tz"></select></div>
+        </div>
+        <button type="submit" class="btn btn-solid">Convert</button>
+      </form>
+      <div class="result-box hidden" id="result-box">
+        <div class="label">Converted Time</div>
+        <div class="value" id="result-value">—</div>
+      </div>
+      <div class="action-row">
+        <button class="btn btn-ghost" onclick="copyResultText('#result-value')">Copy Result</button>
+        <button class="btn btn-ghost" onclick="shareCurrentPage()">Share</button>
+        <button class="btn btn-ghost" type="button" onclick="location.reload()">Reset</button>
+      </div>
+    </div>
+    <div class="panel"><div class="info-block"><h2>How It Works</h2><p>Adds the difference between the two UTC offsets to your input time, wrapping correctly across day boundaries.</p></div></div>
+  </div>
+  <div class="info-block"><h2>Related Calculators</h2><div class="related-grid" id="related-grid"></div></div>
+</main>
+<div id="site-footer"></div>
+<script src="../js/calc-data.js"></script>
+<script src="../js/main.js"></script>
+<script src="../js/theme.js"></script>
+<script src="../js/calculator.js"></script>
+<script>
+const offsets = [];
+for(let h=-12; h<=14; h+=0.5) offsets.push(h);
+function fmtOffset(h){ const sign = h>=0?"+":"-"; const abs=Math.abs(h); const hh=Math.floor(abs); const mm=(abs%1)*60; return `UTC${sign}${hh}:${String(mm).padStart(2,"0")}`; }
+const fromTz = document.getElementById("from-tz"), toTz = document.getElementById("to-tz");
+offsets.forEach(o=>{
+  fromTz.innerHTML += `<option value="${o}">${fmtOffset(o)}</option>`;
+  toTz.innerHTML += `<option value="${o}">${fmtOffset(o)}</option>`;
+});
+fromTz.value = 0; toTz.value = 0;
+
+document.getElementById("calc-form").addEventListener("submit", function(e){
+  e.preventDefault();
+  const [h,m] = document.getElementById("time-in").value.split(":").map(Number);
+  const diffHours = parseFloat(toTz.value) - parseFloat(fromTz.value);
+  let totalMin = h*60+m + diffHours*60;
+  let dayOffset = 0;
+  while(totalMin < 0){ totalMin += 1440; dayOffset--; }
+  while(totalMin >= 1440){ totalMin -= 1440; dayOffset++; }
+  const rh = String(Math.floor(totalMin/60)).padStart(2,"0");
+  const rm = String(Math.round(totalMin%60)).padStart(2,"0");
+  const dayLabel = dayOffset===0?"":(dayOffset>0?` (+${dayOffset}d)`:` (${dayOffset}d)`);
+  showResult("#result-box", `${rh}:${rm}${dayLabel}`);
+});
+document.addEventListener("DOMContentLoaded", ()=>{
+  const related = calcsByCategory("time-tools").filter(c=>!c.url.includes("timezone-converter")).slice(0,4);
+  document.getElementById("related-grid").innerHTML = related.map(CalcUI.calcCard).join("");
+});
+</script>
+</body>
+</html>

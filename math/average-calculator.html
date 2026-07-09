@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Average Calculator — Free Online Calculator | Calculator Studio</title>
+<meta name="description" content="Calculate the mean, median and mode of a list of numbers.">
+<link rel="canonical" href="https://example.com/math/average-calculator.html">
+<meta property="og:title" content="Average Calculator — Calculator Studio">
+<meta property="og:description" content="Calculate the mean, median and mode of a list of numbers.">
+<meta property="og:type" content="website">
+<meta name="twitter:card" content="summary">
+<link rel="icon" href="../icons/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="../css/style.css">
+<link rel="stylesheet" href="../css/responsive.css">
+<link rel="stylesheet" href="../css/animations.css">
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"SoftwareApplication","name":"Average Calculator","applicationCategory":"UtilitiesApplication","operatingSystem":"Any"}
+</script>
+</head>
+<body>
+<script>const ROOT="../";</script>
+<div id="site-header"></div>
+<main class="container">
+  <div class="breadcrumb"><a href="../index.html">Home</a> / <a href="index.html">Math</a> / Average Calculator</div>
+  <h1 class="calc-page-title">Average Calculator</h1>
+  <p class="calc-page-desc">Calculate mean, median and mode of a list of numbers.</p>
+  <div class="calc-layout">
+    <div class="panel">
+      <form id="calc-form">
+        <div class="field">
+          <label for="nums">Numbers (comma or space separated)</label>
+          <input type="text" id="nums" placeholder="e.g. 4, 8, 15, 16, 23, 42" required>
+        </div>
+        <button type="submit" class="btn btn-solid">Calculate</button>
+      </form>
+      <div class="result-box hidden" id="result-box">
+        <div class="label">Result</div>
+        <div class="value" id="result-value">—</div>
+      </div>
+      <div class="action-row">
+        <button class="btn btn-ghost" onclick="copyResultText('#result-value')">Copy Result</button>
+        <button class="btn btn-ghost" onclick="shareCurrentPage()">Share</button>
+        <button class="btn btn-ghost" onclick="resetForm('#calc-form','#result-box')">Reset</button>
+      </div>
+    </div>
+    <div class="panel">
+      <div class="info-block">
+        <h2>Formula</h2>
+        <div class="formula">Mean = Sum of values / Count
+Median = middle value (sorted)
+Mode = most frequently occurring value</div>
+        <h2>Example</h2>
+        <p>For 4, 8, 15, 16, 23, 42: Mean ≈ 18, Median = 15.5, Mode = none (all unique).</p>
+        <h2>How To Use</h2>
+        <p>Enter a list of numbers separated by commas or spaces, then click Calculate.</p>
+      </div>
+    </div>
+  </div>
+  <div class="info-block">
+    <h2>Frequently Asked Questions</h2>
+    <div class="faq-item"><div class="faq-q">What if there is no mode? <span class="caret">▾</span></div><div class="faq-a">If all values occur equally often, the calculator reports "No unique mode".</div></div>
+    <div class="faq-item"><div class="faq-q">How is the median calculated for an even count? <span class="caret">▾</span></div><div class="faq-a">It is the average of the two middle values after sorting.</div></div>
+  </div>
+  <div class="info-block">
+    <h2>Related Calculators</h2>
+    <div class="related-grid" id="related-grid"></div>
+  </div>
+</main>
+<div id="site-footer"></div>
+<script src="../js/calc-data.js"></script>
+<script src="../js/main.js"></script>
+<script src="../js/theme.js"></script>
+<script src="../js/calculator.js"></script>
+<script>
+document.getElementById("calc-form").addEventListener("submit", function(e){
+  e.preventDefault();
+  const raw = document.getElementById("nums").value;
+  const nums = raw.split(/[,\s]+/).filter(s=>s.trim()!=="").map(Number).filter(n=>!isNaN(n));
+  if(nums.length === 0){ showResult("#result-box", "Error: enter valid numbers"); return; }
+  const sum = nums.reduce((a,b)=>a+b, 0);
+  const mean = sum / nums.length;
+  const sorted = [...nums].sort((a,b)=>a-b);
+  const mid = Math.floor(sorted.length/2);
+  const median = sorted.length % 2 === 0 ? (sorted[mid-1]+sorted[mid])/2 : sorted[mid];
+  const freq = {};
+  nums.forEach(n=>{ freq[n] = (freq[n]||0)+1; });
+  const maxFreq = Math.max(...Object.values(freq));
+  const modes = Object.keys(freq).filter(k=>freq[k]===maxFreq);
+  const modeStr = (maxFreq === 1 || modes.length === Object.keys(freq).length) ? "No unique mode" : modes.join(", ");
+  showResult("#result-box", `Mean: ${formatNumber(mean,4)} | Median: ${formatNumber(median,4)} | Mode: ${modeStr}`);
+});
+document.addEventListener("DOMContentLoaded", ()=>{
+  const related = calcsByCategory("math").filter(c=>!c.url.includes("average-calculator")).slice(0,4);
+  document.getElementById("related-grid").innerHTML = related.map(CalcUI.calcCard).join("");
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>JSON Formatter — Free Online Tool | Calculator Studio</title>
+<meta name="description" content="Format, validate and pretty-print JSON data.">
+<link rel="canonical" href="https://example.com/programming/json-formatter.html">
+<link rel="icon" href="../icons/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="../css/style.css">
+<link rel="stylesheet" href="../css/responsive.css">
+<link rel="stylesheet" href="../css/animations.css">
+<style>textarea.ta{width:100%;padding:12px;border-radius:8px;border:1px solid var(--border);background:var(--bg-alt);color:var(--text);font-family:Consolas,Monaco,monospace;min-height:220px}
+pre.out{background:var(--card-alt);border:1px solid var(--border);border-radius:8px;padding:14px;overflow:auto;max-height:400px;font-size:.85rem}</style>
+</head>
+<body>
+<script>const ROOT="../";</script>
+<div id="site-header"></div>
+<main class="container">
+  <div class="breadcrumb"><a href="../index.html">Home</a> / <a href="index.html">Programming</a> / JSON Formatter</div>
+  <h1 class="calc-page-title">JSON Formatter</h1>
+  <p class="calc-page-desc">Paste raw JSON and format it with proper indentation, or catch syntax errors.</p>
+  <div class="calc-layout">
+    <div class="panel">
+      <form id="calc-form">
+        <div class="field"><label>Raw JSON</label><textarea class="ta" id="input" placeholder='{"key":"value"}' required></textarea></div>
+        <button type="submit" class="btn btn-solid">Format</button>
+      </form>
+      <div class="result-box hidden" id="result-box">
+        <div class="label">Formatted JSON</div>
+        <pre class="out"><code id="result-value">—</code></pre>
+      </div>
+      <div class="action-row">
+        <button class="btn btn-ghost" onclick="copyResultText('#result-value')">Copy Result</button>
+        <button class="btn btn-ghost" type="button" onclick="location.reload()">Reset</button>
+      </div>
+    </div>
+    <div class="panel"><div class="info-block"><h2>How It Works</h2><p>Parses your JSON and re-outputs it with 2-space indentation. Invalid JSON shows a clear error instead of crashing.</p></div></div>
+  </div>
+  <div class="info-block"><h2>Related Calculators</h2><div class="related-grid" id="related-grid"></div></div>
+</main>
+<div id="site-footer"></div>
+<script src="../js/calc-data.js"></script>
+<script src="../js/main.js"></script>
+<script src="../js/theme.js"></script>
+<script src="../js/calculator.js"></script>
+<script>
+document.getElementById("calc-form").addEventListener("submit", function(e){
+  e.preventDefault();
+  const input = document.getElementById("input").value;
+  try{
+    const parsed = JSON.parse(input);
+    showResult("#result-box", JSON.stringify(parsed, null, 2));
+  }catch(err){
+    showResult("#result-box", "Invalid JSON: " + err.message);
+  }
+});
+document.addEventListener("DOMContentLoaded", ()=>{
+  const related = calcsByCategory("programming").filter(c=>!c.url.includes("json-formatter")).slice(0,4);
+  document.getElementById("related-grid").innerHTML = related.map(CalcUI.calcCard).join("");
+});
+</script>
+</body>
+</html>

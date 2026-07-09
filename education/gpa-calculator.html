@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GPA Calculator — Free Online Calculator | Calculator Studio</title>
+<meta name="description" content="Calculate your Grade Point Average (GPA) from course credit hours and grade points.">
+<link rel="canonical" href="https://example.com/education/gpa-calculator.html">
+<meta property="og:title" content="GPA Calculator — Calculator Studio">
+<meta property="og:description" content="Calculate your Grade Point Average (GPA) from course credit hours and grade points.">
+<meta property="og:type" content="website">
+<meta name="twitter:card" content="summary">
+<link rel="icon" href="../icons/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="../css/style.css">
+<link rel="stylesheet" href="../css/responsive.css">
+<link rel="stylesheet" href="../css/animations.css">
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"SoftwareApplication","name":"GPA Calculator","applicationCategory":"EducationalApplication","operatingSystem":"Any"}
+</script>
+</head>
+<body>
+<script>const ROOT="../";</script>
+<div id="site-header"></div>
+<main class="container">
+  <div class="breadcrumb"><a href="../index.html">Home</a> / <a href="index.html">Education</a> / GPA Calculator</div>
+  <h1 class="calc-page-title">GPA Calculator</h1>
+  <p class="calc-page-desc">Calculate your Grade Point Average by adding each course's credit hours and grade point (0-4 scale).</p>
+  <div class="calc-layout">
+    <div class="panel">
+      <form id="calc-form">
+        <div id="course-container">
+          <div class="field-row course-row">
+            <div class="field">
+              <label>Course Name</label>
+              <input type="text" class="course-name" placeholder="Course 1" value="Course 1">
+            </div>
+            <div class="field">
+              <label>Credit Hours</label>
+              <input type="number" class="course-credits" step="any" min="0" value="3" required>
+            </div>
+            <div class="field">
+              <label>Grade Point (0-4)</label>
+              <input type="number" class="course-gp" step="any" min="0" max="4" value="4" required>
+            </div>
+          </div>
+        </div>
+        <button type="button" class="btn btn-ghost" id="add-course">+ Add Course</button>
+        <button type="submit" class="btn btn-solid">Calculate</button>
+      </form>
+      <div class="result-box hidden" id="result-box">
+        <div class="label">Result</div>
+        <div class="value" id="result-value">—</div>
+      </div>
+      <div class="action-row">
+        <button class="btn btn-ghost" onclick="copyResultText('#result-value')">Copy Result</button>
+        <button class="btn btn-ghost" onclick="shareCurrentPage()">Share</button>
+        <button class="btn btn-ghost" onclick="resetForm('#calc-form','#result-box')">Reset</button>
+      </div>
+    </div>
+    <div class="panel">
+      <div class="info-block">
+        <h2>Formula</h2>
+        <div class="formula">GPA = Σ(Credit Hours × Grade Point) / Σ(Credit Hours)</div>
+        <h2>Example</h2>
+        <p>Course A: 3 credits, 4.0 GP. Course B: 4 credits, 3.0 GP.
+GPA = (3×4 + 4×3) / (3+4) = 24/7 = 3.43</p>
+        <h2>How To Use</h2>
+        <p>Enter each course's credit hours and grade point. Click "Add Course" to add more rows, then click Calculate.</p>
+      </div>
+    </div>
+  </div>
+  <div class="info-block">
+    <h2>Frequently Asked Questions</h2>
+    <div class="faq-item"><div class="faq-q">What grade point scale is used? <span class="caret">▾</span></div><div class="faq-a">This calculator uses the standard 0-4.0 grade point scale common at most universities.</div></div>
+    <div class="faq-item"><div class="faq-q">How many courses can I add? <span class="caret">▾</span></div><div class="faq-a">You can add unlimited course rows using the "Add Course" button.</div></div>
+  </div>
+  <div class="info-block">
+    <h2>Related Calculators</h2>
+    <div class="related-grid" id="related-grid"></div>
+  </div>
+</main>
+<div id="site-footer"></div>
+<script src="../js/calc-data.js"></script>
+<script src="../js/main.js"></script>
+<script src="../js/theme.js"></script>
+<script src="../js/calculator.js"></script>
+<script>
+const courseContainer = document.getElementById("course-container");
+document.getElementById("add-course").addEventListener("click", function(){
+  const n = courseContainer.querySelectorAll(".course-row").length + 1;
+  const row = document.createElement("div");
+  row.className = "field-row course-row";
+  row.innerHTML = `
+    <div class="field">
+      <label>Course Name</label>
+      <input type="text" class="course-name" placeholder="Course ${n}" value="Course ${n}">
+    </div>
+    <div class="field">
+      <label>Credit Hours</label>
+      <input type="number" class="course-credits" step="any" min="0" value="3" required>
+    </div>
+    <div class="field">
+      <label>Grade Point (0-4)</label>
+      <input type="number" class="course-gp" step="any" min="0" max="4" value="4" required>
+    </div>`;
+  courseContainer.appendChild(row);
+});
+
+document.getElementById("calc-form").addEventListener("submit", function(e){
+  e.preventDefault();
+  const credits = document.querySelectorAll(".course-credits");
+  const gps = document.querySelectorAll(".course-gp");
+  let totalCredits = 0, totalPoints = 0;
+  for(let i=0;i<credits.length;i++){
+    const c = parseFloat(credits[i].value);
+    const g = parseFloat(gps[i].value);
+    if(!(c > 0) || isNaN(g) || g < 0 || g > 4) continue;
+    totalCredits += c;
+    totalPoints += c*g;
+  }
+  if(totalCredits <= 0){
+    showResult("#result-box", "Error: enter valid credit hours and grade points");
+    return;
+  }
+  const gpa = totalPoints/totalCredits;
+  showResult("#result-box", `GPA: ${formatNumber(gpa,2)}`);
+});
+document.addEventListener("DOMContentLoaded", ()=>{
+  const related = calcsByCategory("education").filter(c=>!c.url.includes("gpa-calculator")).slice(0,4);
+  document.getElementById("related-grid").innerHTML = related.map(CalcUI.calcCard).join("");
+});
+</script>
+</body>
+</html>

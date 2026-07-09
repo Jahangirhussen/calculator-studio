@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Scientific Calculator — Free Online Calculator | Calculator Studio</title>
+<meta name="description" content="Full scientific calculator with trigonometry, logarithms, powers, roots and memory functions — just like a real handheld calculator.">
+<link rel="canonical" href="https://example.com/math/scientific-calculator.html">
+<meta property="og:title" content="Scientific Calculator — Calculator Studio">
+<meta property="og:description" content="Full scientific calculator with trig, log, power and memory functions.">
+<meta property="og:type" content="website">
+<meta name="twitter:card" content="summary">
+<link rel="icon" href="../icons/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="../css/style.css">
+<link rel="stylesheet" href="../css/responsive.css">
+<link rel="stylesheet" href="../css/animations.css">
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"SoftwareApplication","name":"Scientific Calculator","applicationCategory":"UtilitiesApplication","operatingSystem":"Any"}
+</script>
+<style>
+.sci-body{background:var(--card);border:1px solid var(--border);border-radius:20px;padding:20px;max-width:420px;margin:0 auto;box-shadow:var(--shadow)}
+.sci-screen{background:var(--card-alt);border:1px solid var(--border);border-radius:10px;padding:16px;margin-bottom:14px;text-align:right}
+.sci-expr{color:var(--text-soft);font-size:.9rem;min-height:20px;word-break:break-all}
+.sci-result{color:var(--gold);font-size:1.8rem;font-weight:700;word-break:break-all}
+.sci-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:8px}
+.sci-key{background:var(--card-alt);border:1px solid var(--border);border-radius:8px;padding:12px 4px;font-size:.85rem;cursor:pointer;color:var(--text);transition:all var(--transition)}
+.sci-key:hover{border-color:var(--gold);color:var(--gold)}
+.sci-key.op{background:var(--gold-soft);color:var(--gold)}
+.sci-key.eq{background:var(--gold);color:#000;font-weight:700}
+.sci-key.wide{grid-column:span 2}
+</style>
+</head>
+<body>
+<script>const ROOT="../";</script>
+<div id="site-header"></div>
+<main class="container">
+  <div class="breadcrumb"><a href="../index.html">Home</a> / <a href="index.html">Math</a> / Scientific Calculator</div>
+  <h1 class="calc-page-title">Scientific Calculator</h1>
+  <p class="calc-page-desc">A full scientific calculator with trigonometric, logarithmic, power and memory functions — works exactly like a real handheld calculator, entirely offline in your browser.</p>
+
+  <div class="sci-body">
+    <div class="sci-screen">
+      <div class="sci-expr" id="sci-expr">&nbsp;</div>
+      <div class="sci-result" id="sci-result">0</div>
+    </div>
+    <div class="sci-grid" id="sci-keys"></div>
+  </div>
+
+  <div class="info-block" style="max-width:700px;margin-left:auto;margin-right:auto">
+    <h2>How To Use</h2>
+    <p>Tap number and operator keys to build an expression, then press "=" to evaluate. Use SHIFT-style keys sin/cos/tan/log/ln for scientific functions, ( ) for grouping, M+/M-/MR/MC for memory, and AC/DEL to clear. Keyboard input is also supported.</p>
+    <h2>Supported Functions</h2>
+    <p>sin, cos, tan (degrees), log (base 10), ln (natural log), √ (square root), x² , x^y (power), π, e, %, and standard +−×÷ arithmetic with correct operator precedence and parentheses.</p>
+  </div>
+
+  <div class="info-block">
+    <h2>Frequently Asked Questions</h2>
+    <div class="faq-item"><div class="faq-q">Does this work offline? <span class="caret">▾</span></div><div class="faq-a">Yes, all calculations run locally in your browser with vanilla JavaScript — no internet or server needed.</div></div>
+    <div class="faq-item"><div class="faq-q">Are trig functions in degrees or radians? <span class="caret">▾</span></div><div class="faq-a">Degrees, matching standard handheld scientific calculators.</div></div>
+    <div class="faq-item"><div class="faq-q">Can I use my keyboard? <span class="caret">▾</span></div><div class="faq-a">Yes — number keys, + - * / ( ) ., Enter for "=", and Backspace/Escape for delete/clear all work.</div></div>
+  </div>
+
+  <div class="info-block">
+    <h2>Related Calculators</h2>
+    <div class="related-grid" id="related-grid"></div>
+  </div>
+</main>
+<div id="site-footer"></div>
+<script src="../js/calc-data.js"></script>
+<script src="../js/main.js"></script>
+<script src="../js/theme.js"></script>
+<script src="../js/calculator.js"></script>
+<script>
+/* ===== Safe expression evaluator (recursive-descent) ===== */
+function evalExpr(src){
+  let i = 0;
+  function peek(){ return src[i]; }
+  function isDigit(c){ return c>='0' && c<='9'; }
+  function skipNothing(){}
+  function parseNumber(){
+    let start = i;
+    while(i<src.length && (isDigit(src[i])||src[i]==='.')) i++;
+    return parseFloat(src.slice(start,i));
+  }
+  function parseFactor(){
+    let c = peek();
+    if(c==='('){ i++; let v = parseExpr(); if(peek()===')') i++; return applyPow(v); }
+    if(c==='-'){ i++; return -parseFactor(); }
+    if(c==='+'){ i++; return parseFactor(); }
+    if(src.startsWith("sin(",i)){ i+=4; let v=parseExpr(); if(peek()===')')i++; return applyPow(Math.sin(v*Math.PI/180)); }
+    if(src.startsWith("cos(",i)){ i+=4; let v=parseExpr(); if(peek()===')')i++; return applyPow(Math.cos(v*Math.PI/180)); }
+    if(src.startsWith("tan(",i)){ i+=4; let v=parseExpr(); if(peek()===')')i++; return applyPow(Math.tan(v*Math.PI/180)); }
+    if(src.startsWith("log(",i)){ i+=4; let v=parseExpr(); if(peek()===')')i++; return applyPow(Math.log10(v)); }
+    if(src.startsWith("ln(",i)){ i+=3; let v=parseExpr(); if(peek()===')')i++; return applyPow(Math.log(v)); }
+    if(src.startsWith("sqrt(",i)){ i+=5; let v=parseExpr(); if(peek()===')')i++; return applyPow(Math.sqrt(v)); }
+    if(src.startsWith("pi",i)){ i+=2; return applyPow(Math.PI); }
+    if(src.startsWith("e",i) && !isDigit(src[i+1])){ i+=1; return applyPow(Math.E); }
+    if(isDigit(c) || c==='.'){ return applyPow(parseNumber()); }
+    throw new Error("Unexpected token");
+  }
+  function applyPow(base){
+    if(peek()==='^'){ i++; let exp = parseFactor(); return Math.pow(base, exp); }
+    if(peek()==='%'){ i++; return base/100; }
+    return base;
+  }
+  function parseTerm(){
+    let v = parseFactor();
+    while(peek()==='*' || peek()==='/'){
+      let op = peek(); i++;
+      let rhs = parseFactor();
+      v = op==='*' ? v*rhs : v/rhs;
+    }
+    return v;
+  }
+  function parseExpr(){
+    let v = parseTerm();
+    while(peek()==='+' || peek()==='-'){
+      let op = peek(); i++;
+      let rhs = parseTerm();
+      v = op==='+' ? v+rhs : v-rhs;
+    }
+    return v;
+  }
+  src = src.replace(/×/g,'*').replace(/÷/g,'/').replace(/√/g,'sqrt');
+  const result = parseExpr();
+  if(isNaN(result) || !isFinite(result)) throw new Error("Invalid");
+  return result;
+}
+
+/* ===== UI ===== */
+const KEYS = [
+  {l:"MC",v:"MC",cls:""},{l:"MR",v:"MR",cls:""},{l:"M+",v:"M+",cls:""},{l:"M-",v:"M-",cls:""},{l:"AC",v:"AC",cls:"op"},
+  {l:"sin",v:"sin(",cls:""},{l:"cos",v:"cos(",cls:""},{l:"tan",v:"tan(",cls:""},{l:"(",v:"(",cls:""},{l:")",v:")",cls:""},
+  {l:"log",v:"log(",cls:""},{l:"ln",v:"ln(",cls:""},{l:"√",v:"sqrt(",cls:""},{l:"x^y",v:"^",cls:"op"},{l:"DEL",v:"DEL",cls:"op"},
+  {l:"7",v:"7",cls:""},{l:"8",v:"8",cls:""},{l:"9",v:"9",cls:""},{l:"π",v:"pi",cls:""},{l:"÷",v:"/",cls:"op"},
+  {l:"4",v:"4",cls:""},{l:"5",v:"5",cls:""},{l:"6",v:"6",cls:""},{l:"e",v:"e",cls:""},{l:"×",v:"*",cls:"op"},
+  {l:"1",v:"1",cls:""},{l:"2",v:"2",cls:""},{l:"3",v:"3",cls:""},{l:"%",v:"%",cls:"op"},{l:"−",v:"-",cls:"op"},
+  {l:"0",v:"0",cls:"wide"},{l:".",v:".",cls:""},{l:"Ans",v:"ANS",cls:""},{l:"+",v:"+",cls:"op"},
+  {l:"=",v:"=",cls:"eq wide"}
+];
+let expr = "";
+let memory = 0;
+let lastAns = 0;
+const exprEl = document.getElementById("sci-expr");
+const resultEl = document.getElementById("sci-result");
+
+function render(){ exprEl.textContent = expr || " "; }
+
+function pressKey(v){
+  if(v==="AC"){ expr=""; resultEl.textContent="0"; render(); return; }
+  if(v==="DEL"){ expr = expr.slice(0,-1); render(); return; }
+  if(v==="MC"){ memory=0; return; }
+  if(v==="MR"){ expr += String(memory); render(); return; }
+  if(v==="M+"){ memory += Number(resultEl.textContent)||0; return; }
+  if(v==="M-"){ memory -= Number(resultEl.textContent)||0; return; }
+  if(v==="ANS"){ expr += String(lastAns); render(); return; }
+  if(v==="="){
+    try{
+      const r = evalExpr(expr);
+      lastAns = r;
+      resultEl.textContent = Number(r.toPrecision(12)).toString();
+    }catch(e){ resultEl.textContent = "Error"; }
+    return;
+  }
+  expr += v;
+  render();
+}
+
+const keysEl = document.getElementById("sci-keys");
+keysEl.innerHTML = KEYS.map(k=>`<button type="button" class="sci-key ${k.cls}" data-v="${k.v}">${k.l}</button>`).join("");
+keysEl.addEventListener("click", e=>{
+  const btn = e.target.closest(".sci-key");
+  if(btn) pressKey(btn.dataset.v);
+});
+document.addEventListener("keydown", e=>{
+  if(/[0-9+\-*/.()^%]/.test(e.key)){ expr += e.key; render(); }
+  else if(e.key==="Enter"){ pressKey("="); }
+  else if(e.key==="Backspace"){ pressKey("DEL"); }
+  else if(e.key==="Escape"){ pressKey("AC"); }
+});
+
+document.addEventListener("DOMContentLoaded", ()=>{
+  const related = calcsByCategory("math").filter(c=>!c.url.includes("scientific-calculator")).slice(0,4);
+  document.getElementById("related-grid").innerHTML = related.map(CalcUI.calcCard).join("");
+});
+</script>
+</body>
+</html>

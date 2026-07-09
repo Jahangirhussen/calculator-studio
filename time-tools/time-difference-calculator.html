@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Time Difference Calculator — Free Online Calculator | Calculator Studio</title>
+<meta name="description" content="Calculate the duration between two times, including overnight spans that cross midnight.">
+<link rel="canonical" href="https://example.com/time-tools/time-difference-calculator.html">
+<meta property="og:title" content="Time Difference Calculator — Calculator Studio">
+<meta property="og:description" content="Calculate the duration between two times, including overnight spans that cross midnight.">
+<meta property="og:type" content="website">
+<meta name="twitter:card" content="summary">
+<link rel="icon" href="../icons/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="../css/style.css">
+<link rel="stylesheet" href="../css/responsive.css">
+<link rel="stylesheet" href="../css/animations.css">
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"SoftwareApplication","name":"Time Difference Calculator","applicationCategory":"UtilitiesApplication","operatingSystem":"Any"}
+</script>
+</head>
+<body>
+<script>const ROOT="../";</script>
+<div id="site-header"></div>
+<main class="container">
+  <div class="breadcrumb"><a href="../index.html">Home</a> / <a href="index.html">Time Tools</a> / Time Difference Calculator</div>
+  <h1 class="calc-page-title">Time Difference Calculator</h1>
+  <p class="calc-page-desc">Find the duration between two times of day, with automatic overnight handling.</p>
+  <div class="calc-layout">
+    <div class="panel">
+      <form id="calc-form">
+        <div class="field-row">
+          <div class="field">
+            <label for="start-time">Start Time</label>
+            <input type="time" id="start-time" required>
+          </div>
+          <div class="field">
+            <label for="end-time">End Time</label>
+            <input type="time" id="end-time" required>
+          </div>
+        </div>
+        <button type="submit" class="btn btn-solid">Calculate</button>
+      </form>
+      <div class="result-box hidden" id="result-box">
+        <div class="label">Duration</div>
+        <div class="value" id="result-value">—</div>
+      </div>
+      <p id="decimal-out" style="margin-top:10px;color:var(--text-soft);font-size:.9rem"></p>
+      <div class="action-row">
+        <button class="btn btn-ghost" onclick="copyResultText('#result-value')">Copy Result</button>
+        <button class="btn btn-ghost" onclick="shareCurrentPage()">Share</button>
+        <button class="btn btn-ghost" type="button" onclick="location.reload()">Reset</button>
+      </div>
+    </div>
+    <div class="panel">
+      <div class="info-block">
+        <h2>How It Works</h2>
+        <p>Enter a start and end time in 24-hour format. If the end time is earlier than the start time, the calculator assumes it falls on the next day and adds 24 hours automatically.</p>
+        <h2>Example</h2>
+        <p>Start 23:00, End 03:00 → the shift crosses midnight, so the duration is 4 hours (4h 0m), not a negative number.</p>
+        <h2>How To Use</h2>
+        <p>Select a start time and an end time, then click Calculate to see the duration in hours and minutes plus decimal hours.</p>
+      </div>
+    </div>
+  </div>
+  <div class="info-block">
+    <h2>Frequently Asked Questions</h2>
+    <div class="faq-item"><div class="faq-q">What happens if the end time is before the start time? <span class="caret">▾</span></div><div class="faq-a">It is treated as an overnight span — the calculator adds 24 hours to correctly compute the duration.</div></div>
+    <div class="faq-item"><div class="faq-q">Can I get the result in decimal hours? <span class="caret">▾</span></div><div class="faq-a">Yes, the decimal hours equivalent is shown below the main result.</div></div>
+  </div>
+  <div class="info-block">
+    <h2>Related Calculators</h2>
+    <div class="related-grid" id="related-grid"></div>
+  </div>
+</main>
+<div id="site-footer"></div>
+<script src="../js/calc-data.js"></script>
+<script src="../js/main.js"></script>
+<script src="../js/theme.js"></script>
+<script src="../js/calculator.js"></script>
+<script src="../js/time.js"></script>
+<script>
+document.getElementById("calc-form").addEventListener("submit", (e)=>{
+  e.preventDefault();
+  const startMin = parseTimeToMinutes(document.getElementById("start-time").value, null);
+  const endMin = parseTimeToMinutes(document.getElementById("end-time").value, null);
+  if(startMin===null || endMin===null) return;
+  const dur = durationMinutes(startMin, endMin);
+  showResult("#result-box", minutesToHM(dur));
+  document.getElementById("decimal-out").textContent = `Decimal hours: ${minutesToDecimalHours(dur)}`;
+});
+
+document.addEventListener("DOMContentLoaded", ()=>{
+  const related = calcsByCategory("time-tools").filter(c=>!c.url.includes("time-difference-calculator")).slice(0,4);
+  document.getElementById("related-grid").innerHTML = related.map(CalcUI.calcCard).join("");
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Aspect Ratio Calculator — Free Online Calculator | Calculator Studio</title>
+<meta name="description" content="Calculate simplified aspect ratio and matching dimensions.">
+<link rel="canonical" href="https://example.com/utilities/aspect-ratio-calculator.html">
+<link rel="icon" href="../icons/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="../css/style.css">
+<link rel="stylesheet" href="../css/responsive.css">
+<link rel="stylesheet" href="../css/animations.css">
+</head>
+<body>
+<script>const ROOT="../";</script>
+<div id="site-header"></div>
+<main class="container">
+  <div class="breadcrumb"><a href="../index.html">Home</a> / <a href="index.html">Utilities</a> / Aspect Ratio Calculator</div>
+  <h1 class="calc-page-title">Aspect Ratio Calculator</h1>
+  <p class="calc-page-desc">Calculate the simplified aspect ratio of a width and height, and find a matching height for a target width.</p>
+  <div class="calc-layout">
+    <div class="panel">
+      <form id="calc-form">
+        <div class="field-row">
+          <div class="field"><label>Width (px)</label><input type="number" id="w" required></div>
+          <div class="field"><label>Height (px)</label><input type="number" id="h" required></div>
+        </div>
+        <div class="field"><label>New Width (optional — get matching height)</label><input type="number" id="new-w"></div>
+        <button type="submit" class="btn btn-solid">Calculate</button>
+      </form>
+      <div class="result-box hidden" id="result-box">
+        <div class="label">Aspect Ratio</div>
+        <div class="value" id="result-value">—</div>
+      </div>
+      <div class="action-row">
+        <button class="btn btn-ghost" onclick="copyResultText('#result-value')">Copy Result</button>
+        <button class="btn btn-ghost" type="button" onclick="location.reload()">Reset</button>
+      </div>
+    </div>
+    <div class="panel"><div class="info-block"><h2>Example</h2><p>1920 × 1080 simplifies to 16:9</p></div></div>
+  </div>
+  <div class="info-block"><h2>Related Calculators</h2><div class="related-grid" id="related-grid"></div></div>
+</main>
+<div id="site-footer"></div>
+<script src="../js/calc-data.js"></script>
+<script src="../js/main.js"></script>
+<script src="../js/theme.js"></script>
+<script src="../js/calculator.js"></script>
+<script src="../js/utilities.js"></script>
+<script>
+document.getElementById("calc-form").addEventListener("submit", function(e){
+  e.preventDefault();
+  const w = parseInt(document.getElementById("w").value);
+  const h = parseInt(document.getElementById("h").value);
+  const g = gcd(w,h);
+  let out = `${w/g}:${h/g}`;
+  const newW = parseFloat(document.getElementById("new-w").value);
+  if(newW){
+    const newH = (newW * h / w);
+    out += ` — at width ${newW}px, height = ${formatNumber(newH,1)}px`;
+  }
+  showResult("#result-box", out);
+});
+document.addEventListener("DOMContentLoaded", ()=>{
+  const related = calcsByCategory("utilities").filter(c=>!c.url.includes("aspect-ratio-calculator")).slice(0,4);
+  document.getElementById("related-grid").innerHTML = related.map(CalcUI.calcCard).join("");
+});
+</script>
+</body>
+</html>

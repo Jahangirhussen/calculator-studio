@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Case Converter — Free Online Tool | Calculator Studio</title>
+<meta name="description" content="Convert text case: UPPERCASE, lowercase, Title Case, camelCase, snake_case, kebab-case, PascalCase.">
+<link rel="canonical" href="https://example.com/programming/case-converter.html">
+<link rel="icon" href="../icons/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="../css/style.css">
+<link rel="stylesheet" href="../css/responsive.css">
+<link rel="stylesheet" href="../css/animations.css">
+<style>textarea.ta{width:100%;padding:12px;border-radius:8px;border:1px solid var(--border);background:var(--bg-alt);color:var(--text);font-family:inherit;min-height:120px}</style>
+</head>
+<body>
+<script>const ROOT="../";</script>
+<div id="site-header"></div>
+<main class="container">
+  <div class="breadcrumb"><a href="../index.html">Home</a> / <a href="index.html">Programming</a> / Case Converter</div>
+  <h1 class="calc-page-title">Case Converter</h1>
+  <p class="calc-page-desc">Convert text between UPPERCASE, lowercase, Title Case, camelCase, snake_case, kebab-case and PascalCase.</p>
+  <div class="calc-layout">
+    <div class="panel">
+      <form id="calc-form">
+        <div class="field"><label>Input Text</label><textarea class="ta" id="input" required></textarea></div>
+        <div class="field"><label>Target Case</label>
+          <select id="mode">
+            <option value="upper">UPPERCASE</option>
+            <option value="lower">lowercase</option>
+            <option value="title">Title Case</option>
+            <option value="camel">camelCase</option>
+            <option value="snake">snake_case</option>
+            <option value="kebab">kebab-case</option>
+            <option value="pascal">PascalCase</option>
+          </select>
+        </div>
+        <button type="submit" class="btn btn-solid">Convert</button>
+      </form>
+      <div class="result-box hidden" id="result-box">
+        <div class="label">Output</div>
+        <div class="value" id="result-value" style="word-break:break-all;font-size:1rem">—</div>
+      </div>
+      <div class="action-row">
+        <button class="btn btn-ghost" onclick="copyResultText('#result-value')">Copy Result</button>
+        <button class="btn btn-ghost" type="button" onclick="location.reload()">Reset</button>
+      </div>
+    </div>
+    <div class="panel"><div class="info-block"><h2>Example</h2><p>"hello world" → helloWorld (camelCase), hello_world (snake_case), hello-world (kebab-case)</p></div></div>
+  </div>
+  <div class="info-block"><h2>Related Calculators</h2><div class="related-grid" id="related-grid"></div></div>
+</main>
+<div id="site-footer"></div>
+<script src="../js/calc-data.js"></script>
+<script src="../js/main.js"></script>
+<script src="../js/theme.js"></script>
+<script src="../js/calculator.js"></script>
+<script>
+function toWords(str){
+  return str.trim().replace(/[_-]+/g," ").replace(/([a-z])([A-Z])/g,"$1 $2").split(/\s+/).filter(Boolean).map(w=>w.toLowerCase());
+}
+document.getElementById("calc-form").addEventListener("submit", function(e){
+  e.preventDefault();
+  const input = document.getElementById("input").value;
+  const mode = document.getElementById("mode").value;
+  const words = toWords(input);
+  let out;
+  switch(mode){
+    case "upper": out = input.toUpperCase(); break;
+    case "lower": out = input.toLowerCase(); break;
+    case "title": out = words.map(w=>w.charAt(0).toUpperCase()+w.slice(1)).join(" "); break;
+    case "camel": out = words.map((w,i)=> i===0? w : w.charAt(0).toUpperCase()+w.slice(1)).join(""); break;
+    case "snake": out = words.join("_"); break;
+    case "kebab": out = words.join("-"); break;
+    case "pascal": out = words.map(w=>w.charAt(0).toUpperCase()+w.slice(1)).join(""); break;
+  }
+  showResult("#result-box", out);
+});
+document.addEventListener("DOMContentLoaded", ()=>{
+  const related = calcsByCategory("programming").filter(c=>!c.url.includes("case-converter")).slice(0,4);
+  document.getElementById("related-grid").innerHTML = related.map(CalcUI.calcCard).join("");
+});
+</script>
+</body>
+</html>

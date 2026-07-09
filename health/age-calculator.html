@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Age Calculator — Free Online Calculator | Calculator Studio</title>
+<meta name="description" content="Calculate your exact age in years, months and days from your birthdate to today.">
+<link rel="canonical" href="https://example.com/health/age-calculator.html">
+<meta property="og:title" content="Age Calculator — Calculator Studio">
+<meta property="og:description" content="Calculate your exact age in years, months and days from your birthdate to today.">
+<meta property="og:type" content="website">
+<meta name="twitter:card" content="summary">
+<link rel="icon" href="../icons/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="../css/style.css">
+<link rel="stylesheet" href="../css/responsive.css">
+<link rel="stylesheet" href="../css/animations.css">
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"SoftwareApplication","name":"Age Calculator","applicationCategory":"HealthApplication","operatingSystem":"Any"}
+</script>
+</head>
+<body>
+<script>const ROOT="../";</script>
+<div id="site-header"></div>
+<main class="container">
+  <div class="breadcrumb"><a href="../index.html">Home</a> / <a href="index.html">Health</a> / Age Calculator</div>
+  <h1 class="calc-page-title">Age Calculator</h1>
+  <p class="calc-page-desc">Calculate your exact age in years, months and days from your birthdate to any target date.</p>
+  <div class="calc-layout">
+    <div class="panel">
+      <form id="calc-form">
+        <div class="field">
+          <label for="birth-date">Date of Birth</label>
+          <input type="date" id="birth-date" required>
+        </div>
+        <div class="field">
+          <label for="target-date">Age at Date</label>
+          <input type="date" id="target-date" required>
+        </div>
+        <button type="submit" class="btn btn-solid">Calculate</button>
+      </form>
+      <div class="result-box hidden" id="result-box">
+        <div class="label">Result</div>
+        <div class="value" id="result-value">—</div>
+      </div>
+      <div class="action-row">
+        <button class="btn btn-ghost" onclick="copyResultText('#result-value')">Copy Result</button>
+        <button class="btn btn-ghost" onclick="shareCurrentPage()">Share</button>
+        <button class="btn btn-ghost" onclick="resetForm('#calc-form','#result-box')">Reset</button>
+      </div>
+    </div>
+    <div class="panel">
+      <div class="info-block">
+        <h2>Formula</h2>
+        <div class="formula">Age = Target Date − Date of Birth
+(calculated as full years, then remaining months, then remaining days)</div>
+        <h2>Example</h2>
+        <p>Born on 15 June 2000, on 9 July 2026 you would be 26 years, 0 months, 24 days old.</p>
+        <h2>How To Use</h2>
+        <p>Pick your date of birth, leave "Age at Date" as today or choose another date, then click Calculate.</p>
+      </div>
+    </div>
+  </div>
+  <div class="info-block">
+    <h2>Frequently Asked Questions</h2>
+    <div class="faq-item"><div class="faq-q">How is age calculated in years, months and days? <span class="caret">▾</span></div><div class="faq-a">We count the number of complete years between the two dates, then the remaining complete months, then the remaining days — accounting for varying month lengths and leap years.</div></div>
+    <div class="faq-item"><div class="faq-q">Can I calculate my age on a future or past date? <span class="caret">▾</span></div><div class="faq-a">Yes, change the "Age at Date" field to any date to see your age at that point in time.</div></div>
+  </div>
+  <div class="info-block">
+    <h2>Related Calculators</h2>
+    <div class="related-grid" id="related-grid"></div>
+  </div>
+</main>
+<div id="site-footer"></div>
+<script src="../js/calc-data.js"></script>
+<script src="../js/main.js"></script>
+<script src="../js/theme.js"></script>
+<script src="../js/calculator.js"></script>
+<script>
+document.getElementById("target-date").valueAsDate = new Date();
+document.getElementById("calc-form").addEventListener("submit", function(e){
+  e.preventDefault();
+  const birth = new Date(document.getElementById("birth-date").value);
+  const target = new Date(document.getElementById("target-date").value);
+  if(isNaN(birth) || isNaN(target)){
+    showResult("#result-box", "Error: please pick valid dates");
+    return;
+  }
+  if(target < birth){
+    showResult("#result-box", "Error: Age date must be after date of birth");
+    return;
+  }
+  let years = target.getFullYear() - birth.getFullYear();
+  let months = target.getMonth() - birth.getMonth();
+  let days = target.getDate() - birth.getDate();
+  if(days < 0){
+    months -= 1;
+    const prevMonth = new Date(target.getFullYear(), target.getMonth(), 0);
+    days += prevMonth.getDate();
+  }
+  if(months < 0){
+    years -= 1;
+    months += 12;
+  }
+  const totalDays = Math.floor((target - birth) / (1000*60*60*24));
+  showResult("#result-box", `${years} years, ${months} months, ${days} days (${formatNumber(totalDays,0)} total days)`);
+});
+document.addEventListener("DOMContentLoaded", ()=>{
+  const related = calcsByCategory("health").filter(c=>!c.url.includes("age-calculator")).slice(0,4);
+  document.getElementById("related-grid").innerHTML = related.map(CalcUI.calcCard).join("");
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CGPA Calculator — Free Online Calculator | Calculator Studio</title>
+<meta name="description" content="Calculate your Cumulative Grade Point Average (CGPA) across multiple semesters.">
+<link rel="canonical" href="https://example.com/education/cgpa-calculator.html">
+<meta property="og:title" content="CGPA Calculator — Calculator Studio">
+<meta property="og:description" content="Calculate your Cumulative Grade Point Average (CGPA) across multiple semesters.">
+<meta property="og:type" content="website">
+<meta name="twitter:card" content="summary">
+<link rel="icon" href="../icons/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="../css/style.css">
+<link rel="stylesheet" href="../css/responsive.css">
+<link rel="stylesheet" href="../css/animations.css">
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"SoftwareApplication","name":"CGPA Calculator","applicationCategory":"EducationalApplication","operatingSystem":"Any"}
+</script>
+</head>
+<body>
+<script>const ROOT="../";</script>
+<div id="site-header"></div>
+<main class="container">
+  <div class="breadcrumb"><a href="../index.html">Home</a> / <a href="index.html">Education</a> / CGPA Calculator</div>
+  <h1 class="calc-page-title">CGPA Calculator</h1>
+  <p class="calc-page-desc">Calculate your Cumulative GPA across semesters using each semester's GPA and credit hours.</p>
+  <div class="calc-layout">
+    <div class="panel">
+      <form id="calc-form">
+        <div id="semester-container">
+          <div class="field-row semester-row">
+            <div class="field">
+              <label>Semester Name</label>
+              <input type="text" class="sem-name" placeholder="Semester 1" value="Semester 1">
+            </div>
+            <div class="field">
+              <label>Semester GPA (0-4)</label>
+              <input type="number" class="sem-gpa" step="any" min="0" max="4" value="4" required>
+            </div>
+            <div class="field">
+              <label>Credit Hours</label>
+              <input type="number" class="sem-credits" step="any" min="0" value="15" required>
+            </div>
+          </div>
+        </div>
+        <button type="button" class="btn btn-ghost" id="add-semester">+ Add Semester</button>
+        <button type="submit" class="btn btn-solid">Calculate</button>
+      </form>
+      <div class="result-box hidden" id="result-box">
+        <div class="label">Result</div>
+        <div class="value" id="result-value">—</div>
+      </div>
+      <div class="action-row">
+        <button class="btn btn-ghost" onclick="copyResultText('#result-value')">Copy Result</button>
+        <button class="btn btn-ghost" onclick="shareCurrentPage()">Share</button>
+        <button class="btn btn-ghost" onclick="resetForm('#calc-form','#result-box')">Reset</button>
+      </div>
+    </div>
+    <div class="panel">
+      <div class="info-block">
+        <h2>Formula</h2>
+        <div class="formula">CGPA = Σ(Semester GPA × Credit Hours) / Σ(Credit Hours)</div>
+        <h2>Example</h2>
+        <p>Semester 1: GPA 3.5, 15 credits. Semester 2: GPA 3.8, 16 credits.
+CGPA = (3.5×15 + 3.8×16) / (15+16) = 113.3/31 = 3.65</p>
+        <h2>How To Use</h2>
+        <p>Enter each semester's GPA and credit hours. Click "Add Semester" to add more rows, then click Calculate.</p>
+      </div>
+    </div>
+  </div>
+  <div class="info-block">
+    <h2>Frequently Asked Questions</h2>
+    <div class="faq-item"><div class="faq-q">What is the difference between GPA and CGPA? <span class="caret">▾</span></div><div class="faq-a">GPA measures performance in a single semester, while CGPA is the weighted average across all semesters.</div></div>
+    <div class="faq-item"><div class="faq-q">How many semesters can I add? <span class="caret">▾</span></div><div class="faq-a">You can add unlimited semester rows using the "Add Semester" button.</div></div>
+  </div>
+  <div class="info-block">
+    <h2>Related Calculators</h2>
+    <div class="related-grid" id="related-grid"></div>
+  </div>
+</main>
+<div id="site-footer"></div>
+<script src="../js/calc-data.js"></script>
+<script src="../js/main.js"></script>
+<script src="../js/theme.js"></script>
+<script src="../js/calculator.js"></script>
+<script>
+const semContainer = document.getElementById("semester-container");
+document.getElementById("add-semester").addEventListener("click", function(){
+  const n = semContainer.querySelectorAll(".semester-row").length + 1;
+  const row = document.createElement("div");
+  row.className = "field-row semester-row";
+  row.innerHTML = `
+    <div class="field">
+      <label>Semester Name</label>
+      <input type="text" class="sem-name" placeholder="Semester ${n}" value="Semester ${n}">
+    </div>
+    <div class="field">
+      <label>Semester GPA (0-4)</label>
+      <input type="number" class="sem-gpa" step="any" min="0" max="4" value="4" required>
+    </div>
+    <div class="field">
+      <label>Credit Hours</label>
+      <input type="number" class="sem-credits" step="any" min="0" value="15" required>
+    </div>`;
+  semContainer.appendChild(row);
+});
+
+document.getElementById("calc-form").addEventListener("submit", function(e){
+  e.preventDefault();
+  const gpas = document.querySelectorAll(".sem-gpa");
+  const credits = document.querySelectorAll(".sem-credits");
+  let totalCredits = 0, totalPoints = 0;
+  for(let i=0;i<gpas.length;i++){
+    const g = parseFloat(gpas[i].value);
+    const c = parseFloat(credits[i].value);
+    if(!(c > 0) || isNaN(g) || g < 0 || g > 4) continue;
+    totalCredits += c;
+    totalPoints += g*c;
+  }
+  if(totalCredits <= 0){
+    showResult("#result-box", "Error: enter valid semester GPA and credit hours");
+    return;
+  }
+  const cgpa = totalPoints/totalCredits;
+  showResult("#result-box", `CGPA: ${formatNumber(cgpa,2)}`);
+});
+document.addEventListener("DOMContentLoaded", ()=>{
+  const related = calcsByCategory("education").filter(c=>!c.url.includes("cgpa-calculator")).slice(0,4);
+  document.getElementById("related-grid").innerHTML = related.map(CalcUI.calcCard).join("");
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>VAT Calculator — Free Online Calculator | Calculator Studio</title>
+<meta name="description" content="Add or remove VAT from a price instantly.">
+<link rel="canonical" href="https://example.com/finance/vat-calculator.html">
+<link rel="icon" href="../icons/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="../css/style.css">
+<link rel="stylesheet" href="../css/responsive.css">
+<link rel="stylesheet" href="../css/animations.css">
+</head>
+<body>
+<script>const ROOT="../";</script>
+<div id="site-header"></div>
+<main class="container">
+  <div class="breadcrumb"><a href="../index.html">Home</a> / <a href="index.html">Finance</a> / VAT Calculator</div>
+  <h1 class="calc-page-title">VAT Calculator</h1>
+  <p class="calc-page-desc">Add VAT to a net price, or remove VAT from a gross price.</p>
+  <div class="calc-layout">
+    <div class="panel">
+      <form id="calc-form">
+        <div class="field"><label>Mode</label><select id="mode"><option value="add">Add VAT (price excludes VAT)</option><option value="remove">Remove VAT (price includes VAT)</option></select></div>
+        <div class="field-row">
+          <div class="field"><label>Price</label><input type="number" id="price" step="any" required></div>
+          <div class="field"><label>VAT Rate (%)</label><input type="number" id="rate" step="any" value="20" required></div>
+        </div>
+        <button type="submit" class="btn btn-solid">Calculate</button>
+      </form>
+      <div class="result-box hidden" id="result-box">
+        <div class="label">Result</div>
+        <div class="value" id="result-value">—</div>
+      </div>
+      <div class="action-row">
+        <button class="btn btn-ghost" onclick="copyResultText('#result-value')">Copy Result</button>
+        <button class="btn btn-ghost" onclick="shareCurrentPage()">Share</button>
+        <button class="btn btn-ghost" type="button" onclick="location.reload()">Reset</button>
+      </div>
+    </div>
+    <div class="panel"><div class="info-block">
+      <h2>Formula</h2>
+      <div class="formula">Add: total = price × (1 + rate/100)<br>Remove: net = price / (1 + rate/100)</div>
+      <h2>Example</h2><p>$100 + 20% VAT = $120</p>
+    </div></div>
+  </div>
+  <div class="info-block"><h2>Related Calculators</h2><div class="related-grid" id="related-grid"></div></div>
+</main>
+<div id="site-footer"></div>
+<script src="../js/calc-data.js"></script>
+<script src="../js/main.js"></script>
+<script src="../js/theme.js"></script>
+<script src="../js/calculator.js"></script>
+<script>
+document.getElementById("calc-form").addEventListener("submit", function(e){
+  e.preventDefault();
+  const price = parseFloat(document.getElementById("price").value);
+  const rate = parseFloat(document.getElementById("rate").value);
+  const mode = document.getElementById("mode").value;
+  let result;
+  if(mode==="add") result = price*(1+rate/100);
+  else result = price/(1+rate/100);
+  showResult("#result-box", formatNumber(result));
+});
+document.addEventListener("DOMContentLoaded", ()=>{
+  const related = calcsByCategory("finance").filter(c=>!c.url.includes("vat-calculator")).slice(0,4);
+  document.getElementById("related-grid").innerHTML = related.map(CalcUI.calcCard).join("");
+});
+</script>
+</body>
+</html>

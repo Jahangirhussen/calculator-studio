@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Attendance Calculator — Free Online Calculator | Calculator Studio</title>
+<meta name="description" content="Calculate your current attendance percentage and how many classes you need to attend or can miss to hit your target.">
+<link rel="canonical" href="https://example.com/education/attendance-calculator.html">
+<meta property="og:title" content="Attendance Calculator — Calculator Studio">
+<meta property="og:description" content="Calculate your current attendance percentage and how many classes you need to attend or can miss to hit your target.">
+<meta property="og:type" content="website">
+<meta name="twitter:card" content="summary">
+<link rel="icon" href="../icons/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="../css/style.css">
+<link rel="stylesheet" href="../css/responsive.css">
+<link rel="stylesheet" href="../css/animations.css">
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"SoftwareApplication","name":"Attendance Calculator","applicationCategory":"EducationalApplication","operatingSystem":"Any"}
+</script>
+</head>
+<body>
+<script>const ROOT="../";</script>
+<div id="site-header"></div>
+<main class="container">
+  <div class="breadcrumb"><a href="../index.html">Home</a> / <a href="index.html">Education</a> / Attendance Calculator</div>
+  <h1 class="calc-page-title">Attendance Calculator</h1>
+  <p class="calc-page-desc">Calculate your current attendance percentage and find out how many more classes to attend, or how many you can miss, to hit your target attendance.</p>
+  <div class="calc-layout">
+    <div class="panel">
+      <form id="calc-form">
+        <div class="field-row">
+          <div class="field">
+            <label for="attended">Classes Attended</label>
+            <input type="number" id="attended" step="1" min="0" required>
+          </div>
+          <div class="field">
+            <label for="totalClasses">Total Classes Held</label>
+            <input type="number" id="totalClasses" step="1" min="0" required>
+          </div>
+        </div>
+        <div class="field">
+          <label for="target">Required Attendance Target (%)</label>
+          <input type="number" id="target" step="any" min="1" max="99.99" value="75" required>
+        </div>
+        <button type="submit" class="btn btn-solid">Calculate</button>
+      </form>
+      <div class="result-box hidden" id="result-box">
+        <div class="label">Result</div>
+        <div class="value" id="result-value">—</div>
+      </div>
+      <div class="action-row">
+        <button class="btn btn-ghost" onclick="copyResultText('#result-value')">Copy Result</button>
+        <button class="btn btn-ghost" onclick="shareCurrentPage()">Share</button>
+        <button class="btn btn-ghost" onclick="resetForm('#calc-form','#result-box')">Reset</button>
+      </div>
+    </div>
+    <div class="panel">
+      <div class="info-block">
+        <h2>Formula</h2>
+        <div class="formula">Current % = Attended / Total × 100
+
+If below target, classes needed (x) to attend consecutively:
+x = (Target×Total − 100×Attended) / (100 − Target)
+
+If above target, classes you can still miss (y):
+y = (100×Attended / Target) − Total</div>
+        <h2>Example</h2>
+        <p>If you attended 60 of 80 classes (75%) and your target is 80%, you need to attend 20 more consecutive classes to reach 80%.</p>
+        <h2>How To Use</h2>
+        <p>Enter classes attended, total classes held, and your required attendance percentage, then click Calculate.</p>
+      </div>
+    </div>
+  </div>
+  <div class="info-block">
+    <h2>Frequently Asked Questions</h2>
+    <div class="faq-item"><div class="faq-q">What if my attendance is already above target? <span class="caret">▾</span></div><div class="faq-a">The calculator will tell you how many classes you can afford to miss going forward while staying at or above your target.</div></div>
+    <div class="faq-item"><div class="faq-q">Does this assume future classes are attended consecutively? <span class="caret">▾</span></div><div class="faq-a">Yes, the "classes needed" figure assumes you attend every future class until you reach the target.</div></div>
+  </div>
+  <div class="info-block">
+    <h2>Related Calculators</h2>
+    <div class="related-grid" id="related-grid"></div>
+  </div>
+</main>
+<div id="site-footer"></div>
+<script src="../js/calc-data.js"></script>
+<script src="../js/main.js"></script>
+<script src="../js/theme.js"></script>
+<script src="../js/calculator.js"></script>
+<script>
+document.getElementById("calc-form").addEventListener("submit", function(e){
+  e.preventDefault();
+  const attended = parseFloat(document.getElementById("attended").value);
+  const total = parseFloat(document.getElementById("totalClasses").value);
+  const target = parseFloat(document.getElementById("target").value);
+  if(!(total > 0) || attended < 0 || attended > total || !(target > 0) || target >= 100){
+    showResult("#result-box", "Error: enter valid values (attended ≤ total, target between 1-99.99%)");
+    return;
+  }
+  const currentPct = (attended/total)*100;
+  let msg = `Current Attendance: ${formatNumber(currentPct,2)}%. `;
+  if(currentPct < target){
+    const x = (target*total - 100*attended) / (100 - target);
+    const need = Math.ceil(x);
+    msg += `You need to attend ${need} more consecutive class${need===1?"":"es"} to reach ${formatNumber(target,2)}%.`;
+  } else {
+    const y = (100*attended/target) - total;
+    const canMiss = Math.floor(y);
+    if(canMiss > 0){
+      msg += `You can miss up to ${canMiss} more class${canMiss===1?"":"es"} and stay at or above ${formatNumber(target,2)}%.`;
+    } else {
+      msg += `You are exactly at target — missing any class will drop you below ${formatNumber(target,2)}%.`;
+    }
+  }
+  showResult("#result-box", msg);
+});
+document.addEventListener("DOMContentLoaded", ()=>{
+  const related = calcsByCategory("education").filter(c=>!c.url.includes("attendance-calculator")).slice(0,4);
+  document.getElementById("related-grid").innerHTML = related.map(CalcUI.calcCard).join("");
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Fuel Cost Calculator — Free Online Calculator | Calculator Studio</title>
+<meta name="description" content="Calculate the fuel cost of a trip from distance, mileage and fuel price.">
+<link rel="canonical" href="https://example.com/utilities/fuel-cost-calculator.html">
+<link rel="icon" href="../icons/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="../css/style.css">
+<link rel="stylesheet" href="../css/responsive.css">
+<link rel="stylesheet" href="../css/animations.css">
+</head>
+<body>
+<script>const ROOT="../";</script>
+<div id="site-header"></div>
+<main class="container">
+  <div class="breadcrumb"><a href="../index.html">Home</a> / <a href="index.html">Utilities</a> / Fuel Cost Calculator</div>
+  <h1 class="calc-page-title">Fuel Cost Calculator</h1>
+  <p class="calc-page-desc">Calculate the total fuel cost of a trip.</p>
+  <div class="calc-layout">
+    <div class="panel">
+      <form id="calc-form">
+        <div class="field"><label>Distance (km)</label><input type="number" step="any" id="distance" required></div>
+        <div class="field"><label>Mileage (km per liter)</label><input type="number" step="any" id="mileage" required></div>
+        <div class="field"><label>Fuel Price (per liter)</label><input type="number" step="any" id="price" required></div>
+        <button type="submit" class="btn btn-solid">Calculate</button>
+      </form>
+      <div class="result-box hidden" id="result-box">
+        <div class="label">Trip Fuel Cost</div>
+        <div class="value" id="result-value">—</div>
+      </div>
+      <div class="action-row">
+        <button class="btn btn-ghost" onclick="copyResultText('#result-value')">Copy Result</button>
+        <button class="btn btn-ghost" type="button" onclick="location.reload()">Reset</button>
+      </div>
+    </div>
+    <div class="panel"><div class="info-block"><h2>Formula</h2><div class="formula">cost = (distance / mileage) × price per liter</div></div></div>
+  </div>
+  <div class="info-block"><h2>Related Calculators</h2><div class="related-grid" id="related-grid"></div></div>
+</main>
+<div id="site-footer"></div>
+<script src="../js/calc-data.js"></script>
+<script src="../js/main.js"></script>
+<script src="../js/theme.js"></script>
+<script src="../js/calculator.js"></script>
+<script>
+document.getElementById("calc-form").addEventListener("submit", function(e){
+  e.preventDefault();
+  const d = parseFloat(document.getElementById("distance").value);
+  const m = parseFloat(document.getElementById("mileage").value);
+  const p = parseFloat(document.getElementById("price").value);
+  showResult("#result-box", formatNumber((d/m)*p));
+});
+document.addEventListener("DOMContentLoaded", ()=>{
+  const related = calcsByCategory("utilities").filter(c=>!c.url.includes("fuel-cost-calculator")).slice(0,4);
+  document.getElementById("related-grid").innerHTML = related.map(CalcUI.calcCard).join("");
+});
+</script>
+</body>
+</html>

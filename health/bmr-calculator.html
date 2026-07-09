@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BMR Calculator — Free Online Calculator | Calculator Studio</title>
+<meta name="description" content="Calculate your Basal Metabolic Rate (BMR) using the Mifflin-St Jeor formula.">
+<link rel="canonical" href="https://example.com/health/bmr-calculator.html">
+<meta property="og:title" content="BMR Calculator — Calculator Studio">
+<meta property="og:description" content="Calculate your Basal Metabolic Rate (BMR) using the Mifflin-St Jeor formula.">
+<meta property="og:type" content="website">
+<meta name="twitter:card" content="summary">
+<link rel="icon" href="../icons/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="../css/style.css">
+<link rel="stylesheet" href="../css/responsive.css">
+<link rel="stylesheet" href="../css/animations.css">
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"SoftwareApplication","name":"BMR Calculator","applicationCategory":"HealthApplication","operatingSystem":"Any"}
+</script>
+</head>
+<body>
+<script>const ROOT="../";</script>
+<div id="site-header"></div>
+<main class="container">
+  <div class="breadcrumb"><a href="../index.html">Home</a> / <a href="index.html">Health</a> / BMR Calculator</div>
+  <h1 class="calc-page-title">BMR Calculator</h1>
+  <p class="calc-page-desc">Calculate your Basal Metabolic Rate — the calories your body burns at complete rest — using the Mifflin-St Jeor formula.</p>
+  <div class="calc-layout">
+    <div class="panel">
+      <form id="calc-form">
+        <div class="field">
+          <label for="gender">Gender</label>
+          <select id="gender">
+            <option value="male">Male</option>
+            <option value="female">Female</option>
+          </select>
+        </div>
+        <div class="field-row">
+          <div class="field">
+            <label for="weight">Weight (kg)</label>
+            <input type="number" id="weight" step="any" min="0" required>
+          </div>
+          <div class="field">
+            <label for="height">Height (cm)</label>
+            <input type="number" id="height" step="any" min="0" required>
+          </div>
+        </div>
+        <div class="field">
+          <label for="age">Age (years)</label>
+          <input type="number" id="age" step="1" min="0" required>
+        </div>
+        <button type="submit" class="btn btn-solid">Calculate</button>
+      </form>
+      <div class="result-box hidden" id="result-box">
+        <div class="label">Result</div>
+        <div class="value" id="result-value">—</div>
+      </div>
+      <div class="action-row">
+        <button class="btn btn-ghost" onclick="copyResultText('#result-value')">Copy Result</button>
+        <button class="btn btn-ghost" onclick="shareCurrentPage()">Share</button>
+        <button class="btn btn-ghost" onclick="resetForm('#calc-form','#result-box')">Reset</button>
+      </div>
+    </div>
+    <div class="panel">
+      <div class="info-block">
+        <h2>Formula</h2>
+        <div class="formula">Mifflin-St Jeor:
+Male: BMR = 10×kg + 6.25×cm − 5×age + 5
+Female: BMR = 10×kg + 6.25×cm − 5×age − 161</div>
+        <h2>Example</h2>
+        <p>A 30 year old male, 80 kg, 180 cm: BMR = 10×80 + 6.25×180 − 5×30 + 5 = 1780 kcal/day.</p>
+        <h2>How To Use</h2>
+        <p>Select gender, enter weight, height and age, then click Calculate to see your BMR in calories/day.</p>
+      </div>
+    </div>
+  </div>
+  <div class="info-block">
+    <h2>Frequently Asked Questions</h2>
+    <div class="faq-item"><div class="faq-q">What is BMR? <span class="caret">▾</span></div><div class="faq-a">BMR (Basal Metabolic Rate) is the number of calories your body needs to maintain basic life functions while at complete rest.</div></div>
+    <div class="faq-item"><div class="faq-q">Why does the Mifflin-St Jeor formula differ by gender? <span class="caret">▾</span></div><div class="faq-a">Men typically have more lean muscle mass than women, so the formula uses different constants to better estimate resting energy needs.</div></div>
+  </div>
+  <div class="info-block">
+    <h2>Related Calculators</h2>
+    <div class="related-grid" id="related-grid"></div>
+  </div>
+</main>
+<div id="site-footer"></div>
+<script src="../js/calc-data.js"></script>
+<script src="../js/main.js"></script>
+<script src="../js/theme.js"></script>
+<script src="../js/calculator.js"></script>
+<script>
+document.getElementById("calc-form").addEventListener("submit", function(e){
+  e.preventDefault();
+  const gender = document.getElementById("gender").value;
+  const weight = parseFloat(document.getElementById("weight").value);
+  const height = parseFloat(document.getElementById("height").value);
+  const age = parseFloat(document.getElementById("age").value);
+  if(!(weight > 0) || !(height > 0) || !(age >= 0)){
+    showResult("#result-box", "Error: enter valid positive numbers");
+    return;
+  }
+  let bmr = 10*weight + 6.25*height - 5*age;
+  bmr += (gender === "male") ? 5 : -161;
+  showResult("#result-box", `${formatNumber(bmr,0)} kcal/day`);
+});
+document.addEventListener("DOMContentLoaded", ()=>{
+  const related = calcsByCategory("health").filter(c=>!c.url.includes("bmr-calculator")).slice(0,4);
+  document.getElementById("related-grid").innerHTML = related.map(CalcUI.calcCard).join("");
+});
+</script>
+</body>
+</html>

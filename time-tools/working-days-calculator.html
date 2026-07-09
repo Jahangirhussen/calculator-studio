@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Working Days Calculator — Free Online Calculator | Calculator Studio</title>
+<meta name="description" content="Calculate the number of business days (Mon-Fri) between two dates.">
+<link rel="canonical" href="https://example.com/time-tools/working-days-calculator.html">
+<link rel="icon" href="../icons/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="../css/style.css">
+<link rel="stylesheet" href="../css/responsive.css">
+<link rel="stylesheet" href="../css/animations.css">
+</head>
+<body>
+<script>const ROOT="../";</script>
+<div id="site-header"></div>
+<main class="container">
+  <div class="breadcrumb"><a href="../index.html">Home</a> / <a href="index.html">Time Tools</a> / Working Days Calculator</div>
+  <h1 class="calc-page-title">Working Days Calculator</h1>
+  <p class="calc-page-desc">Calculate the number of business days (Monday–Friday) between two dates, excluding weekends.</p>
+  <div class="calc-layout">
+    <div class="panel">
+      <form id="calc-form">
+        <div class="field-row">
+          <div class="field"><label>Start Date</label><input type="date" id="start" required></div>
+          <div class="field"><label>End Date</label><input type="date" id="end" required></div>
+        </div>
+        <button type="submit" class="btn btn-solid">Calculate</button>
+      </form>
+      <div class="result-box hidden" id="result-box">
+        <div class="label">Business Days</div>
+        <div class="value" id="result-value">—</div>
+      </div>
+      <div class="action-row">
+        <button class="btn btn-ghost" onclick="copyResultText('#result-value')">Copy Result</button>
+        <button class="btn btn-ghost" onclick="shareCurrentPage()">Share</button>
+        <button class="btn btn-ghost" type="button" onclick="location.reload()">Reset</button>
+      </div>
+    </div>
+    <div class="panel"><div class="info-block"><h2>How It Works</h2><p>Counts each day between the two dates, skipping Saturdays and Sundays.</p></div></div>
+  </div>
+  <div class="info-block"><h2>Related Calculators</h2><div class="related-grid" id="related-grid"></div></div>
+</main>
+<div id="site-footer"></div>
+<script src="../js/calc-data.js"></script>
+<script src="../js/main.js"></script>
+<script src="../js/theme.js"></script>
+<script src="../js/calculator.js"></script>
+<script>
+document.getElementById("calc-form").addEventListener("submit", function(e){
+  e.preventDefault();
+  const start = new Date(document.getElementById("start").value);
+  const end = new Date(document.getElementById("end").value);
+  if(isNaN(start)||isNaN(end)) return;
+  let count = 0;
+  let d = new Date(Math.min(start,end));
+  const last = new Date(Math.max(start,end));
+  while(d <= last){
+    const day = d.getDay();
+    if(day!==0 && day!==6) count++;
+    d.setDate(d.getDate()+1);
+  }
+  showResult("#result-box", count + " business day" + (count===1?"":"s"));
+});
+document.addEventListener("DOMContentLoaded", ()=>{
+  const related = calcsByCategory("time-tools").filter(c=>!c.url.includes("working-days-calculator")).slice(0,4);
+  document.getElementById("related-grid").innerHTML = related.map(CalcUI.calcCard).join("");
+});
+</script>
+</body>
+</html>

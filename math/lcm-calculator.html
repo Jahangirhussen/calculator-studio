@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LCM Calculator — Free Online Calculator | Calculator Studio</title>
+<meta name="description" content="Find the least common multiple (LCM) of two or more numbers.">
+<link rel="canonical" href="https://example.com/math/lcm-calculator.html">
+<meta property="og:title" content="LCM Calculator — Calculator Studio">
+<meta property="og:description" content="Find the least common multiple (LCM) of two or more numbers.">
+<meta property="og:type" content="website">
+<meta name="twitter:card" content="summary">
+<link rel="icon" href="../icons/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="../css/style.css">
+<link rel="stylesheet" href="../css/responsive.css">
+<link rel="stylesheet" href="../css/animations.css">
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"SoftwareApplication","name":"LCM Calculator","applicationCategory":"UtilitiesApplication","operatingSystem":"Any"}
+</script>
+</head>
+<body>
+<script>const ROOT="../";</script>
+<div id="site-header"></div>
+<main class="container">
+  <div class="breadcrumb"><a href="../index.html">Home</a> / <a href="index.html">Math</a> / LCM Calculator</div>
+  <h1 class="calc-page-title">LCM Calculator</h1>
+  <p class="calc-page-desc">Find the least common multiple of two or more positive integers.</p>
+  <div class="calc-layout">
+    <div class="panel">
+      <form id="calc-form">
+        <div class="field">
+          <label for="nums">Numbers (comma separated)</label>
+          <input type="text" id="nums" placeholder="e.g. 4, 6, 8" required>
+        </div>
+        <button type="submit" class="btn btn-solid">Calculate</button>
+      </form>
+      <div class="result-box hidden" id="result-box">
+        <div class="label">Result</div>
+        <div class="value" id="result-value">—</div>
+      </div>
+      <div class="action-row">
+        <button class="btn btn-ghost" onclick="copyResultText('#result-value')">Copy Result</button>
+        <button class="btn btn-ghost" onclick="shareCurrentPage()">Share</button>
+        <button class="btn btn-ghost" onclick="resetForm('#calc-form','#result-box')">Reset</button>
+      </div>
+    </div>
+    <div class="panel">
+      <div class="info-block">
+        <h2>Formula</h2>
+        <div class="formula">LCM(a,b) = (a × b) / GCD(a,b)
+For more numbers, LCM is applied pairwise across the list.</div>
+        <h2>Example</h2>
+        <p>LCM(4, 6, 8) = 24.</p>
+        <h2>How To Use</h2>
+        <p>Enter two or more positive integers separated by commas, then click Calculate.</p>
+      </div>
+    </div>
+  </div>
+  <div class="info-block">
+    <h2>Frequently Asked Questions</h2>
+    <div class="faq-item"><div class="faq-q">Can I enter more than two numbers? <span class="caret">▾</span></div><div class="faq-a">Yes, enter any number of comma-separated positive integers.</div></div>
+    <div class="faq-item"><div class="faq-q">What is LCM used for? <span class="caret">▾</span></div><div class="faq-a">LCM is commonly used to find common denominators when adding or comparing fractions.</div></div>
+  </div>
+  <div class="info-block">
+    <h2>Related Calculators</h2>
+    <div class="related-grid" id="related-grid"></div>
+  </div>
+</main>
+<div id="site-footer"></div>
+<script src="../js/calc-data.js"></script>
+<script src="../js/main.js"></script>
+<script src="../js/theme.js"></script>
+<script src="../js/calculator.js"></script>
+<script>
+function gcd(a,b){ a=Math.abs(a); b=Math.abs(b); while(b){ [a,b]=[b, a%b]; } return a || 1; }
+function lcm2(a,b){ return Math.abs(a*b) / gcd(a,b); }
+document.getElementById("calc-form").addEventListener("submit", function(e){
+  e.preventDefault();
+  const nums = document.getElementById("nums").value.split(",").map(s=>parseInt(s.trim(),10)).filter(n=>!isNaN(n) && n>0);
+  if(nums.length < 2){ showResult("#result-box", "Error: enter at least 2 positive integers"); return; }
+  const result = nums.reduce((a,b)=>lcm2(a,b));
+  showResult("#result-box", formatNumber(result, 0));
+});
+document.addEventListener("DOMContentLoaded", ()=>{
+  const related = calcsByCategory("math").filter(c=>!c.url.includes("lcm-calculator")).slice(0,4);
+  document.getElementById("related-grid").innerHTML = related.map(CalcUI.calcCard).join("");
+});
+</script>
+</body>
+</html>

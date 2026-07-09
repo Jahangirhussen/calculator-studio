@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Electrical Power Calculator — Free Online Calculator | Calculator Studio</title>
+<meta name="description" content="Calculate electrical power in watts from voltage and current.">
+<link rel="canonical" href="https://example.com/engineering/power-calculator.html">
+<link rel="icon" href="../icons/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="../css/style.css">
+<link rel="stylesheet" href="../css/responsive.css">
+<link rel="stylesheet" href="../css/animations.css">
+</head>
+<body>
+<script>const ROOT="../";</script>
+<div id="site-header"></div>
+<main class="container">
+  <div class="breadcrumb"><a href="../index.html">Home</a> / <a href="index.html">Engineering</a> / Electrical Power Calculator</div>
+  <h1 class="calc-page-title">Electrical Power Calculator</h1>
+  <p class="calc-page-desc">Calculate electrical power (watts) from voltage and current.</p>
+  <div class="calc-layout">
+    <div class="panel">
+      <form id="calc-form">
+        <div class="field-row">
+          <div class="field"><label>Voltage (V)</label><input type="number" step="any" id="v" required></div>
+          <div class="field"><label>Current (A)</label><input type="number" step="any" id="i" required></div>
+        </div>
+        <button type="submit" class="btn btn-solid">Calculate</button>
+      </form>
+      <div class="result-box hidden" id="result-box">
+        <div class="label">Power</div>
+        <div class="value" id="result-value">—</div>
+      </div>
+      <div class="action-row">
+        <button class="btn btn-ghost" onclick="copyResultText('#result-value')">Copy Result</button>
+        <button class="btn btn-ghost" type="button" onclick="location.reload()">Reset</button>
+      </div>
+    </div>
+    <div class="panel"><div class="info-block"><h2>Formulas</h2><div class="formula">P = V × I &nbsp;|&nbsp; P = I²R &nbsp;|&nbsp; P = V²/R</div></div></div>
+  </div>
+  <div class="info-block"><h2>Related Calculators</h2><div class="related-grid" id="related-grid"></div></div>
+</main>
+<div id="site-footer"></div>
+<script src="../js/calc-data.js"></script>
+<script src="../js/main.js"></script>
+<script src="../js/theme.js"></script>
+<script src="../js/calculator.js"></script>
+<script>
+document.getElementById("calc-form").addEventListener("submit", function(e){
+  e.preventDefault();
+  const v = parseFloat(document.getElementById("v").value);
+  const i = parseFloat(document.getElementById("i").value);
+  showResult("#result-box", formatNumber(v*i) + " W");
+});
+document.addEventListener("DOMContentLoaded", ()=>{
+  const related = calcsByCategory("engineering").filter(c=>!c.url.includes("/power-calculator")).slice(0,4);
+  document.getElementById("related-grid").innerHTML = related.map(CalcUI.calcCard).join("");
+});
+</script>
+</body>
+</html>

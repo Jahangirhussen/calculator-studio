@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Quadratic Equation Solver — Free Online Calculator | Calculator Studio</title>
+<meta name="description" content="Solve quadratic equations ax² + bx + c = 0 with real or complex roots.">
+<link rel="canonical" href="https://example.com/math/quadratic-equation-calculator.html">
+<meta property="og:title" content="Quadratic Equation Solver — Calculator Studio">
+<meta property="og:description" content="Solve quadratic equations ax² + bx + c = 0 with real or complex roots.">
+<meta property="og:type" content="website">
+<meta name="twitter:card" content="summary">
+<link rel="icon" href="../icons/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="../css/style.css">
+<link rel="stylesheet" href="../css/responsive.css">
+<link rel="stylesheet" href="../css/animations.css">
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"SoftwareApplication","name":"Quadratic Equation Solver","applicationCategory":"UtilitiesApplication","operatingSystem":"Any"}
+</script>
+</head>
+<body>
+<script>const ROOT="../";</script>
+<div id="site-header"></div>
+<main class="container">
+  <div class="breadcrumb"><a href="../index.html">Home</a> / <a href="index.html">Math</a> / Quadratic Equation Solver</div>
+  <h1 class="calc-page-title">Quadratic Equation Solver</h1>
+  <p class="calc-page-desc">Solve ax² + bx + c = 0 for x, with real or complex roots.</p>
+  <div class="calc-layout">
+    <div class="panel">
+      <form id="calc-form">
+        <div class="field-row">
+          <div class="field"><label for="a">a</label><input type="number" id="a" step="any" required></div>
+          <div class="field"><label for="b">b</label><input type="number" id="b" step="any" required></div>
+          <div class="field"><label for="c">c</label><input type="number" id="c" step="any" required></div>
+        </div>
+        <button type="submit" class="btn btn-solid">Calculate</button>
+      </form>
+      <div class="result-box hidden" id="result-box">
+        <div class="label">Result</div>
+        <div class="value" id="result-value">—</div>
+      </div>
+      <div class="action-row">
+        <button class="btn btn-ghost" onclick="copyResultText('#result-value')">Copy Result</button>
+        <button class="btn btn-ghost" onclick="shareCurrentPage()">Share</button>
+        <button class="btn btn-ghost" onclick="resetForm('#calc-form','#result-box')">Reset</button>
+      </div>
+    </div>
+    <div class="panel">
+      <div class="info-block">
+        <h2>Formula</h2>
+        <div class="formula">x = (−b ± √(b² − 4ac)) / 2a</div>
+        <h2>Example</h2>
+        <p>For x² − 5x + 6 = 0: x = 2 or x = 3.</p>
+        <h2>How To Use</h2>
+        <p>Enter coefficients a, b and c (a ≠ 0), then click Calculate.</p>
+      </div>
+    </div>
+  </div>
+  <div class="info-block">
+    <h2>Frequently Asked Questions</h2>
+    <div class="faq-item"><div class="faq-q">What if a = 0? <span class="caret">▾</span></div><div class="faq-a">If a = 0 the equation is not quadratic; the calculator will show an error.</div></div>
+    <div class="faq-item"><div class="faq-q">What are complex roots? <span class="caret">▾</span></div><div class="faq-a">When the discriminant (b² − 4ac) is negative, the roots are complex numbers shown in the form p ± qi.</div></div>
+  </div>
+  <div class="info-block">
+    <h2>Related Calculators</h2>
+    <div class="related-grid" id="related-grid"></div>
+  </div>
+</main>
+<div id="site-footer"></div>
+<script src="../js/calc-data.js"></script>
+<script src="../js/main.js"></script>
+<script src="../js/theme.js"></script>
+<script src="../js/calculator.js"></script>
+<script>
+document.getElementById("calc-form").addEventListener("submit", function(e){
+  e.preventDefault();
+  const a = parseFloat(document.getElementById("a").value);
+  const b = parseFloat(document.getElementById("b").value);
+  const c = parseFloat(document.getElementById("c").value);
+  if(a === 0){ showResult("#result-box", "Error: a cannot be 0 (not quadratic)"); return; }
+  const disc = b*b - 4*a*c;
+  let result;
+  if(disc > 0){
+    const x1 = (-b + Math.sqrt(disc)) / (2*a);
+    const x2 = (-b - Math.sqrt(disc)) / (2*a);
+    result = `x1 = ${formatNumber(x1,6)}, x2 = ${formatNumber(x2,6)}`;
+  } else if(disc === 0){
+    const x = -b / (2*a);
+    result = `x = ${formatNumber(x,6)} (double root)`;
+  } else {
+    const real = -b / (2*a);
+    const imag = Math.sqrt(-disc) / (2*a);
+    result = `x1 = ${formatNumber(real,6)} + ${formatNumber(Math.abs(imag),6)}i, x2 = ${formatNumber(real,6)} − ${formatNumber(Math.abs(imag),6)}i`;
+  }
+  showResult("#result-box", result);
+});
+document.addEventListener("DOMContentLoaded", ()=>{
+  const related = calcsByCategory("math").filter(c=>!c.url.includes("quadratic-equation-calculator")).slice(0,4);
+  document.getElementById("related-grid").innerHTML = related.map(CalcUI.calcCard).join("");
+});
+</script>
+</body>
+</html>

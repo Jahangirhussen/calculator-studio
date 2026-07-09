@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Date Difference Calculator — Free Online Calculator | Calculator Studio</title>
+<meta name="description" content="Calculate the exact number of days, weeks, months and years between two dates.">
+<link rel="canonical" href="https://example.com/time-tools/date-difference-calculator.html">
+<meta property="og:title" content="Date Difference Calculator — Calculator Studio">
+<meta property="og:description" content="Calculate the exact number of days, weeks, months and years between two dates.">
+<meta property="og:type" content="website">
+<meta name="twitter:card" content="summary">
+<link rel="icon" href="../icons/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="../css/style.css">
+<link rel="stylesheet" href="../css/responsive.css">
+<link rel="stylesheet" href="../css/animations.css">
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"SoftwareApplication","name":"Date Difference Calculator","applicationCategory":"UtilitiesApplication","operatingSystem":"Any"}
+</script>
+</head>
+<body>
+<script>const ROOT="../";</script>
+<div id="site-header"></div>
+<main class="container">
+  <div class="breadcrumb"><a href="../index.html">Home</a> / <a href="index.html">Time Tools</a> / Date Difference Calculator</div>
+  <h1 class="calc-page-title">Date Difference Calculator</h1>
+  <p class="calc-page-desc">Find out exactly how many days, weeks, months and years lie between two dates.</p>
+  <div class="calc-layout">
+    <div class="panel">
+      <form id="calc-form">
+        <div class="field-row">
+          <div class="field">
+            <label for="start-date">Start Date</label>
+            <input type="date" id="start-date" required>
+          </div>
+          <div class="field">
+            <label for="end-date">End Date</label>
+            <input type="date" id="end-date" required>
+          </div>
+        </div>
+        <button type="submit" class="btn btn-solid">Calculate</button>
+      </form>
+      <div class="result-box hidden" id="result-box">
+        <div class="label">Total Days Between Dates</div>
+        <div class="value" id="result-value">—</div>
+      </div>
+      <p id="breakdown" style="margin-top:10px;color:var(--text-soft);font-size:.9rem"></p>
+      <div class="action-row">
+        <button class="btn btn-ghost" onclick="copyResultText('#result-value')">Copy Result</button>
+        <button class="btn btn-ghost" onclick="shareCurrentPage()">Share</button>
+        <button class="btn btn-ghost" type="button" onclick="location.reload()">Reset</button>
+      </div>
+    </div>
+    <div class="panel">
+      <div class="info-block">
+        <h2>How It Works</h2>
+        <p>Enter a start date and an end date. The calculator finds the absolute difference in days using JavaScript's Date object, then converts that into weeks, and separately computes a precise years/months/days breakdown by walking calendar units.</p>
+        <h2>Example</h2>
+        <p>From 2024-01-01 to 2024-03-15 is 74 days (10 weeks, 4 days), which breaks down to 2 months and 14 days.</p>
+        <h2>How To Use</h2>
+        <p>Pick a start date, pick an end date, click Calculate. The order doesn't matter — the result is always a positive difference.</p>
+      </div>
+    </div>
+  </div>
+  <div class="info-block">
+    <h2>Frequently Asked Questions</h2>
+    <div class="faq-item"><div class="faq-q">Does it count leap years? <span class="caret">▾</span></div><div class="faq-a">Yes, calculations use real calendar dates so leap years are automatically accounted for.</div></div>
+    <div class="faq-item"><div class="faq-q">What if I enter the end date before the start date? <span class="caret">▾</span></div><div class="faq-a">The calculator always returns the absolute (positive) difference regardless of order.</div></div>
+  </div>
+  <div class="info-block">
+    <h2>Related Calculators</h2>
+    <div class="related-grid" id="related-grid"></div>
+  </div>
+</main>
+<div id="site-footer"></div>
+<script src="../js/calc-data.js"></script>
+<script src="../js/main.js"></script>
+<script src="../js/theme.js"></script>
+<script src="../js/calculator.js"></script>
+<script src="../js/time.js"></script>
+<script>
+document.getElementById("calc-form").addEventListener("submit", (e)=>{
+  e.preventDefault();
+  const s = new Date(document.getElementById("start-date").value + "T00:00:00");
+  const en = new Date(document.getElementById("end-date").value + "T00:00:00");
+  if(isNaN(s) || isNaN(en)) return;
+  const msPerDay = 86400000;
+  const totalDays = Math.round(Math.abs(en - s) / msPerDay);
+  const weeks = Math.floor(totalDays / 7);
+  const remDays = totalDays % 7;
+
+  let early = s <= en ? s : en;
+  let late = s <= en ? en : s;
+  let years = late.getFullYear() - early.getFullYear();
+  let months = late.getMonth() - early.getMonth();
+  let days = late.getDate() - early.getDate();
+  if(days < 0){
+    months--;
+    const prevMonth = new Date(late.getFullYear(), late.getMonth(), 0);
+    days += prevMonth.getDate();
+  }
+  if(months < 0){
+    years--;
+    months += 12;
+  }
+
+  showResult("#result-box", `${totalDays} days`);
+  document.getElementById("breakdown").textContent =
+    `That's ${weeks} weeks and ${remDays} days, or precisely ${years} years, ${months} months, ${days} days.`;
+});
+
+document.addEventListener("DOMContentLoaded", ()=>{
+  const related = calcsByCategory("time-tools").filter(c=>!c.url.includes("date-difference-calculator")).slice(0,4);
+  document.getElementById("related-grid").innerHTML = related.map(CalcUI.calcCard).join("");
+});
+</script>
+</body>
+</html>

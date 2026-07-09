@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hash Generator (SHA-256) — Free Online Tool | Calculator Studio</title>
+<meta name="description" content="Generate a SHA-256 hash digest of any text instantly using the browser's native Web Crypto API. No data leaves your device.">
+<link rel="canonical" href="https://example.com/programming/hash-generator.html">
+<meta property="og:title" content="Hash Generator (SHA-256) — Calculator Studio">
+<meta property="og:description" content="Generate a SHA-256 hash digest of any text instantly using the browser's native Web Crypto API.">
+<meta property="og:type" content="website">
+<meta name="twitter:card" content="summary">
+<link rel="icon" href="../icons/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="../css/style.css">
+<link rel="stylesheet" href="../css/responsive.css">
+<link rel="stylesheet" href="../css/animations.css">
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"SoftwareApplication","name":"Hash Generator","applicationCategory":"DeveloperApplication","operatingSystem":"Any"}
+</script>
+</head>
+<body>
+<script>const ROOT="../";</script>
+<div id="site-header"></div>
+<main class="container">
+  <div class="breadcrumb"><a href="../index.html">Home</a> / <a href="index.html">Programming</a> / Hash Generator</div>
+  <h1 class="calc-page-title">Hash Generator (SHA-256)</h1>
+  <p class="calc-page-desc">Compute the SHA-256 cryptographic hash of any text using your browser's built-in Web Crypto API. Everything happens locally — nothing is uploaded.</p>
+  <div class="calc-layout">
+    <div class="panel">
+      <form id="calc-form">
+        <div class="field">
+          <label for="hash-input">Text to Hash</label>
+          <textarea id="hash-input" rows="6" placeholder="Enter text here..." style="border:1px solid var(--border);background:var(--bg-alt);border-radius:8px;padding:12px;width:100%;font-family:inherit;color:inherit"></textarea>
+        </div>
+        <button type="submit" class="btn btn-solid">Generate</button>
+      </form>
+      <div class="result-box hidden" id="result-box">
+        <div class="label">Result (SHA-256)</div>
+        <div class="value" id="result-value" style="word-break:break-all;font-size:1.1rem">—</div>
+      </div>
+      <div class="action-row">
+        <button class="btn btn-ghost" onclick="copyResultText('#result-value')">Copy Result</button>
+        <button class="btn btn-ghost" onclick="shareCurrentPage()">Share</button>
+        <button class="btn btn-ghost" onclick="resetForm('#calc-form','#result-box')">Reset</button>
+      </div>
+    </div>
+    <div class="panel">
+      <div class="info-block">
+        <h2>How It Works</h2>
+        <p>SHA-256 is a member of the SHA-2 family of cryptographic hash functions. It takes an input of any length and produces a fixed 256-bit (64 hex character) digest. This tool uses <code>crypto.subtle.digest("SHA-256", ...)</code>, part of the native Web Crypto API, so no external libraries are needed.</p>
+        <h2>Example</h2>
+        <p>Hashing the text <code>hello</code> produces <code>2cf24dba5fb0a30e26e83b2ac5b9e29e1b161e5c1fa7425e73043362938b9824</code>. Even a tiny change in input (like capitalizing a letter) produces a completely different hash.</p>
+        <h2>How To Use</h2>
+        <p>Type or paste your text into the box, then click Generate. The resulting hex digest will appear below, ready to copy.</p>
+      </div>
+    </div>
+  </div>
+  <div class="info-block">
+    <h2>Frequently Asked Questions</h2>
+    <div class="faq-item"><div class="faq-q">Can I reverse a SHA-256 hash back to the original text? <span class="caret">▾</span></div><div class="faq-a">No. SHA-256 is a one-way function — it is computationally infeasible to derive the original input from the hash alone.</div></div>
+    <div class="faq-item"><div class="faq-q">Is my text sent to a server? <span class="caret">▾</span></div><div class="faq-a">No. The hash is computed entirely in your browser using the native Web Crypto API. Nothing is transmitted over the network.</div></div>
+    <div class="faq-item"><div class="faq-q">What is SHA-256 used for? <span class="caret">▾</span></div><div class="faq-a">SHA-256 is widely used for data integrity checks, digital signatures, password storage (with salting), and blockchain systems like Bitcoin.</div></div>
+  </div>
+  <div class="info-block">
+    <h2>Related Calculators</h2>
+    <div class="related-grid" id="related-grid"></div>
+  </div>
+</main>
+<div id="site-footer"></div>
+<script src="../js/calc-data.js"></script>
+<script src="../js/main.js"></script>
+<script src="../js/theme.js"></script>
+<script src="../js/calculator.js"></script>
+<script>
+async function sha256Hex(text){
+  const encoder = new TextEncoder();
+  const data = encoder.encode(text);
+  const hashBuffer = await crypto.subtle.digest("SHA-256", data);
+  const hashArray = Array.from(new Uint8Array(hashBuffer));
+  return hashArray.map(b => b.toString(16).padStart(2, "0")).join("");
+}
+document.getElementById("calc-form").addEventListener("submit", async function(e){
+  e.preventDefault();
+  const text = document.getElementById("hash-input").value;
+  const digest = await sha256Hex(text);
+  showResult("#result-box", digest);
+});
+document.addEventListener("DOMContentLoaded", ()=>{
+  const related = calcsByCategory("programming").filter(c=>!c.url.includes("hash-generator")).slice(0,4);
+  document.getElementById("related-grid").innerHTML = related.map(CalcUI.calcCard).join("");
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Basic Calculator — Free Online Calculator | Calculator Studio</title>
+<meta name="description" content="Simple online calculator for addition, subtraction, multiplication and division.">
+<link rel="canonical" href="https://example.com/math/basic-calculator.html">
+<meta property="og:title" content="Basic Calculator — Calculator Studio">
+<meta property="og:description" content="Simple online calculator for addition, subtraction, multiplication and division.">
+<meta property="og:type" content="website">
+<meta name="twitter:card" content="summary">
+<link rel="icon" href="../icons/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="../css/style.css">
+<link rel="stylesheet" href="../css/responsive.css">
+<link rel="stylesheet" href="../css/animations.css">
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"SoftwareApplication","name":"Basic Calculator","applicationCategory":"UtilitiesApplication","operatingSystem":"Any"}
+</script>
+</head>
+<body>
+<script>const ROOT="../";</script>
+<div id="site-header"></div>
+<main class="container">
+  <div class="breadcrumb"><a href="../index.html">Home</a> / <a href="index.html">Math</a> / Basic Calculator</div>
+  <h1 class="calc-page-title">Basic Calculator</h1>
+  <p class="calc-page-desc">Add, subtract, multiply or divide two numbers instantly.</p>
+  <div class="calc-layout">
+    <div class="panel">
+      <form id="calc-form">
+        <div class="field">
+          <label for="numA">First Number</label>
+          <input type="number" id="numA" step="any" required>
+        </div>
+        <div class="field">
+          <label for="op">Operation</label>
+          <select id="op">
+            <option value="+">Add (+)</option>
+            <option value="-">Subtract (−)</option>
+            <option value="*">Multiply (×)</option>
+            <option value="/">Divide (÷)</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="numB">Second Number</label>
+          <input type="number" id="numB" step="any" required>
+        </div>
+        <button type="submit" class="btn btn-solid">Calculate</button>
+      </form>
+      <div class="result-box hidden" id="result-box">
+        <div class="label">Result</div>
+        <div class="value" id="result-value">—</div>
+      </div>
+      <div class="action-row">
+        <button class="btn btn-ghost" onclick="copyResultText('#result-value')">Copy Result</button>
+        <button class="btn btn-ghost" onclick="shareCurrentPage()">Share</button>
+        <button class="btn btn-ghost" onclick="resetForm('#calc-form','#result-box')">Reset</button>
+      </div>
+    </div>
+    <div class="panel">
+      <div class="info-block">
+        <h2>Formula</h2>
+        <div class="formula">Result = A (operation) B</div>
+        <h2>Example</h2>
+        <p>12 + 8 = 20. Choose the operation and enter two numbers to get an instant result.</p>
+        <h2>How To Use</h2>
+        <p>Enter the first number, pick an operation, enter the second number, then click Calculate.</p>
+      </div>
+    </div>
+  </div>
+  <div class="info-block">
+    <h2>Frequently Asked Questions</h2>
+    <div class="faq-item"><div class="faq-q">Can I divide by zero? <span class="caret">▾</span></div><div class="faq-a">No, division by zero is undefined and the calculator will show an error.</div></div>
+    <div class="faq-item"><div class="faq-q">Does it support decimals? <span class="caret">▾</span></div><div class="faq-a">Yes, you can enter decimal numbers for both fields.</div></div>
+  </div>
+  <div class="info-block">
+    <h2>Related Calculators</h2>
+    <div class="related-grid" id="related-grid"></div>
+  </div>
+</main>
+<div id="site-footer"></div>
+<script src="../js/calc-data.js"></script>
+<script src="../js/main.js"></script>
+<script src="../js/theme.js"></script>
+<script src="../js/calculator.js"></script>
+<script>
+document.getElementById("calc-form").addEventListener("submit", function(e){
+  e.preventDefault();
+  const a = parseFloat(document.getElementById("numA").value);
+  const b = parseFloat(document.getElementById("numB").value);
+  const op = document.getElementById("op").value;
+  let result;
+  if(op === "+") result = a + b;
+  else if(op === "-") result = a - b;
+  else if(op === "*") result = a * b;
+  else if(op === "/") result = b === 0 ? "Error: Division by zero" : a / b;
+  showResult("#result-box", typeof result === "number" ? formatNumber(result, 6) : result);
+});
+document.addEventListener("DOMContentLoaded", ()=>{
+  const related = calcsByCategory("math").filter(c=>!c.url.includes("basic-calculator")).slice(0,4);
+  document.getElementById("related-grid").innerHTML = related.map(CalcUI.calcCard).join("");
+});
+</script>
+</body>
+</html>

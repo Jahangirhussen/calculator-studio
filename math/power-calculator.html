@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Power Calculator — Free Online Calculator | Calculator Studio</title>
+<meta name="description" content="Compute exponents: base raised to any power, including negative and fractional exponents.">
+<link rel="canonical" href="https://example.com/math/power-calculator.html">
+<meta property="og:title" content="Power Calculator — Calculator Studio">
+<meta property="og:description" content="Compute exponents: base raised to any power, including negative and fractional exponents.">
+<meta property="og:type" content="website">
+<meta name="twitter:card" content="summary">
+<link rel="icon" href="../icons/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="../css/style.css">
+<link rel="stylesheet" href="../css/responsive.css">
+<link rel="stylesheet" href="../css/animations.css">
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"SoftwareApplication","name":"Power Calculator","applicationCategory":"UtilitiesApplication","operatingSystem":"Any"}
+</script>
+</head>
+<body>
+<script>const ROOT="../";</script>
+<div id="site-header"></div>
+<main class="container">
+  <div class="breadcrumb"><a href="../index.html">Home</a> / <a href="index.html">Math</a> / Power Calculator</div>
+  <h1 class="calc-page-title">Power Calculator</h1>
+  <p class="calc-page-desc">Compute base raised to an exponent (b^e), including negative and fractional exponents.</p>
+  <div class="calc-layout">
+    <div class="panel">
+      <form id="calc-form">
+        <div class="field-row">
+          <div class="field"><label for="base">Base</label><input type="number" id="base" step="any" required></div>
+          <div class="field"><label for="exp">Exponent</label><input type="number" id="exp" step="any" required></div>
+        </div>
+        <button type="submit" class="btn btn-solid">Calculate</button>
+      </form>
+      <div class="result-box hidden" id="result-box">
+        <div class="label">Result</div>
+        <div class="value" id="result-value">—</div>
+      </div>
+      <div class="action-row">
+        <button class="btn btn-ghost" onclick="copyResultText('#result-value')">Copy Result</button>
+        <button class="btn btn-ghost" onclick="shareCurrentPage()">Share</button>
+        <button class="btn btn-ghost" onclick="resetForm('#calc-form','#result-box')">Reset</button>
+      </div>
+    </div>
+    <div class="panel">
+      <div class="info-block">
+        <h2>Formula</h2>
+        <div class="formula">Result = base^exponent</div>
+        <h2>Example</h2>
+        <p>2^10 = 1024. 27^(1/3) = 3.</p>
+        <h2>How To Use</h2>
+        <p>Enter the base and exponent, then click Calculate.</p>
+      </div>
+    </div>
+  </div>
+  <div class="info-block">
+    <h2>Frequently Asked Questions</h2>
+    <div class="faq-item"><div class="faq-q">Can the exponent be negative? <span class="caret">▾</span></div><div class="faq-a">Yes, a negative exponent gives the reciprocal, e.g. 2^-2 = 0.25.</div></div>
+    <div class="faq-item"><div class="faq-q">Can the exponent be a fraction? <span class="caret">▾</span></div><div class="faq-a">Yes, fractional exponents compute roots, e.g. 8^(1/3) = 2.</div></div>
+  </div>
+  <div class="info-block">
+    <h2>Related Calculators</h2>
+    <div class="related-grid" id="related-grid"></div>
+  </div>
+</main>
+<div id="site-footer"></div>
+<script src="../js/calc-data.js"></script>
+<script src="../js/main.js"></script>
+<script src="../js/theme.js"></script>
+<script src="../js/calculator.js"></script>
+<script>
+document.getElementById("calc-form").addEventListener("submit", function(e){
+  e.preventDefault();
+  const base = parseFloat(document.getElementById("base").value);
+  const exp = parseFloat(document.getElementById("exp").value);
+  const result = Math.pow(base, exp);
+  showResult("#result-box", isNaN(result) ? "Error: result is not a real number" : formatNumber(result, 8));
+});
+document.addEventListener("DOMContentLoaded", ()=>{
+  const related = calcsByCategory("math").filter(c=>!c.url.includes("power-calculator")).slice(0,4);
+  document.getElementById("related-grid").innerHTML = related.map(CalcUI.calcCard).join("");
+});
+</script>
+</body>
+</html>

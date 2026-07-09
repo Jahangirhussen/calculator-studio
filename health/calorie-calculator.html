@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Calorie Calculator — Free Online Calculator | Calculator Studio</title>
+<meta name="description" content="Estimate your daily calorie needs to maintain, lose or gain weight based on BMR and activity level.">
+<link rel="canonical" href="https://example.com/health/calorie-calculator.html">
+<meta property="og:title" content="Calorie Calculator — Calculator Studio">
+<meta property="og:description" content="Estimate your daily calorie needs to maintain, lose or gain weight based on BMR and activity level.">
+<meta property="og:type" content="website">
+<meta name="twitter:card" content="summary">
+<link rel="icon" href="../icons/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="../css/style.css">
+<link rel="stylesheet" href="../css/responsive.css">
+<link rel="stylesheet" href="../css/animations.css">
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"SoftwareApplication","name":"Calorie Calculator","applicationCategory":"HealthApplication","operatingSystem":"Any"}
+</script>
+</head>
+<body>
+<script>const ROOT="../";</script>
+<div id="site-header"></div>
+<main class="container">
+  <div class="breadcrumb"><a href="../index.html">Home</a> / <a href="index.html">Health</a> / Calorie Calculator</div>
+  <h1 class="calc-page-title">Calorie Calculator</h1>
+  <p class="calc-page-desc">Estimate your daily calorie needs to maintain, lose or gain weight based on your BMR and activity level.</p>
+  <div class="calc-layout">
+    <div class="panel">
+      <form id="calc-form">
+        <div class="field">
+          <label for="gender">Gender</label>
+          <select id="gender">
+            <option value="male">Male</option>
+            <option value="female">Female</option>
+          </select>
+        </div>
+        <div class="field-row">
+          <div class="field">
+            <label for="weight">Weight (kg)</label>
+            <input type="number" id="weight" step="any" min="0" required>
+          </div>
+          <div class="field">
+            <label for="height">Height (cm)</label>
+            <input type="number" id="height" step="any" min="0" required>
+          </div>
+        </div>
+        <div class="field-row">
+          <div class="field">
+            <label for="age">Age (years)</label>
+            <input type="number" id="age" step="1" min="0" required>
+          </div>
+          <div class="field">
+            <label for="activity">Activity Level</label>
+            <select id="activity">
+              <option value="1.2">Sedentary</option>
+              <option value="1.375">Light</option>
+              <option value="1.55">Moderate</option>
+              <option value="1.725">Active</option>
+              <option value="1.9">Very Active</option>
+            </select>
+          </div>
+        </div>
+        <div class="field">
+          <label for="goal">Goal</label>
+          <select id="goal">
+            <option value="0">Maintain Weight</option>
+            <option value="-500">Lose Weight (−500 kcal/day)</option>
+            <option value="500">Gain Weight (+500 kcal/day)</option>
+          </select>
+        </div>
+        <button type="submit" class="btn btn-solid">Calculate</button>
+      </form>
+      <div class="result-box hidden" id="result-box">
+        <div class="label">Result</div>
+        <div class="value" id="result-value">—</div>
+      </div>
+      <div class="action-row">
+        <button class="btn btn-ghost" onclick="copyResultText('#result-value')">Copy Result</button>
+        <button class="btn btn-ghost" onclick="shareCurrentPage()">Share</button>
+        <button class="btn btn-ghost" onclick="resetForm('#calc-form','#result-box')">Reset</button>
+      </div>
+    </div>
+    <div class="panel">
+      <div class="info-block">
+        <h2>Formula</h2>
+        <div class="formula">BMR (Mifflin-St Jeor):
+Male: 10×kg + 6.25×cm − 5×age + 5
+Female: 10×kg + 6.25×cm − 5×age − 161
+
+TDEE = BMR × Activity Multiplier
+Daily Calories = TDEE + Goal Adjustment (−500 lose / 0 maintain / +500 gain)</div>
+        <h2>Example</h2>
+        <p>A 30 year old female, 65 kg, 165 cm, light activity, wanting to lose weight: BMR ≈ 1401, TDEE ≈ 1927, target ≈ 1427 kcal/day.</p>
+        <h2>How To Use</h2>
+        <p>Enter your details, activity level and goal, then click Calculate to see your recommended daily calories.</p>
+      </div>
+    </div>
+  </div>
+  <div class="info-block">
+    <h2>Frequently Asked Questions</h2>
+    <div class="faq-item"><div class="faq-q">How much of a calorie deficit is safe for weight loss? <span class="caret">▾</span></div><div class="faq-a">A deficit of around 500 kcal/day typically leads to about 0.5 kg (1 lb) of weight loss per week, which is considered a safe and sustainable rate.</div></div>
+    <div class="faq-item"><div class="faq-q">Should I eat the same calories every day? <span class="caret">▾</span></div><div class="faq-a">Not necessarily — many people vary intake day to day, but the weekly average relative to your target is what matters most for weight change.</div></div>
+  </div>
+  <div class="info-block">
+    <h2>Related Calculators</h2>
+    <div class="related-grid" id="related-grid"></div>
+  </div>
+</main>
+<div id="site-footer"></div>
+<script src="../js/calc-data.js"></script>
+<script src="../js/main.js"></script>
+<script src="../js/theme.js"></script>
+<script src="../js/calculator.js"></script>
+<script>
+document.getElementById("calc-form").addEventListener("submit", function(e){
+  e.preventDefault();
+  const gender = document.getElementById("gender").value;
+  const weight = parseFloat(document.getElementById("weight").value);
+  const height = parseFloat(document.getElementById("height").value);
+  const age = parseFloat(document.getElementById("age").value);
+  const activity = parseFloat(document.getElementById("activity").value);
+  const goal = parseFloat(document.getElementById("goal").value);
+  if(!(weight > 0) || !(height > 0) || !(age >= 0)){
+    showResult("#result-box", "Error: enter valid positive numbers");
+    return;
+  }
+  let bmr = 10*weight + 6.25*height - 5*age;
+  bmr += (gender === "male") ? 5 : -161;
+  const tdee = bmr * activity;
+  const target = tdee + goal;
+  showResult("#result-box", `${formatNumber(target,0)} kcal/day`);
+});
+document.addEventListener("DOMContentLoaded", ()=>{
+  const related = calcsByCategory("health").filter(c=>!c.url.includes("calorie-calculator")).slice(0,4);
+  document.getElementById("related-grid").innerHTML = related.map(CalcUI.calcCard).join("");
+});
+</script>
+</body>
+</html>

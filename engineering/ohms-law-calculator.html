@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ohm's Law Calculator — Free Online Calculator | Calculator Studio</title>
+<meta name="description" content="Calculate voltage, current or resistance using Ohm's Law.">
+<link rel="canonical" href="https://example.com/engineering/ohms-law-calculator.html">
+<link rel="icon" href="../icons/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="../css/style.css">
+<link rel="stylesheet" href="../css/responsive.css">
+<link rel="stylesheet" href="../css/animations.css">
+</head>
+<body>
+<script>const ROOT="../";</script>
+<div id="site-header"></div>
+<main class="container">
+  <div class="breadcrumb"><a href="../index.html">Home</a> / <a href="index.html">Engineering</a> / Ohm's Law Calculator</div>
+  <h1 class="calc-page-title">Ohm's Law Calculator</h1>
+  <p class="calc-page-desc">Solve for Voltage, Current or Resistance using Ohm's Law: V = I × R.</p>
+  <div class="calc-layout">
+    <div class="panel">
+      <form id="calc-form">
+        <div class="field"><label>Solve For</label>
+          <select id="solveFor"><option value="V">Voltage (V)</option><option value="I">Current (I)</option><option value="R">Resistance (R)</option></select>
+        </div>
+        <div class="field-row">
+          <div class="field" id="field-I"><label>Current (A)</label><input type="number" step="any" id="I"></div>
+          <div class="field" id="field-R"><label>Resistance (Ω)</label><input type="number" step="any" id="R"></div>
+        </div>
+        <div class="field" id="field-V"><label>Voltage (V)</label><input type="number" step="any" id="V"></div>
+        <button type="submit" class="btn btn-solid">Calculate</button>
+      </form>
+      <div class="result-box hidden" id="result-box">
+        <div class="label">Result</div>
+        <div class="value" id="result-value">—</div>
+      </div>
+      <div class="action-row">
+        <button class="btn btn-ghost" onclick="copyResultText('#result-value')">Copy Result</button>
+        <button class="btn btn-ghost" type="button" onclick="location.reload()">Reset</button>
+      </div>
+    </div>
+    <div class="panel"><div class="info-block"><h2>Formula</h2><div class="formula">V = I × R &nbsp;|&nbsp; I = V / R &nbsp;|&nbsp; R = V / I</div></div></div>
+  </div>
+  <div class="info-block"><h2>Related Calculators</h2><div class="related-grid" id="related-grid"></div></div>
+</main>
+<div id="site-footer"></div>
+<script src="../js/calc-data.js"></script>
+<script src="../js/main.js"></script>
+<script src="../js/theme.js"></script>
+<script src="../js/calculator.js"></script>
+<script>
+const solveFor = document.getElementById("solveFor");
+function toggleFields(){
+  document.getElementById("field-V").classList.toggle("hidden", solveFor.value==="V");
+  document.getElementById("field-I").classList.toggle("hidden", solveFor.value==="I");
+  document.getElementById("field-R").classList.toggle("hidden", solveFor.value==="R");
+}
+solveFor.addEventListener("change", toggleFields);
+toggleFields();
+document.getElementById("calc-form").addEventListener("submit", function(e){
+  e.preventDefault();
+  const V = parseFloat(document.getElementById("V").value);
+  const I = parseFloat(document.getElementById("I").value);
+  const R = parseFloat(document.getElementById("R").value);
+  let result, unit;
+  if(solveFor.value==="V"){ result = I*R; unit="V"; }
+  else if(solveFor.value==="I"){ result = V/R; unit="A"; }
+  else { result = V/I; unit="Ω"; }
+  showResult("#result-box", formatNumber(result) + " " + unit);
+});
+document.addEventListener("DOMContentLoaded", ()=>{
+  const related = calcsByCategory("engineering").filter(c=>!c.url.includes("ohms-law-calculator")).slice(0,4);
+  document.getElementById("related-grid").innerHTML = related.map(CalcUI.calcCard).join("");
+});
+</script>
+</body>
+</html>

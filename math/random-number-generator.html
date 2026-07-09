@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Random Number Generator — Free Online Calculator | Calculator Studio</title>
+<meta name="description" content="Generate random numbers within a custom range, with optional whole-number and no-repeat settings.">
+<link rel="canonical" href="https://example.com/math/random-number-generator.html">
+<meta property="og:title" content="Random Number Generator — Calculator Studio">
+<meta property="og:description" content="Generate random numbers within a custom range, with optional whole-number and no-repeat settings.">
+<meta property="og:type" content="website">
+<meta name="twitter:card" content="summary">
+<link rel="icon" href="../icons/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="../css/style.css">
+<link rel="stylesheet" href="../css/responsive.css">
+<link rel="stylesheet" href="../css/animations.css">
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"SoftwareApplication","name":"Random Number Generator","applicationCategory":"UtilitiesApplication","operatingSystem":"Any"}
+</script>
+</head>
+<body>
+<script>const ROOT="../";</script>
+<div id="site-header"></div>
+<main class="container">
+  <div class="breadcrumb"><a href="../index.html">Home</a> / <a href="index.html">Math</a> / Random Number Generator</div>
+  <h1 class="calc-page-title">Random Number Generator</h1>
+  <p class="calc-page-desc">Generate one or more random numbers within a min/max range.</p>
+  <div class="calc-layout">
+    <div class="panel">
+      <form id="calc-form">
+        <div class="field-row">
+          <div class="field"><label for="min">Minimum</label><input type="number" id="min" value="1" required></div>
+          <div class="field"><label for="max">Maximum</label><input type="number" id="max" value="100" required></div>
+        </div>
+        <div class="field-row">
+          <div class="field"><label for="count">How Many Numbers</label><input type="number" id="count" value="1" min="1" max="50" required></div>
+          <div class="field"><label for="unique">Allow Repeats?</label>
+            <select id="unique">
+              <option value="yes">Yes</option>
+              <option value="no">No (unique numbers)</option>
+            </select>
+          </div>
+        </div>
+        <button type="submit" class="btn btn-solid">Generate</button>
+      </form>
+      <div class="result-box hidden" id="result-box">
+        <div class="label">Result</div>
+        <div class="value" id="result-value">—</div>
+      </div>
+      <div class="action-row">
+        <button class="btn btn-ghost" onclick="copyResultText('#result-value')">Copy Result</button>
+        <button class="btn btn-ghost" onclick="shareCurrentPage()">Share</button>
+        <button class="btn btn-ghost" onclick="resetForm('#calc-form','#result-box')">Reset</button>
+      </div>
+    </div>
+    <div class="panel">
+      <div class="info-block">
+        <h2>Formula</h2>
+        <div class="formula">Random integer = floor(Math.random() × (max − min + 1)) + min</div>
+        <h2>Example</h2>
+        <p>Range 1–100, generate 5 unique numbers: e.g. 7, 42, 18, 91, 3.</p>
+        <h2>How To Use</h2>
+        <p>Set a minimum, maximum, count, and whether repeats are allowed, then click Generate.</p>
+      </div>
+    </div>
+  </div>
+  <div class="info-block">
+    <h2>Frequently Asked Questions</h2>
+    <div class="faq-item"><div class="faq-q">Is this true randomness? <span class="caret">▾</span></div><div class="faq-a">It uses JavaScript's Math.random(), a pseudo-random generator suitable for general use, not cryptography.</div></div>
+    <div class="faq-item"><div class="faq-q">What happens if unique count exceeds the range size? <span class="caret">▾</span></div><div class="faq-a">The calculator will show an error since it can't generate more unique numbers than the range allows.</div></div>
+  </div>
+  <div class="info-block">
+    <h2>Related Calculators</h2>
+    <div class="related-grid" id="related-grid"></div>
+  </div>
+</main>
+<div id="site-footer"></div>
+<script src="../js/calc-data.js"></script>
+<script src="../js/main.js"></script>
+<script src="../js/theme.js"></script>
+<script src="../js/calculator.js"></script>
+<script>
+document.getElementById("calc-form").addEventListener("submit", function(e){
+  e.preventDefault();
+  const min = parseInt(document.getElementById("min").value, 10);
+  const max = parseInt(document.getElementById("max").value, 10);
+  const count = parseInt(document.getElementById("count").value, 10);
+  const unique = document.getElementById("unique").value === "no";
+  if(min > max){ showResult("#result-box", "Error: minimum must be ≤ maximum"); return; }
+  const rangeSize = max - min + 1;
+  if(unique && count > rangeSize){ showResult("#result-box", "Error: cannot generate that many unique numbers in this range"); return; }
+  let results = [];
+  if(unique){
+    const pool = [];
+    for(let i=min;i<=max;i++) pool.push(i);
+    for(let i=pool.length-1;i>0;i--){
+      const j = Math.floor(Math.random()*(i+1));
+      [pool[i], pool[j]] = [pool[j], pool[i]];
+    }
+    results = pool.slice(0, count);
+  } else {
+    for(let i=0;i<count;i++){
+      results.push(Math.floor(Math.random()*rangeSize) + min);
+    }
+  }
+  showResult("#result-box", results.join(", "));
+});
+document.addEventListener("DOMContentLoaded", ()=>{
+  const related = calcsByCategory("math").filter(c=>!c.url.includes("random-number-generator")).slice(0,4);
+  document.getElementById("related-grid").innerHTML = related.map(CalcUI.calcCard).join("");
+});
+</script>
+</body>
+</html>

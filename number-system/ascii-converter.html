@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ASCII Converter — Free Online Tool | Calculator Studio</title>
+<meta name="description" content="Convert text to ASCII codes or ASCII codes back to text.">
+<link rel="canonical" href="https://example.com/number-system/ascii-converter.html">
+<link rel="icon" href="../icons/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="../css/style.css">
+<link rel="stylesheet" href="../css/responsive.css">
+<link rel="stylesheet" href="../css/animations.css">
+<style>textarea.ta{width:100%;padding:12px;border-radius:8px;border:1px solid var(--border);background:var(--bg-alt);color:var(--text);font-family:inherit;min-height:100px}</style>
+</head>
+<body>
+<script>const ROOT="../";</script>
+<div id="site-header"></div>
+<main class="container">
+  <div class="breadcrumb"><a href="../index.html">Home</a> / <a href="index.html">Number System</a> / ASCII Converter</div>
+  <h1 class="calc-page-title">ASCII Converter</h1>
+  <p class="calc-page-desc">Convert text to ASCII codes, or ASCII codes back to text.</p>
+  <div class="calc-layout">
+    <div class="panel">
+      <form id="calc-form">
+        <div class="field"><label>Mode</label><select id="mode"><option value="toascii">Text → ASCII</option><option value="totext">ASCII → Text</option></select></div>
+        <div class="field"><label>Input</label><textarea class="ta" id="input" placeholder="Text, or space-separated codes like 72 105" required></textarea></div>
+        <button type="submit" class="btn btn-solid">Convert</button>
+      </form>
+      <div class="result-box hidden" id="result-box">
+        <div class="label">Output</div>
+        <div class="value" id="result-value" style="word-break:break-all;font-size:1rem">—</div>
+      </div>
+      <div class="action-row">
+        <button class="btn btn-ghost" onclick="copyResultText('#result-value')">Copy Result</button>
+        <button class="btn btn-ghost" type="button" onclick="location.reload()">Reset</button>
+      </div>
+    </div>
+    <div class="panel"><div class="info-block"><h2>Example</h2><p>"Hi" → 72 105</p></div></div>
+  </div>
+  <div class="info-block"><h2>Related Calculators</h2><div class="related-grid" id="related-grid"></div></div>
+</main>
+<div id="site-footer"></div>
+<script src="../js/calc-data.js"></script>
+<script src="../js/main.js"></script>
+<script src="../js/theme.js"></script>
+<script src="../js/calculator.js"></script>
+<script>
+document.getElementById("calc-form").addEventListener("submit", function(e){
+  e.preventDefault();
+  const mode = document.getElementById("mode").value;
+  const input = document.getElementById("input").value;
+  if(mode==="toascii"){
+    const codes = [...input].map(c=>c.charCodeAt(0)).join(" ");
+    showResult("#result-box", codes);
+  } else {
+    try{
+      const text = input.trim().split(/\s+/).map(n=>String.fromCharCode(parseInt(n))).join("");
+      showResult("#result-box", text);
+    }catch(err){ showResult("#result-box","Invalid ASCII codes"); }
+  }
+});
+document.addEventListener("DOMContentLoaded", ()=>{
+  const related = calcsByCategory("number-system").filter(c=>!c.url.includes("ascii-converter")).slice(0,4);
+  document.getElementById("related-grid").innerHTML = related.map(CalcUI.calcCard).join("");
+});
+</script>
+</body>
+</html>

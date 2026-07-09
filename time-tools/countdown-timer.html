@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Countdown Timer — Free Online Calculator | Calculator Studio</title>
+<meta name="description" content="Countdown to any future date and time, live.">
+<link rel="canonical" href="https://example.com/time-tools/countdown-timer.html">
+<link rel="icon" href="../icons/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="../css/style.css">
+<link rel="stylesheet" href="../css/responsive.css">
+<link rel="stylesheet" href="../css/animations.css">
+</head>
+<body>
+<script>const ROOT="../";</script>
+<div id="site-header"></div>
+<main class="container">
+  <div class="breadcrumb"><a href="../index.html">Home</a> / <a href="index.html">Time Tools</a> / Countdown Timer</div>
+  <h1 class="calc-page-title">Countdown Timer</h1>
+  <p class="calc-page-desc">Set a target date and time and watch a live countdown.</p>
+  <div class="calc-layout">
+    <div class="panel">
+      <form id="calc-form">
+        <div class="field"><label>Target Date & Time</label><input type="datetime-local" id="target" required></div>
+        <button type="submit" class="btn btn-solid">Start Countdown</button>
+      </form>
+      <div class="result-box hidden" id="result-box">
+        <div class="label">Time Remaining</div>
+        <div class="value" id="result-value">—</div>
+      </div>
+    </div>
+    <div class="panel"><div class="info-block"><h2>How To Use</h2><p>Pick a future date/time and press Start. The countdown updates every second.</p></div></div>
+  </div>
+  <div class="info-block"><h2>Related Calculators</h2><div class="related-grid" id="related-grid"></div></div>
+</main>
+<div id="site-footer"></div>
+<script src="../js/calc-data.js"></script>
+<script src="../js/main.js"></script>
+<script src="../js/theme.js"></script>
+<script src="../js/calculator.js"></script>
+<script>
+let timer = null;
+document.getElementById("calc-form").addEventListener("submit", function(e){
+  e.preventDefault();
+  if(timer) clearInterval(timer);
+  const target = new Date(document.getElementById("target").value).getTime();
+  document.getElementById("result-box").classList.remove("hidden");
+  function tick(){
+    const now = Date.now();
+    let diff = target - now;
+    if(diff <= 0){
+      document.getElementById("result-value").textContent = "Time's up!";
+      clearInterval(timer);
+      return;
+    }
+    const d = Math.floor(diff/86400000); diff -= d*86400000;
+    const h = Math.floor(diff/3600000); diff -= h*3600000;
+    const m = Math.floor(diff/60000); diff -= m*60000;
+    const s = Math.floor(diff/1000);
+    document.getElementById("result-value").textContent = `${d}d ${h}h ${m}m ${s}s`;
+  }
+  tick();
+  timer = setInterval(tick, 1000);
+});
+document.addEventListener("DOMContentLoaded", ()=>{
+  const related = calcsByCategory("time-tools").filter(c=>!c.url.includes("countdown-timer")).slice(0,4);
+  document.getElementById("related-grid").innerHTML = related.map(CalcUI.calcCard).join("");
+});
+</script>
+</body>
+</html>

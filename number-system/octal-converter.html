@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Octal Converter — Free Online Calculator | Calculator Studio</title>
+<meta name="description" content="Convert octal numbers to/from binary, decimal and hexadecimal.">
+<link rel="canonical" href="https://example.com/number-system/octal-converter.html">
+<link rel="icon" href="../icons/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="../css/style.css">
+<link rel="stylesheet" href="../css/responsive.css">
+<link rel="stylesheet" href="../css/animations.css">
+</head>
+<body>
+<script>const ROOT="../";</script>
+<div id="site-header"></div>
+<main class="container">
+  <div class="breadcrumb"><a href="../index.html">Home</a> / <a href="index.html">Number System</a> / Octal Converter</div>
+  <h1 class="calc-page-title">Octal Converter</h1>
+  <p class="calc-page-desc">Convert octal numbers to binary, decimal or hexadecimal — or convert from those bases into octal.</p>
+  <div class="calc-layout">
+    <div class="panel">
+      <form id="calc-form">
+        <div class="field-row">
+          <div class="field"><label>From</label><select id="from-base"><option value="8">Octal</option><option value="2">Binary</option><option value="10">Decimal</option><option value="16">Hexadecimal</option></select></div>
+          <div class="field"><label>To</label><select id="to-base"><option value="2">Binary</option><option value="10">Decimal</option><option value="16">Hexadecimal</option><option value="8">Octal</option></select></div>
+        </div>
+        <div class="field"><label>Value</label><input type="text" id="val" placeholder="e.g. 17" required></div>
+        <button type="submit" class="btn btn-solid">Convert</button>
+      </form>
+      <div class="result-box hidden" id="result-box">
+        <div class="label">Result</div>
+        <div class="value" id="result-value">—</div>
+      </div>
+      <div class="action-row">
+        <button class="btn btn-ghost" onclick="copyResultText('#result-value')">Copy Result</button>
+        <button class="btn btn-ghost" onclick="shareCurrentPage()">Share</button>
+        <button class="btn btn-ghost" type="button" onclick="location.reload()">Reset</button>
+      </div>
+    </div>
+    <div class="panel"><div class="info-block"><h2>Example</h2><p>17₈ = 15₁₀ = 1111₂ = F₁₆</p></div></div>
+  </div>
+  <div class="info-block"><h2>Related Calculators</h2><div class="related-grid" id="related-grid"></div></div>
+</main>
+<div id="site-footer"></div>
+<script src="../js/calc-data.js"></script>
+<script src="../js/main.js"></script>
+<script src="../js/theme.js"></script>
+<script src="../js/calculator.js"></script>
+<script>
+function decToBaseFraction(num, base, precision){
+  const neg = num < 0; num = Math.abs(num);
+  let intPart = Math.floor(num);
+  let fracPart = num - intPart;
+  let out = intPart.toString(base);
+  if(fracPart > 0){
+    out += ".";
+    for(let i=0; i<precision && fracPart>0; i++){
+      fracPart *= base;
+      const digit = Math.floor(fracPart);
+      out += digit.toString(base);
+      fracPart -= digit;
+    }
+  }
+  return (neg?"-":"") + out.toUpperCase();
+}
+document.getElementById("calc-form").addEventListener("submit", function(e){
+  e.preventDefault();
+  const from = parseInt(document.getElementById("from-base").value);
+  const to = parseInt(document.getElementById("to-base").value);
+  const val = document.getElementById("val").value.trim();
+  if(from === 10){
+    const dec = parseFloat(val);
+    if(isNaN(dec)){ showResult("#result-box","Invalid decimal number"); return; }
+    showResult("#result-box", decToBaseFraction(dec, to, 8));
+    return;
+  }
+  const dec = parseInt(val, from);
+  if(isNaN(dec)){ showResult("#result-box","Invalid number for selected base"); return; }
+  showResult("#result-box", dec.toString(to).toUpperCase());
+});
+document.addEventListener("DOMContentLoaded", ()=>{
+  const related = calcsByCategory("number-system").filter(c=>!c.url.includes("octal-converter")).slice(0,4);
+  document.getElementById("related-grid").innerHTML = related.map(CalcUI.calcCard).join("");
+});
+</script>
+</body>
+</html>

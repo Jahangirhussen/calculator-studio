@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Temperature Converter — Free Online Converter | Calculator Studio</title>
+<meta name="description" content="Convert Celsius, Fahrenheit and Kelvin instantly with accurate formulas.">
+<link rel="canonical" href="https://example.com/converter/temperature-converter.html">
+<meta property="og:title" content="Temperature Converter — Calculator Studio">
+<meta property="og:description" content="Convert Celsius, Fahrenheit and Kelvin instantly with accurate formulas.">
+<meta property="og:type" content="website">
+<meta name="twitter:card" content="summary">
+<link rel="icon" href="../icons/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="../css/style.css">
+<link rel="stylesheet" href="../css/responsive.css">
+<link rel="stylesheet" href="../css/animations.css">
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"SoftwareApplication","name":"Temperature Converter","applicationCategory":"UtilitiesApplication","operatingSystem":"Any"}
+</script>
+</head>
+<body>
+<script>const ROOT="../";</script>
+<div id="site-header"></div>
+<main class="container">
+  <div class="breadcrumb"><a href="../index.html">Home</a> / <a href="index.html">Converters</a> / Temperature Converter</div>
+  <h1 class="calc-page-title">Temperature Converter</h1>
+  <p class="calc-page-desc">Convert between Celsius, Fahrenheit and Kelvin using exact formulas.</p>
+  <div class="calc-layout">
+    <div class="panel">
+      <form id="calc-form">
+        <div class="field"><label>Value</label><input type="number" step="any" id="input-value" required></div>
+        <div class="field-row">
+          <div class="field"><label>From</label><select id="from-unit"><!-- options --></select></div>
+          <div class="field"><label>To</label><select id="to-unit"><!-- options --></select></div>
+        </div>
+        <button type="submit" class="btn btn-solid">Convert</button>
+      </form>
+      <div class="result-box hidden" id="result-box">
+        <div class="label">Result</div>
+        <div class="value" id="result-value">—</div>
+      </div>
+      <div class="action-row">
+        <button class="btn btn-ghost" onclick="copyResultText('#result-value')">Copy Result</button>
+        <button class="btn btn-ghost" onclick="shareCurrentPage()">Share</button>
+        <button class="btn btn-ghost" onclick="resetForm('#calc-form','#result-box')">Reset</button>
+      </div>
+    </div>
+    <div class="panel">
+      <div class="info-block">
+        <h2>Formula</h2>
+        <div class="formula">
+          C → F = C × 9/5 + 32<br>
+          C → K = C + 273.15<br>
+          F → C = (F − 32) × 5/9<br>
+          F → K = (F − 32) × 5/9 + 273.15<br>
+          K → C = K − 273.15<br>
+          K → F = (K − 273.15) × 9/5 + 32
+        </div>
+        <h2>Example</h2>
+        <p>Convert 100°C to Fahrenheit: 100 × 9/5 + 32 = 212°F. Convert 100°C to Kelvin: 100 + 273.15 = 373.15 K.</p>
+        <h2>How To Use</h2>
+        <p>Enter a value, choose the unit you're converting from and the unit you want, then click Convert.</p>
+      </div>
+    </div>
+  </div>
+  <div class="info-block">
+    <h2>Frequently Asked Questions</h2>
+    <div class="faq-item"><div class="faq-q">Why doesn't temperature use a simple base-unit table? <span class="caret">▾</span></div><div class="faq-a">Celsius and Fahrenheit have offset zero points, so conversion is affine (multiply and add), not a pure multiplication like other unit types. This tool uses direct formulas for each pair instead.</div></div>
+    <div class="faq-item"><div class="faq-q">What is absolute zero in each scale? <span class="caret">▾</span></div><div class="faq-a">Absolute zero is 0 Kelvin, which equals -273.15°C and -459.67°F.</div></div>
+  </div>
+  <div class="info-block">
+    <h2>Related Calculators</h2>
+    <div class="related-grid" id="related-grid"></div>
+  </div>
+</main>
+<div id="site-footer"></div>
+<script src="../js/calc-data.js"></script>
+<script src="../js/main.js"></script>
+<script src="../js/theme.js"></script>
+<script src="../js/calculator.js"></script>
+<script>
+const UNITS = ["Celsius", "Fahrenheit", "Kelvin"];
+
+function convertTemp(val, from, to){
+  if(from === to) return val;
+  // normalize to Celsius first
+  let celsius;
+  if(from === "Celsius") celsius = val;
+  else if(from === "Fahrenheit") celsius = (val - 32) * 5/9;
+  else celsius = val - 273.15; // Kelvin
+
+  if(to === "Celsius") return celsius;
+  if(to === "Fahrenheit") return celsius * 9/5 + 32;
+  return celsius + 273.15; // Kelvin
+}
+
+document.addEventListener("DOMContentLoaded", ()=>{
+  const opts = UNITS.map(u=>`<option value="${u}">${u}</option>`).join("");
+  document.getElementById("from-unit").innerHTML = opts;
+  document.getElementById("to-unit").innerHTML = opts;
+  document.getElementById("to-unit").value = "Fahrenheit";
+  const related = calcsByCategory("converter").filter(c=>!c.url.includes("temperature-converter")).slice(0,4);
+  document.getElementById("related-grid").innerHTML = related.map(CalcUI.calcCard).join("");
+});
+document.getElementById("calc-form").addEventListener("submit", function(e){
+  e.preventDefault();
+  const val = parseFloat(document.getElementById("input-value").value);
+  const from = document.getElementById("from-unit").value;
+  const to = document.getElementById("to-unit").value;
+  const result = convertTemp(val, from, to);
+  showResult("#result-box", formatNumber(result, 6) + " " + (to === "Celsius" ? "°C" : to === "Fahrenheit" ? "°F" : "K"));
+});
+</script>
+</body>
+</html>
