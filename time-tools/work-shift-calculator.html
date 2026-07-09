@@ -3,11 +3,11 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Advanced Work Shift Calculator — Free Online Calculator | Calculator Studio</title>
-<meta name="description" content="Calculate total working hours across unlimited shift phases. Supports 12-hour AM/PM and 24-hour mode, with overnight and midnight-crossing shifts.">
+<title>Work Shift &amp; Break Time Calculator — Free Online Calculator | Calculator Studio</title>
+<meta name="description" content="Calculate total working hours across unlimited shift phases and unlimited breaks — get shift time, break time and net working time in one place.">
 <link rel="canonical" href="https://example.com/time-tools/work-shift-calculator.html">
-<meta property="og:title" content="Advanced Work Shift Calculator — Calculator Studio">
-<meta property="og:description" content="Calculate total working hours across unlimited shift phases with overnight support.">
+<meta property="og:title" content="Work Shift & Break Time Calculator — Calculator Studio">
+<meta property="og:description" content="Calculate total working hours minus breaks, with unlimited phases and overnight support.">
 <meta property="og:type" content="website">
 <meta name="twitter:card" content="summary">
 <link rel="icon" href="../icons/favicon.svg" type="image/svg+xml">
@@ -15,33 +15,44 @@
 <link rel="stylesheet" href="../css/responsive.css">
 <link rel="stylesheet" href="../css/animations.css">
 <script type="application/ld+json">
-{"@context":"https://schema.org","@type":"SoftwareApplication","name":"Advanced Work Shift Calculator","applicationCategory":"UtilitiesApplication","operatingSystem":"Any"}
+{"@context":"https://schema.org","@type":"SoftwareApplication","name":"Work Shift & Break Time Calculator","applicationCategory":"UtilitiesApplication","operatingSystem":"Any"}
 </script>
+<style>
+.stat-row{display:flex;gap:14px;flex-wrap:wrap;margin-top:14px}
+.stat-box{flex:1;min-width:140px;padding:14px;background:var(--card-alt);border:1px solid var(--border);border-radius:10px}
+.stat-box .label{font-size:.75rem;color:var(--text-soft);text-transform:uppercase}
+.stat-box .val{font-weight:700;font-size:1.1rem;margin-top:4px}
+.section-heading{font-size:1rem;font-weight:700;margin:20px 0 10px;color:var(--gold)}
+</style>
 </head>
 <body>
 <script>const ROOT="../";</script>
 <div id="site-header"></div>
 <main class="container">
-  <div class="breadcrumb"><a href="../index.html">Home</a> / <a href="index.html">Time Tools</a> / Advanced Work Shift Calculator</div>
-  <h1 class="calc-page-title">Advanced Work Shift Calculator</h1>
-  <p class="calc-page-desc">Add unlimited work phases — for example a split shift with a morning session and an evening session — and get the total hours worked. Handles overnight shifts crossing midnight automatically.</p>
+  <div class="breadcrumb"><a href="../index.html">Home</a> / <a href="index.html">Time Tools</a> / Work Shift &amp; Break Time Calculator</div>
+  <h1 class="calc-page-title">Work Shift &amp; Break Time Calculator</h1>
+  <p class="calc-page-desc">Add unlimited work phases and unlimited breaks. Get total shift time, total break time, and net working time — all handled with unambiguous 24-hour time to avoid AM/PM mix-ups.</p>
 
   <div class="calc-layout">
     <div class="panel">
       <form id="calc-form">
-        <div class="field">
-          <label>Time Format</label>
-          <select id="mode-select">
-            <option value="12">12-Hour (AM/PM)</option>
-            <option value="24">24-Hour</option>
-          </select>
-        </div>
+        <div class="section-heading">Work Phases</div>
         <div id="phases-container"></div>
-        <button type="button" class="btn btn-ghost" id="add-phase" style="margin-bottom:16px">+ Add Phase</button>
-        <button type="submit" class="btn btn-solid">Calculate Total Working Time</button>
+        <button type="button" class="btn btn-ghost" id="add-phase" style="margin-bottom:20px">+ Add Phase</button>
+
+        <div class="section-heading">Breaks (optional)</div>
+        <div id="breaks-container"></div>
+        <button type="button" class="btn btn-ghost" id="add-break" style="margin-bottom:20px">+ Add Break</button>
+
+        <button type="submit" class="btn btn-solid">Calculate</button>
       </form>
+
+      <div class="stat-row hidden" id="stat-row">
+        <div class="stat-box"><div class="label">Total Phase Time</div><div class="val" id="stat-phase">—</div></div>
+        <div class="stat-box"><div class="label">Total Break Time</div><div class="val" id="stat-break">—</div></div>
+      </div>
       <div class="result-box hidden" id="result-box">
-        <div class="label">Total Working Time</div>
+        <div class="label">Net Working Time</div>
         <div class="value" id="result-value">—</div>
       </div>
       <div class="action-row">
@@ -53,19 +64,21 @@
     <div class="panel">
       <div class="info-block">
         <h2>How It Works</h2>
-        <p>Each phase is one continuous block of work — e.g. Phase 1: 9:00 AM to 1:00 PM, Phase 2: 2:00 PM to 6:00 PM. The calculator finds the duration of each phase, correctly handling overnight phases (e.g. 11:00 PM to 3:00 AM = 4 hours), and adds them all up for the total working time.</p>
+        <p>Each Phase is one continuous block of work (24-hour time, e.g. 10:00 to 12:00). Each Break is time subtracted from your worked hours (e.g. lunch, rest). Net Working Time = Total Phase Time − Total Break Time.</p>
         <h2>Example</h2>
-        <p>Phase 1: 12:00 AM → 03:00 PM (15h). Phase 2: 04:00 PM → 07:30 PM (3h 30m). Total Working Time = 18h 30m.</p>
-        <p>Overnight example: Phase 1: 10:00 PM → 06:00 AM (8h, crosses midnight automatically).</p>
+        <p>Phase 1: 10:00 → 12:00 = 2h. Phase 2: 13:00 → 18:00 = 5h. Total Phase Time = 7h. Break: 13:30 → 14:00 = 30m. Net Working Time = 6h 30m.</p>
+        <p>Overnight example: Phase 22:00 → 06:00 = 8h (end time earlier than start = counted as next day automatically).</p>
+        <h2>Why 24-hour time?</h2>
+        <p>Using 24-hour time (e.g. 14:00 instead of 2:00 PM) removes the most common input mistake — picking the wrong AM/PM — which used to silently add 12 hours to a result.</p>
       </div>
     </div>
   </div>
 
   <div class="info-block">
     <h2>Frequently Asked Questions</h2>
-    <div class="faq-item"><div class="faq-q">Does it handle overnight shifts? <span class="caret">▾</span></div><div class="faq-a">Yes. If the end time is earlier than the start time, the calculator assumes the shift continues into the next day.</div></div>
-    <div class="faq-item"><div class="faq-q">Can I add unlimited phases? <span class="caret">▾</span></div><div class="faq-a">Yes, use "+ Add Phase" to add as many as needed, and delete or duplicate any phase.</div></div>
-    <div class="faq-item"><div class="faq-q">What does 12 AM / 12 PM mean here? <span class="caret">▾</span></div><div class="faq-a">12 AM is midnight (00:00) and 12 PM is noon (12:00) — handled correctly per standard convention.</div></div>
+    <div class="faq-item"><div class="faq-q">Why did my old calculation show 14 hours instead of 2? <span class="caret">▾</span></div><div class="faq-a">That happened when using a 12-hour AM/PM selector and picking the wrong AM/PM (e.g. leaving "12:00 AM" instead of "12:00 PM"), which added a full extra 12-hour offset. This version uses 24-hour time only, which removes that entire class of mistake.</div></div>
+    <div class="faq-item"><div class="faq-q">Can I add unlimited phases and breaks? <span class="caret">▾</span></div><div class="faq-a">Yes — use "+ Add Phase" and "+ Add Break" as many times as needed, and delete any row you don't need.</div></div>
+    <div class="faq-item"><div class="faq-q">Does it handle overnight shifts? <span class="caret">▾</span></div><div class="faq-a">Yes. If an end time is earlier than its start time, it's treated as ending the next day.</div></div>
   </div>
   <div class="info-block"><h2>Related Calculators</h2><div class="related-grid" id="related-grid"></div></div>
 </main>
@@ -76,38 +89,16 @@
 <script src="../js/calculator.js"></script>
 <script src="../js/time.js"></script>
 <script>
-let phaseCount = 0;
-const container = document.getElementById("phases-container");
-const modeSelect = document.getElementById("mode-select");
+const phasesContainer = document.getElementById("phases-container");
+const breaksContainer = document.getElementById("breaks-container");
+let phaseCount = 0, breakCount = 0;
 
-function phaseRowHTML(id){
-  const mode = modeSelect.value;
-  if(mode === "12"){
-    return `<div class="phase-row" data-id="${id}">
-      <div class="field" style="margin-bottom:0">
-        <label>Start</label>
-        <div style="display:flex;gap:4px">
-          <input type="time" class="p-start" style="flex:1">
-          <select class="p-start-ampm"><option value="AM">AM</option><option value="PM">PM</option></select>
-        </div>
-      </div>
-      <div class="field" style="margin-bottom:0">
-        <label>End</label>
-        <div style="display:flex;gap:4px">
-          <input type="time" class="p-end" style="flex:1">
-          <select class="p-end-ampm"><option value="AM">AM</option><option value="PM">PM</option></select>
-        </div>
-      </div>
-      <div class="duration">—</div>
-      <div class="phase-actions" style="display:flex;gap:6px">
-        <button type="button" class="dup-btn" title="Duplicate">⧉</button>
-        <button type="button" class="del-btn" title="Delete">✕</button>
-      </div>
-    </div>`;
-  }
+function rowHTML(kind, id){
+  const startClass = kind==="phase" ? "p-start" : "b-start";
+  const endClass = kind==="phase" ? "p-end" : "b-end";
   return `<div class="phase-row" data-id="${id}">
-    <div class="field" style="margin-bottom:0"><label>Start</label><input type="time" class="p-start"></div>
-    <div class="field" style="margin-bottom:0"><label>End</label><input type="time" class="p-end"></div>
+    <div class="field" style="margin-bottom:0"><label>Start (24h)</label><input type="time" class="${startClass}" required></div>
+    <div class="field" style="margin-bottom:0"><label>End (24h)</label><input type="time" class="${endClass}" required></div>
     <div class="duration">—</div>
     <div class="phase-actions" style="display:flex;gap:6px">
       <button type="button" class="dup-btn" title="Duplicate">⧉</button>
@@ -116,67 +107,56 @@ function phaseRowHTML(id){
   </div>`;
 }
 
-function addPhase(prefill){
-  phaseCount++;
-  const div = document.createElement("div");
-  div.innerHTML = phaseRowHTML(phaseCount);
-  const row = div.firstElementChild;
+function addRow(kind){
+  const container = kind==="phase" ? phasesContainer : breaksContainer;
+  const id = kind==="phase" ? ++phaseCount : ++breakCount;
+  const wrap = document.createElement("div");
+  wrap.innerHTML = rowHTML(kind, id);
+  const row = wrap.firstElementChild;
   container.appendChild(row);
-  if(prefill){
-    row.querySelector(".p-start").value = prefill.start;
-    row.querySelector(".p-end").value = prefill.end;
-    if(modeSelect.value==="12"){
-      row.querySelector(".p-start-ampm").value = prefill.startAmpm||"AM";
-      row.querySelector(".p-end-ampm").value = prefill.endAmpm||"AM";
-    }
-  }
-  bindRow(row);
-}
-
-function bindRow(row){
   row.querySelector(".del-btn").addEventListener("click", ()=>{
-    if(container.children.length > 1) row.remove();
+    if(container.children.length > 1 || kind==="break") row.remove();
   });
   row.querySelector(".dup-btn").addEventListener("click", ()=>{
-    const prefill = {
-      start: row.querySelector(".p-start").value,
-      end: row.querySelector(".p-end").value,
-    };
-    if(modeSelect.value==="12"){
-      prefill.startAmpm = row.querySelector(".p-start-ampm").value;
-      prefill.endAmpm = row.querySelector(".p-end-ampm").value;
-    }
-    addPhase(prefill);
+    const s = row.querySelector(kind==="phase" ? ".p-start" : ".b-start").value;
+    const en = row.querySelector(kind==="phase" ? ".p-end" : ".b-end").value;
+    addRow(kind);
+    const last = container.lastElementChild;
+    last.querySelector(kind==="phase" ? ".p-start" : ".b-start").value = s;
+    last.querySelector(kind==="phase" ? ".p-end" : ".b-end").value = en;
   });
 }
 
-document.getElementById("add-phase").addEventListener("click", ()=>addPhase());
-modeSelect.addEventListener("change", ()=>{ container.innerHTML=""; phaseCount=0; addPhase(); });
-addPhase();
+document.getElementById("add-phase").addEventListener("click", ()=>addRow("phase"));
+document.getElementById("add-break").addEventListener("click", ()=>addRow("break"));
+addRow("phase");
 
 document.getElementById("calc-form").addEventListener("submit", function(e){
   e.preventDefault();
-  const mode = modeSelect.value;
-  let total = 0;
-  let valid = true;
-  container.querySelectorAll(".phase-row").forEach(row=>{
-    const startVal = row.querySelector(".p-start").value;
-    const endVal = row.querySelector(".p-end").value;
-    if(!startVal || !endVal){ valid=false; return; }
-    let startMin, endMin;
-    if(mode === "12"){
-      startMin = parseTimeToMinutes(startVal, row.querySelector(".p-start-ampm").value);
-      endMin = parseTimeToMinutes(endVal, row.querySelector(".p-end-ampm").value);
-    } else {
-      startMin = parseTimeToMinutes(startVal, null);
-      endMin = parseTimeToMinutes(endVal, null);
-    }
-    const dur = durationMinutes(startMin, endMin);
-    total += dur;
+  let totalPhase = 0, valid = true;
+  phasesContainer.querySelectorAll(".phase-row").forEach(row=>{
+    const s = row.querySelector(".p-start").value, en = row.querySelector(".p-end").value;
+    if(!s || !en){ valid=false; return; }
+    const dur = durationMinutes(parseTimeToMinutes(s,null), parseTimeToMinutes(en,null));
+    totalPhase += dur;
     row.querySelector(".duration").textContent = minutesToHM(dur);
   });
   if(!valid){ alert("Please fill in all phase start and end times."); return; }
-  showResult("#result-box", minutesToHM(total) + " (" + minutesToDecimalHours(total) + " hrs)");
+
+  let totalBreak = 0;
+  breaksContainer.querySelectorAll(".phase-row").forEach(row=>{
+    const s = row.querySelector(".b-start").value, en = row.querySelector(".b-end").value;
+    if(!s || !en) return;
+    const dur = durationMinutes(parseTimeToMinutes(s,null), parseTimeToMinutes(en,null));
+    totalBreak += dur;
+    row.querySelector(".duration").textContent = minutesToHM(dur);
+  });
+
+  const net = Math.max(0, totalPhase - totalBreak);
+  document.getElementById("stat-row").classList.remove("hidden");
+  document.getElementById("stat-phase").textContent = minutesToHM(totalPhase);
+  document.getElementById("stat-break").textContent = minutesToHM(totalBreak);
+  showResult("#result-box", minutesToHM(net) + " (" + minutesToDecimalHours(net) + " hrs)");
 });
 
 document.addEventListener("DOMContentLoaded", ()=>{

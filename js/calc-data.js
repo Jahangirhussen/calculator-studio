@@ -106,14 +106,13 @@ const CALCULATORS = [
 
   // ===== TIME TOOLS =====
   { cat:"time-tools", title:"Date Difference Calculator", url:"time-tools/date-difference-calculator.html", desc:"Calculate days between two dates.", popular:true },
-  { cat:"time-tools", title:"Time Difference Calculator", url:"time-tools/time-difference-calculator.html", desc:"Calculate difference between two times." },
+  { cat:"time-tools", title:"Time Difference Calculator", url:"time-tools/time-difference-calculator.html", desc:"Calculate the duration between two times, handling overnight wraparound." },
   { cat:"time-tools", title:"Countdown Timer", url:"time-tools/countdown-timer.html", desc:"Countdown to any future date and time." },
   { cat:"time-tools", title:"Stopwatch", url:"time-tools/stopwatch.html", desc:"Simple online stopwatch with lap times." },
   { cat:"time-tools", title:"Working Days Calculator", url:"time-tools/working-days-calculator.html", desc:"Calculate business days between two dates." },
   { cat:"time-tools", title:"Timezone Converter", url:"time-tools/timezone-converter.html", desc:"Convert time between timezones." },
   { cat:"time-tools", title:"12-Hour to 24-Hour Converter", url:"time-tools/12-24-hour-converter.html", desc:"Convert between AM/PM and 24-hour time." },
-  { cat:"time-tools", title:"Work Shift Calculator", url:"time-tools/work-shift-calculator.html", desc:"Calculate total working time across unlimited shift phases, AM/PM or 24-hour, with overnight support.", popular:true },
-  { cat:"time-tools", title:"Break Time Calculator", url:"time-tools/break-time-calculator.html", desc:"Calculate net working time after unlimited breaks.", popular:true },
+  { cat:"time-tools", title:"Work Shift & Break Time Calculator", url:"time-tools/work-shift-calculator.html", desc:"Calculate total working time across unlimited shift phases and breaks, in unambiguous 24-hour time, with overnight support.", popular:true },
 
   // ===== UTILITIES =====
   { cat:"utilities", title:"QR Code Generator", url:"utilities/qr-generator.html", desc:"Generate a QR code from text or URL.", popular:true },

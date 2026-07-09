@@ -78,7 +78,9 @@ main{flex:1}
 }
 .main-nav>ul>li:hover .dropdown,
 .main-nav>ul>li.open .dropdown{opacity:1;visibility:visible;transform:translateY(0)}
-.main-nav>ul>li:nth-last-child(-n+4) .dropdown{left:auto;right:0}
+@media (min-width:769px){
+  .main-nav>ul>li:nth-last-child(-n+4) .dropdown{left:auto;right:0}
+}
 .dropdown a{display:block;padding:9px 12px;border-radius:8px;font-size:.9rem;transition:background var(--transition),color var(--transition)}
 .dropdown a:hover{background:var(--gold-soft);color:var(--gold)}
 .header-actions{display:flex;align-items:center;gap:12px}
