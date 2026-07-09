@@ -2,6 +2,7 @@
    ("" for root pages, "../" for one-level-deep category/calculator pages). */
 (function(){
   const root = typeof ROOT !== "undefined" ? ROOT : "";
+  const SITE_NAME = "Calculator Studio";
 
   function buildHeader(){
     const navItems = CATEGORIES.map(cat=>{
@@ -15,7 +16,7 @@
     return `
     <header class="site-header">
       <div class="container header-inner">
-        <a href="${root}index.html" class="logo">🧮<span>Calc</span>All</a>
+        <a href="${root}index.html" class="logo">🧮<span>${SITE_NAME.split(" ")[0]}</span> ${SITE_NAME.split(" ").slice(1).join(" ")}</a>
         <nav class="main-nav">
           <ul>
             <li><a href="${root}index.html">Home</a></li>
@@ -42,12 +43,12 @@
       <div class="container">
         <div class="footer-grid">
           <div>
-            <h4>🧮 Calculator Studio</h4>
+            <h4>🧮 ${SITE_NAME}</h4>
             <p style="color:var(--text-soft);font-size:.85rem;margin-top:8px">All-in-one free online calculators for math, finance, health, time and more.</p>
           </div>
           ${cols}
         </div>
-        <div class="footer-bottom">© <span id="year"></span> Calculator Studio. All rights reserved. | <a href="${root}about.html">About</a> | <a href="${root}contact.html">Contact</a></div>
+        <div class="footer-bottom">© <span id="year"></span> ${SITE_NAME}. All rights reserved. | <a href="${root}about.html">About</a> | <a href="${root}contact.html">Contact</a></div>
       </div>
     </footer>`;
   }
