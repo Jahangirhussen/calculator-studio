@@ -42,8 +42,15 @@
         <button type="submit" class="btn btn-solid">Calculate</button>
       </form>
       <div class="result-box hidden" id="result-box">
-        <div class="label">Result</div>
+        <div class="label">Age</div>
         <div class="value" id="result-value">—</div>
+      </div>
+      <div class="stat-row hidden" id="stat-row" style="display:flex;gap:12px;flex-wrap:wrap;margin-top:14px">
+        <div class="panel" style="flex:1;min-width:120px;padding:14px"><div style="font-size:.75rem;color:var(--text-soft)">Total Months</div><div style="font-weight:700;font-size:1.1rem" id="stat-months">—</div></div>
+        <div class="panel" style="flex:1;min-width:120px;padding:14px"><div style="font-size:.75rem;color:var(--text-soft)">Total Days</div><div style="font-weight:700;font-size:1.1rem" id="stat-days">—</div></div>
+        <div class="panel" style="flex:1;min-width:120px;padding:14px"><div style="font-size:.75rem;color:var(--text-soft)">Total Hours</div><div style="font-weight:700;font-size:1.1rem" id="stat-hours">—</div></div>
+        <div class="panel" style="flex:1;min-width:120px;padding:14px"><div style="font-size:.75rem;color:var(--text-soft)">Total Minutes</div><div style="font-weight:700;font-size:1.1rem" id="stat-minutes">—</div></div>
+        <div class="panel" style="flex:1;min-width:120px;padding:14px"><div style="font-size:.75rem;color:var(--text-soft)">Total Seconds</div><div style="font-weight:700;font-size:1.1rem" id="stat-seconds">—</div></div>
       </div>
       <div class="action-row">
         <button class="btn btn-ghost" onclick="copyResultText('#result-value')">Copy Result</button>
@@ -104,8 +111,20 @@ document.getElementById("calc-form").addEventListener("submit", function(e){
     years -= 1;
     months += 12;
   }
-  const totalDays = Math.floor((target - birth) / (1000*60*60*24));
-  showResult("#result-box", `${years} years, ${months} months, ${days} days (${formatNumber(totalDays,0)} total days)`);
+  const diffMs = target - birth;
+  const totalDays = Math.floor(diffMs / (1000*60*60*24));
+  const totalMonths = years*12 + months;
+  const totalHours = Math.floor(diffMs / (1000*60*60));
+  const totalMinutes = Math.floor(diffMs / (1000*60));
+  const totalSeconds = Math.floor(diffMs / 1000);
+
+  showResult("#result-box", `${years} years, ${months} months, ${days} days`);
+  document.getElementById("stat-row").classList.remove("hidden");
+  document.getElementById("stat-months").textContent = formatNumber(totalMonths,0) + " months";
+  document.getElementById("stat-days").textContent = formatNumber(totalDays,0) + " days";
+  document.getElementById("stat-hours").textContent = formatNumber(totalHours,0) + " hours";
+  document.getElementById("stat-minutes").textContent = formatNumber(totalMinutes,0) + " minutes";
+  document.getElementById("stat-seconds").textContent = formatNumber(totalSeconds,0) + " seconds";
 });
 document.addEventListener("DOMContentLoaded", ()=>{
   const related = calcsByCategory("health").filter(c=>!c.url.includes("age-calculator")).slice(0,4);
