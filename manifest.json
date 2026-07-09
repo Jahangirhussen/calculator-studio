@@ -7,6 +7,6 @@
   "theme_color": "#D4AF37",
   "description": "150+ free online calculators for math, finance, health, conversions, education, engineering, programming, time and utilities.",
   "icons": [
-    { "src": "images/logo.png", "sizes": "any", "type": "image/png" }
+    { "src": "images/logo-white.png", "sizes": "any", "type": "image/png" }
   ]
 }

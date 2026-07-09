@@ -2,6 +2,7 @@
   .grid-4{grid-template-columns:repeat(3,1fr)}
   .footer-grid{grid-template-columns:1fr 1fr 1fr}
   .related-grid{grid-template-columns:repeat(2,1fr)}
+  .logo-img{height:44px}
 }
 @media (max-width:900px){
   .calc-layout{grid-template-columns:1fr}
@@ -27,6 +28,7 @@
   }
   .main-nav>ul>li.open .dropdown{display:block}
   .hamburger{display:flex}
+  .logo-img{height:38px}
   .grid-4,.grid-3,.grid-2{grid-template-columns:repeat(2,1fr)}
   .footer-grid{grid-template-columns:1fr 1fr}
   .hero h1{font-size:1.9rem}
