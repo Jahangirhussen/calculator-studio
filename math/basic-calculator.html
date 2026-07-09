@@ -4,10 +4,10 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Basic Calculator — Free Online Calculator | Calculator Studio</title>
-<meta name="description" content="Simple online calculator for addition, subtraction, multiplication and division.">
+<meta name="description" content="Simple online calculator with a real numpad-style keypad for addition, subtraction, multiplication and division.">
 <link rel="canonical" href="https://example.com/math/basic-calculator.html">
 <meta property="og:title" content="Basic Calculator — Calculator Studio">
-<meta property="og:description" content="Simple online calculator for addition, subtraction, multiplication and division.">
+<meta property="og:description" content="Simple online calculator with a real numpad-style keypad.">
 <meta property="og:type" content="website">
 <meta name="twitter:card" content="summary">
 <link rel="icon" href="../icons/favicon.svg" type="image/svg+xml">
@@ -17,6 +17,18 @@
 <script type="application/ld+json">
 {"@context":"https://schema.org","@type":"SoftwareApplication","name":"Basic Calculator","applicationCategory":"UtilitiesApplication","operatingSystem":"Any"}
 </script>
+<style>
+.calc-body{background:var(--card);border:1px solid var(--border);border-radius:20px;padding:20px;max-width:360px;margin:0 auto;box-shadow:var(--shadow)}
+.calc-screen{background:var(--card-alt);border:1px solid var(--border);border-radius:10px;padding:16px;margin-bottom:14px;text-align:right}
+.calc-expr{color:var(--text-soft);font-size:.9rem;min-height:20px;word-break:break-all}
+.calc-result{color:var(--gold);font-size:2rem;font-weight:700;word-break:break-all}
+.calc-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+.calc-key{background:var(--card-alt);border:1px solid var(--border);border-radius:10px;padding:18px 4px;font-size:1.1rem;cursor:pointer;color:var(--text);transition:all var(--transition)}
+.calc-key:hover{border-color:var(--gold);color:var(--gold)}
+.calc-key.op{background:var(--gold-soft);color:var(--gold)}
+.calc-key.eq{background:var(--gold);color:#000;font-weight:700}
+.calc-key.wide{grid-column:span 2}
+</style>
 </head>
 <body>
 <script>const ROOT="../";</script>
@@ -24,54 +36,28 @@
 <main class="container">
   <div class="breadcrumb"><a href="../index.html">Home</a> / <a href="index.html">Math</a> / Basic Calculator</div>
   <h1 class="calc-page-title">Basic Calculator</h1>
-  <p class="calc-page-desc">Add, subtract, multiply or divide two numbers instantly.</p>
-  <div class="calc-layout">
-    <div class="panel">
-      <form id="calc-form">
-        <div class="field">
-          <label for="numA">First Number</label>
-          <input type="number" id="numA" step="any" required>
-        </div>
-        <div class="field">
-          <label for="op">Operation</label>
-          <select id="op">
-            <option value="+">Add (+)</option>
-            <option value="-">Subtract (−)</option>
-            <option value="*">Multiply (×)</option>
-            <option value="/">Divide (÷)</option>
-          </select>
-        </div>
-        <div class="field">
-          <label for="numB">Second Number</label>
-          <input type="number" id="numB" step="any" required>
-        </div>
-        <button type="submit" class="btn btn-solid">Calculate</button>
-      </form>
-      <div class="result-box hidden" id="result-box">
-        <div class="label">Result</div>
-        <div class="value" id="result-value">—</div>
-      </div>
-      <div class="action-row">
-        <button class="btn btn-ghost" onclick="copyResultText('#result-value')">Copy Result</button>
-        <button class="btn btn-ghost" onclick="shareCurrentPage()">Share</button>
-        <button class="btn btn-ghost" onclick="resetForm('#calc-form','#result-box')">Reset</button>
-      </div>
+  <p class="calc-page-desc">A simple calculator with a real numpad-style keypad — just like a physical PC number pad.</p>
+
+  <div class="calc-body">
+    <div class="calc-screen">
+      <div class="calc-expr" id="calc-expr">&nbsp;</div>
+      <div class="calc-result" id="calc-result">0</div>
     </div>
-    <div class="panel">
-      <div class="info-block">
-        <h2>Formula</h2>
-        <div class="formula">Result = A (operation) B</div>
-        <h2>Example</h2>
-        <p>12 + 8 = 20. Choose the operation and enter two numbers to get an instant result.</p>
-        <h2>How To Use</h2>
-        <p>Enter the first number, pick an operation, enter the second number, then click Calculate.</p>
-      </div>
-    </div>
+    <div class="calc-grid" id="calc-keys"></div>
   </div>
+
+  <div class="info-block" style="max-width:600px;margin-left:auto;margin-right:auto">
+    <h2>How To Use</h2>
+    <p>Tap the numpad to build your calculation, then press "=" for the result. C clears everything, ⌫ deletes the last character. Keyboard input (0-9, + - * / . Enter Backspace Escape) also works.</p>
+    <h2>Example</h2>
+    <p>12 + 8 = 20</p>
+  </div>
+
   <div class="info-block">
     <h2>Frequently Asked Questions</h2>
-    <div class="faq-item"><div class="faq-q">Can I divide by zero? <span class="caret">▾</span></div><div class="faq-a">No, division by zero is undefined and the calculator will show an error.</div></div>
-    <div class="faq-item"><div class="faq-q">Does it support decimals? <span class="caret">▾</span></div><div class="faq-a">Yes, you can enter decimal numbers for both fields.</div></div>
+    <div class="faq-item"><div class="faq-q">Can I divide by zero? <span class="caret">▾</span></div><div class="faq-a">No, division by zero shows an error instead of a number.</div></div>
+    <div class="faq-item"><div class="faq-q">Does it support decimals? <span class="caret">▾</span></div><div class="faq-a">Yes, use the "." key for decimal points.</div></div>
+    <div class="faq-item"><div class="faq-q">Can I chain multiple operations? <span class="caret">▾</span></div><div class="faq-a">Yes, e.g. 5 + 3 × 2 = evaluates with standard operator precedence, just like a real calculator.</div></div>
   </div>
   <div class="info-block">
     <h2>Related Calculators</h2>
@@ -84,17 +70,81 @@
 <script src="../js/theme.js"></script>
 <script src="../js/calculator.js"></script>
 <script>
-document.getElementById("calc-form").addEventListener("submit", function(e){
-  e.preventDefault();
-  const a = parseFloat(document.getElementById("numA").value);
-  const b = parseFloat(document.getElementById("numB").value);
-  const op = document.getElementById("op").value;
-  let result;
-  if(op === "+") result = a + b;
-  else if(op === "-") result = a - b;
-  else if(op === "*") result = a * b;
-  else if(op === "/") result = b === 0 ? "Error: Division by zero" : a / b;
-  showResult("#result-box", typeof result === "number" ? formatNumber(result, 6) : result);
+function evalExpr(src){
+  let i = 0;
+  function peek(){ return src[i]; }
+  function isDigit(c){ return c>='0' && c<='9'; }
+  function parseNumber(){
+    let start = i;
+    while(i<src.length && (isDigit(src[i])||src[i]==='.')) i++;
+    return parseFloat(src.slice(start,i));
+  }
+  function parseFactor(){
+    let c = peek();
+    if(c==='('){ i++; let v = parseExpr(); if(peek()===')') i++; return v; }
+    if(c==='-'){ i++; return -parseFactor(); }
+    if(c==='+'){ i++; return parseFactor(); }
+    if(isDigit(c) || c==='.'){ return parseNumber(); }
+    throw new Error("Unexpected token");
+  }
+  function parseTerm(){
+    let v = parseFactor();
+    while(peek()==='*' || peek()==='/'){
+      let op = peek(); i++;
+      let rhs = parseFactor();
+      v = op==='*' ? v*rhs : v/rhs;
+    }
+    return v;
+  }
+  function parseExpr(){
+    let v = parseTerm();
+    while(peek()==='+' || peek()==='-'){
+      let op = peek(); i++;
+      let rhs = parseTerm();
+      v = op==='+' ? v+rhs : v-rhs;
+    }
+    return v;
+  }
+  src = src.replace(/×/g,'*').replace(/÷/g,'/');
+  const result = parseExpr();
+  if(isNaN(result) || !isFinite(result)) throw new Error("Invalid");
+  return result;
+}
+
+const KEYS = [
+  {l:"C",v:"AC",cls:"op"},{l:"(",v:"(",cls:""},{l:")",v:")",cls:""},{l:"⌫",v:"DEL",cls:"op"},
+  {l:"7",v:"7",cls:""},{l:"8",v:"8",cls:""},{l:"9",v:"9",cls:""},{l:"÷",v:"/",cls:"op"},
+  {l:"4",v:"4",cls:""},{l:"5",v:"5",cls:""},{l:"6",v:"6",cls:""},{l:"×",v:"*",cls:"op"},
+  {l:"1",v:"1",cls:""},{l:"2",v:"2",cls:""},{l:"3",v:"3",cls:""},{l:"−",v:"-",cls:"op"},
+  {l:"0",v:"0",cls:"wide"},{l:".",v:".",cls:""},{l:"+",v:"+",cls:"op"},
+  {l:"=",v:"=",cls:"eq wide"}
+];
+let expr = "";
+const exprEl = document.getElementById("calc-expr");
+const resultEl = document.getElementById("calc-result");
+function render(){ exprEl.textContent = expr || " "; }
+function pressKey(v){
+  if(v==="AC"){ expr=""; resultEl.textContent="0"; render(); return; }
+  if(v==="DEL"){ expr = expr.slice(0,-1); render(); return; }
+  if(v==="="){
+    try{ resultEl.textContent = Number(evalExpr(expr).toPrecision(12)).toString(); }
+    catch(e){ resultEl.textContent = "Error"; }
+    return;
+  }
+  expr += v;
+  render();
+}
+const keysEl = document.getElementById("calc-keys");
+keysEl.innerHTML = KEYS.map(k=>`<button type="button" class="calc-key ${k.cls}" data-v="${k.v}">${k.l}</button>`).join("");
+keysEl.addEventListener("click", e=>{
+  const btn = e.target.closest(".calc-key");
+  if(btn) pressKey(btn.dataset.v);
+});
+document.addEventListener("keydown", e=>{
+  if(/[0-9+\-*/.()]/.test(e.key)){ expr += e.key; render(); }
+  else if(e.key==="Enter"){ pressKey("="); }
+  else if(e.key==="Backspace"){ pressKey("DEL"); }
+  else if(e.key==="Escape"){ pressKey("AC"); }
 });
 document.addEventListener("DOMContentLoaded", ()=>{
   const related = calcsByCategory("math").filter(c=>!c.url.includes("basic-calculator")).slice(0,4);
