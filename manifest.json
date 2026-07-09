@@ -1,7 +1,8 @@
 {
   "name": "Calculator Studio — Free All-in-One Calculators",
   "short_name": "Calculator Studio",
-  "start_url": "/index.html",
+  "start_url": "./index.html",
+  "scope": "./",
   "display": "standalone",
   "background_color": "#000000",
   "theme_color": "#D4AF37",

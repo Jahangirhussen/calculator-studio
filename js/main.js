@@ -90,6 +90,12 @@
 
   document.addEventListener("DOMContentLoaded", mountLayout);
 
+  if("serviceWorker" in navigator){
+    window.addEventListener("load", ()=>{
+      navigator.serviceWorker.register(`${root}sw.js`).catch(()=>{});
+    });
+  }
+
   /* ===== Reusable card renderers ===== */
   window.CalcUI = {
     root,

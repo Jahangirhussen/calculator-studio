@@ -7,9 +7,12 @@
 <meta name="description" content="Simple online stopwatch with lap times.">
 <link rel="canonical" href="https://example.com/time-tools/stopwatch.html">
 <link rel="icon" href="../images/logo-white.png">
-<link rel="stylesheet" href="../css/style.css">
-<link rel="stylesheet" href="../css/responsive.css">
-<link rel="stylesheet" href="../css/animations.css">
+<link rel="manifest" href="../manifest.json">
+<link rel="apple-touch-icon" href="../images/logo-white.png">
+<meta name="theme-color" content="#D4AF37">
+<link rel="stylesheet" href="../css/style.css?v=2">
+<link rel="stylesheet" href="../css/responsive.css?v=2">
+<link rel="stylesheet" href="../css/animations.css?v=2">
 </head>
 <body>
 <script>const ROOT="../";</script>
@@ -31,8 +34,8 @@
 </main>
 <div id="site-footer"></div>
 <script src="../js/calc-data.js"></script>
-<script src="../js/main.js"></script>
-<script src="../js/theme.js"></script>
+<script src="../js/main.js?v=2"></script>
+<script src="../js/theme.js?v=2"></script>
 <script>
 let running = false, startTime = 0, elapsed = 0, rafId = null, lapCount = 0;
 const display = document.getElementById("display");

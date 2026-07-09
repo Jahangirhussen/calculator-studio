@@ -11,9 +11,12 @@
 <meta property="og:type" content="website">
 <meta name="twitter:card" content="summary">
 <link rel="icon" href="../images/logo-white.png">
-<link rel="stylesheet" href="../css/style.css">
-<link rel="stylesheet" href="../css/responsive.css">
-<link rel="stylesheet" href="../css/animations.css">
+<link rel="manifest" href="../manifest.json">
+<link rel="apple-touch-icon" href="../images/logo-white.png">
+<meta name="theme-color" content="#D4AF37">
+<link rel="stylesheet" href="../css/style.css?v=2">
+<link rel="stylesheet" href="../css/responsive.css?v=2">
+<link rel="stylesheet" href="../css/animations.css?v=2">
 <script type="application/ld+json">
 {"@context":"https://schema.org","@type":"SoftwareApplication","name":"LCM Calculator","applicationCategory":"UtilitiesApplication","operatingSystem":"Any"}
 </script>
@@ -68,8 +71,8 @@ For more numbers, LCM is applied pairwise across the list.</div>
 </main>
 <div id="site-footer"></div>
 <script src="../js/calc-data.js"></script>
-<script src="../js/main.js"></script>
-<script src="../js/theme.js"></script>
+<script src="../js/main.js?v=2"></script>
+<script src="../js/theme.js?v=2"></script>
 <script src="../js/calculator.js"></script>
 <script>
 function gcd(a,b){ a=Math.abs(a); b=Math.abs(b); while(b){ [a,b]=[b, a%b]; } return a || 1; }
