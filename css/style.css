@@ -61,6 +61,7 @@ main{flex:1}
 .header-inner{display:flex;align-items:center;justify-content:space-between;height:100%}
 .logo{display:flex;align-items:center;gap:8px;font-weight:700;font-size:1.3rem}
 .logo span{color:var(--gold)}
+.logo-img{height:44px;width:auto;display:block}
 .main-nav{display:flex;height:100%}
 .main-nav>ul{display:flex;height:100%}
 .main-nav>ul>li{position:relative;display:flex;align-items:center}

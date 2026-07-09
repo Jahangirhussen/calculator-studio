@@ -16,7 +16,7 @@
     return `
     <header class="site-header">
       <div class="container header-inner">
-        <a href="${root}index.html" class="logo">🧮<span>${SITE_NAME.split(" ")[0]}</span> ${SITE_NAME.split(" ").slice(1).join(" ")}</a>
+        <a href="${root}index.html" class="logo"><img src="${root}images/logo.png" alt="${SITE_NAME}" class="logo-img"></a>
         <nav class="main-nav">
           <ul>
             <li><a href="${root}index.html">Home</a></li>
@@ -43,7 +43,7 @@
       <div class="container">
         <div class="footer-grid">
           <div>
-            <h4>🧮 ${SITE_NAME}</h4>
+            <h4><img src="${root}images/logo.png" alt="${SITE_NAME}" style="height:28px;vertical-align:middle"></h4>
             <p style="color:var(--text-soft);font-size:.85rem;margin-top:8px">All-in-one free online calculators for math, finance, health, time and more.</p>
           </div>
           ${cols}
