@@ -68,14 +68,17 @@
     if(hamburger && nav){
       hamburger.addEventListener("click", ()=> nav.classList.toggle("active"));
     }
-    document.querySelectorAll(".main-nav > ul > li").forEach(li=>{
+    const allLis = document.querySelectorAll(".main-nav > ul > li");
+    allLis.forEach(li=>{
       const link = li.querySelector(":scope > a");
       const dropdown = li.querySelector(".dropdown");
-      if(!dropdown) return;
+      if(!dropdown || !link) return;
       link.addEventListener("click", (e)=>{
         if(window.innerWidth <= 768){
           e.preventDefault();
-          li.classList.toggle("open");
+          const wasOpen = li.classList.contains("open");
+          allLis.forEach(other=> other.classList.remove("open"));
+          if(!wasOpen) li.classList.add("open");
         }
       });
     });

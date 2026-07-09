@@ -19,7 +19,8 @@
   .main-nav>ul>li>a{height:52px;border-bottom:1px solid var(--border)}
   .dropdown{
     position:static;opacity:1;visibility:visible;transform:none;display:none;
-    box-shadow:none;border:none;background:var(--bg-alt);max-height:none;
+    box-shadow:none;border:none;background:var(--bg-alt);
+    max-height:none;overflow-y:visible;min-width:0;
   }
   .main-nav>ul>li.open .dropdown{display:block}
   .hamburger{display:flex}
