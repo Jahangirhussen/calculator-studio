@@ -60,9 +60,14 @@ main{flex:1}
   height:var(--header-h);
 }
 .header-inner{display:flex;align-items:center;justify-content:space-between;height:100%}
-.logo{display:flex;align-items:center;gap:8px;font-weight:700;font-size:1.3rem}
+.logo{display:flex;align-items:center;gap:8px;font-weight:700;font-size:1.3rem;order:1;min-width:0}
 .logo span{color:var(--gold)}
-.logo-img{height:52px;width:auto;display:block;image-rendering:-webkit-optimize-contrast}
+.logo-img{height:52px;width:auto;display:none;image-rendering:-webkit-optimize-contrast;max-width:100%}
+[data-theme="dark"] .logo-dark{display:block}
+[data-theme="light"] .logo-light{display:block}
+.main-nav{order:2}
+.header-actions{order:3;display:flex;align-items:center}
+.hamburger{order:0}
 .main-nav{display:flex;height:100%}
 .main-nav>ul{display:flex;height:100%}
 .main-nav>ul>li{position:relative;display:flex;align-items:center}

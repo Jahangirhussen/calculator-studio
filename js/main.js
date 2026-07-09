@@ -16,7 +16,11 @@
     return `
     <header class="site-header">
       <div class="container header-inner">
-        <a href="${root}index.html" class="logo"><img src="${root}images/logo-white.png" alt="${SITE_NAME}" class="logo-img"></a>
+        <button class="hamburger" aria-label="Toggle menu"><span></span><span></span><span></span></button>
+        <a href="${root}index.html" class="logo">
+          <img src="${root}images/logo-white.png" alt="${SITE_NAME}" class="logo-img logo-dark">
+          <img src="${root}images/logo.png" alt="${SITE_NAME}" class="logo-img logo-light">
+        </a>
         <nav class="main-nav">
           <ul>
             <li><a href="${root}index.html">Home</a></li>
@@ -27,7 +31,6 @@
         </nav>
         <div class="header-actions">
           <button class="theme-toggle" aria-label="Toggle theme">🌙</button>
-          <button class="hamburger" aria-label="Toggle menu"><span></span><span></span><span></span></button>
         </div>
       </div>
     </header>`;
